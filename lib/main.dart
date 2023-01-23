@@ -1,4 +1,5 @@
-import 'package:praksa_frontend/ui/background/background.dart';
+import 'package:praksa_frontend/ui/background/backgroundTop.dart';
+import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
@@ -10,13 +11,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Material App',
-      home: Scaffold(
-        body: Stack(
-          children: [
-            Background()
-          ],
+      home: Stack(
+            children: const [
+                HomePage(),
+                //BackgroundTop(),
+                
+            //BackgroundTop(),
+            ]
         ),
-      ),
-    );
+      );
   }
 }

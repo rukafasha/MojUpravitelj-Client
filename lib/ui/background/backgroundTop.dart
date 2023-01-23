@@ -1,8 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class BackgroundTop extends StatefulWidget {
+  const BackgroundTop({super.key});
+
   @override
   _MyPainterState createState() => _MyPainterState();
 }
@@ -18,7 +18,6 @@ class _MyPainterState extends State<BackgroundTop> {
     final size = MediaQuery.of(context).size;
     return Center(
       child: Container(
-        color: Colors.white,
         child: CustomPaint(
           size: Size(size.width, size.height),
           painter: Curved(),
