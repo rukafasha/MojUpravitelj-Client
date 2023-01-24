@@ -10,15 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Material App',
-      home: Stack(
-            children: const [
-                HomePage(),
-                //BackgroundTop(),
-                
-            //BackgroundTop(),
-            ]
-        ),
-      );
+      home: Stack(children: const [
+        HomePage(),
+        // BackgroundTop(),
+      ]),
+    );
   }
 }

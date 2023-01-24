@@ -2,32 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/DemoValues.dart';
 import 'package:praksa_frontend/ui/background/backgroundTop.dart';
 
+import '../NavigationDrawer/navigation_drawer.dart';
+
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var body;
     return Scaffold(
         appBar: AppBar(
-        title: Text("ZEV Centar"),
+          title: const Center(child: Text("ZEV Centar")),
         ),
-           body: Container(
-              child :ListView.builder(
-                itemCount: 10,
-                itemBuilder: (BuildContext context, int index) {
-                return const PostCard();
-              //BackgroundTop(),
-                }
-              ) 
-            )
-
-      );
-
+        drawer: const NavigationDrawer(),
+        body: ListView.builder(
+            itemCount: 10,
+            itemBuilder: (BuildContext context, int index) {
+              return const PostCard();
+            }));
   }
 }
+
 class PostCard extends StatelessWidget {
-  const PostCard({Key? key}) : super(key: key);
+  const PostCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +54,10 @@ class _Post extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: 3,
-      child: Row(children: const <Widget>[ _PostTitleAndSummary()]),
+      child: Row(children: const <Widget>[_PostTitleAndSummary()]),
     );
   }
 }
-
-
 
 class _PostTitleAndSummary extends StatelessWidget {
   const _PostTitleAndSummary({Key? key}) : super(key: key);
@@ -72,8 +66,8 @@ class _PostTitleAndSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle? titleTheme = Theme.of(context).textTheme.headline6;
     final TextStyle? summaryTheme = Theme.of(context).textTheme.bodyText2;
-    final String title = DemoValues.title;
-    final String summary = DemoValues.Description;
+    const String title = DemoValues.title;
+    const String summary = DemoValues.description;
 
     return Expanded(
       flex: 3,
@@ -99,7 +93,7 @@ class _PostDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: <Widget>[
+      children: const <Widget>[
         _UserNameAndEmail(),
         _PostTimeStamp(),
       ],
