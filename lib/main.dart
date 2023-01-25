@@ -1,12 +1,12 @@
+import 'package:praksa_frontend/ui/background/backgroundTop.dart';
+import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/ui/forms/register_form.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
