@@ -40,14 +40,12 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          // children: [],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              // builder: (context) => const RegisterForm(),
               builder: (context) => const RegisterForm(),
             ),
           );

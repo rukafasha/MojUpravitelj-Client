@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class Background extends StatefulWidget {
@@ -17,14 +15,12 @@ class _MyPainterState extends State<Background> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Center(
-      child: Container(
-        color: Colors.white,
-        child: CustomPaint(
-          size: Size(size.width, size.height),
-          painter: Curved(),
-        ),
-      ),
-    );
+        child: Container(
+            color: Colors.white,
+            child: CustomPaint(
+              size: Size(size.width, size.height),
+              painter: Curved(),
+            )));
   }
 }
 
@@ -32,7 +28,7 @@ class Curved extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var rect = Offset.zero & size;
-    // Path rectPathThree = Path();
+
     Paint paint = Paint();
     paint.shader = const LinearGradient(
       begin: Alignment.topLeft,
@@ -66,12 +62,14 @@ class Curved extends CustomPainter {
       size.width * 0.6,
       size.height * 0.07,
     );
+
     path.quadraticBezierTo(
       size.width * 0.2,
       size.height * 0.08,
       size.width * 0.1,
       size.height * 0.18,
     );
+
     path.quadraticBezierTo(
       size.width * 0.06,
       size.height * 0.21,
@@ -79,7 +77,7 @@ class Curved extends CustomPainter {
       size.height * 0.26,
     );
     path.close();
-    //
+
     path2.moveTo(size.width, size.height);
     path2.lineTo(size.width, size.height * 0.7);
     path2.quadraticBezierTo(
@@ -88,19 +86,21 @@ class Curved extends CustomPainter {
       size.width,
       size.height * 0.7,
     );
+
     path2.quadraticBezierTo(
       size.width * .9,
       size.height * .95,
       size.width * 0.2,
       size.height * 0.97,
     );
+
     path2.quadraticBezierTo(
       size.width * .1,
       size.height * .98,
       size.width * 0.1,
       size.height,
     );
-    //
+
     canvas.drawPath(path, paint);
     canvas.drawPath(path2, paint2);
   }
@@ -111,7 +111,6 @@ class Curved extends CustomPainter {
   }
 }
 
-// FOR PAINTING THE CIRCLE
 class CirclePainter extends CustomPainter {
   final double radius;
   CirclePainter(this.radius);

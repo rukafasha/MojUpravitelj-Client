@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:praksa_frontend/ui/Helper/data_picker.dart';
-
 import '../background/background.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -12,7 +10,7 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  TextEditingController _date = TextEditingController();
+  final TextEditingController _date = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,6 @@ class _RegisterFormState extends State<RegisterForm> {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Background(),
             Container(
               margin: const EdgeInsets.only(bottom: 55),
               child: const Text(
@@ -38,7 +35,6 @@ class _RegisterFormState extends State<RegisterForm> {
               child: Stack(
                 children: [
                   Container(
-                    // height: 150,
                     margin: const EdgeInsets.only(right: 70),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -107,7 +103,6 @@ class _RegisterFormState extends State<RegisterForm> {
                           margin: const EdgeInsets.only(left: 16, right: 32),
                           child: TextField(
                               controller: _date,
-                              // obscureText: true,
                               decoration: const InputDecoration(
                                 hintStyle: TextStyle(fontSize: 16),
                                 border: InputBorder.none,
@@ -119,7 +114,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                 DateTime? pickedDate = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
+                                    firstDate: DateTime(1900),
                                     lastDate: DateTime(2101));
 
                                 if (pickedDate != null) {
@@ -130,12 +125,9 @@ class _RegisterFormState extends State<RegisterForm> {
                                 }
                               }),
                         ),
-                        // DatePicker(date: _date)
                       ],
                     ),
                   ),
-
-                  // KRUG
                   Align(
                     alignment: Alignment.centerRight,
                     child: Container(
@@ -171,7 +163,6 @@ class _RegisterFormState extends State<RegisterForm> {
                 ],
               ),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
