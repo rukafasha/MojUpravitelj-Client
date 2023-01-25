@@ -1,5 +1,3 @@
-//import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class Background extends StatefulWidget {
@@ -113,7 +111,6 @@ class Curved extends CustomPainter {
   }
 }
 
-//For painting the circle
 class CirclePainter extends CustomPainter {
   final double radius;
   CirclePainter(this.radius);
@@ -128,7 +125,9 @@ class CirclePainter extends CustomPainter {
 
     var path = Path();
     path.addOval(Rect.fromCircle(
-        center: Offset(size.width / 2, size.height / 2), radius: radius));
+      center: Offset(size.width / 2, size.height / 2),
+      radius: radius,
+    ));
     canvas.drawPath(path, paint);
   }
 
