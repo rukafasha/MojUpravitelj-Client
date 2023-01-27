@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/DemoValues.dart';
-
 import '../NavigationDrawer/navigation_drawer.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,15 +9,15 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text("ZEV Centar",)),
+          title: const Center(child: Text("Moj upravitelj")),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: <Color>[Color(0xfff8a55f),Color(0xfff1665f)]),
-      ),
-    ),
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: <Color>[Color(0xfff8a55f), Color(0xfff1665f)]),
+            ),
+          ),
         ),
         drawer: const NavigationDrawer(),
         body: ListView.builder(
