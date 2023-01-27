@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:praksa_frontend/ui/background/background.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'package:praksa_frontend/ui/forms/login_form.dart';
-import '../background/background.dart';
+import 'package:praksa_frontend/ui/forms/register_form.dart';
 
-class RegisterForm extends StatefulWidget {
-  const RegisterForm({Key? key}) : super(key: key);
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
 
   @override
-  State<RegisterForm> createState() => _RegisterFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
-  final TextEditingController _date = TextEditingController();
-
+class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,9 +20,9 @@ class _RegisterFormState extends State<RegisterForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              margin: const EdgeInsets.only(bottom: 55),
+              margin: const EdgeInsets.only(bottom: 60),
               child: const Text(
-                "Register",
+                "Login",
                 style: TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
@@ -33,11 +30,14 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
             ),
             SizedBox(
-              height: 350,
+              height: 150,
               child: Stack(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(right: 70),
+                    height: 150,
+                    margin: const EdgeInsets.only(
+                      right: 70,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: const BorderRadius.only(
@@ -60,31 +60,9 @@ class _RegisterFormState extends State<RegisterForm> {
                           margin: const EdgeInsets.only(left: 16, right: 32),
                           child: const TextField(
                             decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 16),
+                              hintStyle: TextStyle(fontSize: 20),
                               border: InputBorder.none,
                               icon: Icon(Icons.account_circle_rounded),
-                              hintText: "First Name",
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 16, right: 32),
-                          child: const TextField(
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 16),
-                              border: InputBorder.none,
-                              icon: Icon(Icons.account_circle_rounded),
-                              hintText: "Last Name",
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 16, right: 32),
-                          child: const TextField(
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 16),
-                              border: InputBorder.none,
-                              icon: Icon(Icons.person),
                               hintText: "Username",
                             ),
                           ),
@@ -94,39 +72,13 @@ class _RegisterFormState extends State<RegisterForm> {
                           child: const TextField(
                             obscureText: true,
                             decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 16),
+                              hintStyle: TextStyle(fontSize: 22),
                               border: InputBorder.none,
-                              icon: Icon(Icons.password),
-                              hintText: "Password",
+                              icon: Icon(Icons.account_circle_rounded),
+                              hintText: "********",
                             ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 16, right: 32),
-                          child: TextField(
-                              controller: _date,
-                              decoration: const InputDecoration(
-                                hintStyle: TextStyle(fontSize: 16),
-                                border: InputBorder.none,
-                                icon: Icon(Icons.date_range),
-                                hintText: "Select Date",
-                              ),
-                              readOnly: true,
-                              onTap: () async {
-                                DateTime? pickedDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1900),
-                                    lastDate: DateTime(2101));
-
-                                if (pickedDate != null) {
-                                  setState(() {
-                                    _date.text = DateFormat('yyyy-MM-dd')
-                                        .format(pickedDate);
-                                  });
-                                }
-                              }),
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -175,6 +127,22 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 16, top: 16),
+                  child: Text(
+                    "Forgot ?",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[400],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
@@ -183,12 +151,12 @@ class _RegisterFormState extends State<RegisterForm> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const LoginForm(),
+                          builder: (context) => const RegisterForm(),
                         ),
                       );
                     },
                     child: const Text(
-                      "Login",
+                      "Register",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,

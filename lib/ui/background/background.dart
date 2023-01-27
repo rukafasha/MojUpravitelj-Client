@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Background extends StatefulWidget {
   @override
-  _MyPainterState createState() => _MyPainterState();
+  State<Background> createState() => _MyPainterState();
 }
 
 class _MyPainterState extends State<Background> {
@@ -78,22 +78,25 @@ class Curved extends CustomPainter {
     path2.lineTo(size.width, size.height * 0.7);
     path2.quadraticBezierTo(
       size.width,
-      size.height * .65,
+      size.height * 0.65,
       size.width,
       size.height * 0.7,
     );
+
     path2.quadraticBezierTo(
-      size.width * .9,
-      size.height * .95,
+      size.width * 0.9,
+      size.height * 0.95,
       size.width * 0.2,
       size.height * 0.97,
     );
+
     path2.quadraticBezierTo(
-      size.width * .1,
-      size.height * .98,
+      size.width * 0.1,
+      size.height * 0.98,
       size.width * 0.1,
       size.height,
     );
+
     canvas.drawPath(path, paint);
     canvas.drawPath(path2, paint2);
   }
