@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/DemoValues.dart';
+import 'package:praksa_frontend/ui/forms/reportAdd_form.dart';
 
 import '../NavigationDrawer/navigation_drawer.dart';
 
@@ -10,22 +11,30 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text("ZEV Centar",)),
+          title: const Center(child: Text("Moj upravitelj",)),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: <Color>[Color(0xfff8a55f),Color(0xfff1665f)]),
-      ),
-    ),
+            ),
+          ),
         ),
         drawer: const NavigationDrawer(),
         body: ListView.builder(
             itemCount: 10,
             itemBuilder: (BuildContext context, int index) {
               return const PostCard();
-            }));
+            }),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Color(0xfff8a55f),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => const ReportAdd()));},
+              child: Icon(Icons.add_outlined)
+            ),);
   }
 }
 
@@ -144,3 +153,5 @@ class _PostTimeStamp extends StatelessWidget {
     );
   }
 }
+
+
