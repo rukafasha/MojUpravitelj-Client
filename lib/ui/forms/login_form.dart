@@ -11,6 +11,10 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,53 +37,76 @@ class _LoginFormState extends State<LoginForm> {
               height: 150,
               child: Stack(
                 children: [
-                  Container(
-                    height: 150,
-                    margin: const EdgeInsets.only(
-                      right: 70,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(100),
-                        bottomRight: Radius.circular(100),
+                  Form(
+                    key: _formKey,
+                    child: Container(
+                      height: 150,
+                      margin: const EdgeInsets.only(
+                        right: 70,
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 0,
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(100),
+                          bottomRight: Radius.circular(100),
                         ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(left: 16, right: 32),
-                          child: const TextField(
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 20),
-                              border: InputBorder.none,
-                              icon: Icon(Icons.account_circle_rounded),
-                              hintText: "Username",
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 0,
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, right: 32),
+                            child: TextFormField(
+                              controller: _usernameController,
+                              validator: (value) {
+                                if (value!.trim().isEmpty) {
+                                  return "Enter Username";
+                                } else {
+                                  return value.trim().length < 5
+                                      ? 'Minimum character length is 5'
+                                      : null;
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                hintStyle: TextStyle(fontSize: 20),
+                                border: InputBorder.none,
+                                icon: Icon(Icons.account_circle_rounded),
+                                hintText: "Username",
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 16, right: 32),
-                          child: const TextField(
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 22),
-                              border: InputBorder.none,
-                              icon: Icon(Icons.account_circle_rounded),
-                              hintText: "********",
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, right: 32),
+                            child: TextFormField(
+                              controller: _passwordController,
+                              validator: (value) {
+                                if (value!.trim().isEmpty) {
+                                  return "Enter Password";
+                                } else {
+                                  return value.trim().length < 5
+                                      ? 'Minimum character length is 5'
+                                      : null;
+                                }
+                              },
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                hintStyle: TextStyle(fontSize: 22),
+                                border: InputBorder.none,
+                                icon: Icon(Icons.account_circle_rounded),
+                                hintText: "********",
+                              ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   Align(
@@ -108,12 +135,17 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                       ),
                       child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const HomePage(),
-                            ),
-                          );
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            _usernameController.clear();
+                            _passwordController.clear();
+
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const HomePage(),
+                              ),
+                            );
+                          }
                         },
                         child: const Icon(
                           Icons.arrow_forward_outlined,
@@ -127,23 +159,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 16, top: 16),
-                  child: Text(
-                    "Forgot ?",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[400],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   margin: const EdgeInsets.only(left: 16, top: 24),
@@ -162,6 +178,17 @@ class _LoginFormState extends State<LoginForm> {
                         fontWeight: FontWeight.w600,
                         color: Color(0xffe98f60),
                       ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(right: 16, top: 16),
+                  child: Text(
+                    "Forgot ?",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[400],
                     ),
                   ),
                 ),

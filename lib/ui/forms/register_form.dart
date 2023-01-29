@@ -12,7 +12,12 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  final TextEditingController _date = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,98 +41,147 @@ class _RegisterFormState extends State<RegisterForm> {
               height: 350,
               child: Stack(
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 70),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(100),
-                        bottomRight: Radius.circular(100),
+                  Form(
+                    key: _formKey,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 70),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(100),
+                          bottomRight: Radius.circular(100),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 0,
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 0,
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(left: 16, right: 32),
-                          child: const TextField(
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 16),
-                              border: InputBorder.none,
-                              icon: Icon(Icons.account_circle_rounded),
-                              hintText: "First Name",
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 16, right: 32),
-                          child: const TextField(
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 16),
-                              border: InputBorder.none,
-                              icon: Icon(Icons.account_circle_rounded),
-                              hintText: "Last Name",
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 16, right: 32),
-                          child: const TextField(
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 16),
-                              border: InputBorder.none,
-                              icon: Icon(Icons.person),
-                              hintText: "Username",
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 16, right: 32),
-                          child: const TextField(
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 16),
-                              border: InputBorder.none,
-                              icon: Icon(Icons.password),
-                              hintText: "Password",
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 16, right: 32),
-                          child: TextField(
-                              controller: _date,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, right: 32),
+                            child: TextFormField(
+                              controller: _firstNameController,
+                              validator: (value) {
+                                if (value!.trim().isEmpty) {
+                                  return "Enter First Name";
+                                } else {
+                                  return value.trim().length < 3
+                                      ? 'Minimum character length is 3'
+                                      : null;
+                                }
+                              },
                               decoration: const InputDecoration(
                                 hintStyle: TextStyle(fontSize: 16),
                                 border: InputBorder.none,
-                                icon: Icon(Icons.date_range),
-                                hintText: "Select Date",
+                                icon: Icon(Icons.account_circle_rounded),
+                                hintText: "First Name",
                               ),
-                              readOnly: true,
-                              onTap: () async {
-                                DateTime? pickedDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1900),
-                                    lastDate: DateTime(2101));
-
-                                if (pickedDate != null) {
-                                  setState(() {
-                                    _date.text = DateFormat('yyyy-MM-dd')
-                                        .format(pickedDate);
-                                  });
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, right: 32),
+                            child: TextFormField(
+                              controller: _lastNameController,
+                              validator: (value) {
+                                if (value!.trim().isEmpty) {
+                                  return "Enter Last Name";
+                                } else {
+                                  return value.trim().length < 3
+                                      ? 'Minimum character length is 3'
+                                      : null;
                                 }
-                              }),
-                        ),
-                      ],
+                              },
+                              decoration: const InputDecoration(
+                                hintStyle: TextStyle(fontSize: 16),
+                                border: InputBorder.none,
+                                icon: Icon(Icons.account_circle_rounded),
+                                hintText: "Last Name",
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, right: 32),
+                            child: TextFormField(
+                              controller: _usernameController,
+                              validator: (value) {
+                                if (value!.trim().isEmpty) {
+                                  return "Enter Username";
+                                } else {
+                                  return value.trim().length < 5
+                                      ? 'Minimum character length is 5'
+                                      : null;
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                hintStyle: TextStyle(fontSize: 16),
+                                border: InputBorder.none,
+                                icon: Icon(Icons.person),
+                                hintText: "Username",
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, right: 32),
+                            child: TextFormField(
+                              controller: _passwordController,
+                              validator: (value) {
+                                if (value!.trim().isEmpty) {
+                                  return "Enter Password";
+                                } else {
+                                  return value.trim().length < 5
+                                      ? 'Minimum character length is 5'
+                                      : null;
+                                }
+                              },
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                hintStyle: TextStyle(fontSize: 16),
+                                border: InputBorder.none,
+                                icon: Icon(Icons.password),
+                                hintText: "Password",
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, right: 32),
+                            child: TextFormField(
+                                controller: _dateController,
+                                validator: (value) {
+                                  if (value!.trim().isEmpty) {
+                                    return "Enter Date";
+                                  }
+                                },
+                                decoration: const InputDecoration(
+                                  hintStyle: TextStyle(fontSize: 16),
+                                  border: InputBorder.none,
+                                  icon: Icon(Icons.date_range),
+                                  hintText: "Select Date",
+                                ),
+                                readOnly: true,
+                                onTap: () async {
+                                  DateTime? pickedDate = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(1900),
+                                      lastDate: DateTime.now());
+
+                                  if (pickedDate != null) {
+                                    setState(() {
+                                      _dateController.text =
+                                          DateFormat('yyyy-MM-dd')
+                                              .format(pickedDate);
+                                    });
+                                  }
+                                }),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Align(
@@ -156,12 +210,21 @@ class _RegisterFormState extends State<RegisterForm> {
                         ),
                       ),
                       child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const HomePage(),
-                            ),
-                          );
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            print("Data Added Successfully");
+                            _firstNameController.clear();
+                            _lastNameController.clear();
+                            _usernameController.clear();
+                            _passwordController.clear();
+                            _dateController.clear();
+
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginForm(),
+                              ),
+                            );
+                          }
                         },
                         child: const Icon(
                           Icons.arrow_forward_outlined,
