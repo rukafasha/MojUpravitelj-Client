@@ -167,12 +167,6 @@ class _UserNameAndEmail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-    
-    //return FutureBuilder<Person>(
-     // future: fetchUsers(made),
-     // builder:(context, snapshot) {
-       //   if(snapshot.hasData){
         return Expanded(
           flex: 5,
           child: Padding(
@@ -187,10 +181,6 @@ class _UserNameAndEmail extends StatelessWidget {
             ),
           ),
         );
-     //}else if(snapshot.hasError) {
-     //   return Text(snapshot.error.toString());
-     //   }
-     // return const CircularProgressIndicator();
       }
    
 }
