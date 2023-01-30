@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
 import '../background/background.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({Key? key}) : super(key: key);
@@ -18,6 +19,22 @@ class _RegisterFormState extends State<RegisterForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+
+  Future userRegistration() async {
+    var map = <String, dynamic>{};
+    map['firstName'] = _firstNameController.text;
+    map['lastName'] = _lastNameController.text;
+    map['username'] = _usernameController.text;
+    map['password'] = _passwordController.text;
+    map['dateOfBirth'] = _dateController.text;
+
+    final response = await http.post(
+      Uri.parse('http://10.0.3.2:8000/registration'),
+      body: map,
+    );
+
+    return response.statusCode;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -212,18 +229,55 @@ class _RegisterFormState extends State<RegisterForm> {
                       child: InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            print("Data Added Successfully");
-                            _firstNameController.clear();
-                            _lastNameController.clear();
-                            _usernameController.clear();
-                            _passwordController.clear();
-                            _dateController.clear();
+                            var statusCode = await userRegistration();
 
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginForm(),
-                              ),
-                            );
+                            if (statusCode >= 200 && statusCode < 300) {
+                              _firstNameController.clear();
+                              _lastNameController.clear();
+                              _usernameController.clear();
+                              _passwordController.clear();
+                              _dateController.clear();
+
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginForm(),
+                                ),
+                              );
+                            } else if (statusCode == 409) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0.0,
+                                      content: Stack(children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(16),
+                                          height: 80,
+                                          decoration: const BoxDecoration(
+                                              color: Color(0xFFC72C41),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20))),
+                                          child: Row(
+                                            children: [
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: const [
+                                                    Text(
+                                                      "Unsuccessful registration. Username is already registered.",
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ])));
+                            }
                           }
                         },
                         child: const Icon(
