@@ -20,21 +20,24 @@ class ReportAdd extends StatelessWidget {
               ),
             ),
         ),
-        body: AddForm(),
+        body: const AddForm(),
         drawer: const NavigationDrawer(),
         floatingActionButton: FloatingActionButton(
-              backgroundColor: Color(0xfff8a55f),
+              heroTag: UniqueKey(),
+              backgroundColor: const Color(0xfff8a55f),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (context) => const HomePage()));},
-              child: Icon(Icons.keyboard_arrow_left, size: 40,)
+              child: const Icon(Icons.keyboard_arrow_left, size: 40,)
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
       );
   }
 }
-class AddForm extends StatefulWidget {  
+class AddForm extends StatefulWidget {
+  const AddForm({super.key});
+  
   @override  
   AddFormState createState() {  
     return AddFormState();  
@@ -57,7 +60,7 @@ class AddFormState extends State<AddForm> {
         children: <Widget>[  
           TextFormField(  
             decoration: const InputDecoration(  
-              icon: const Icon(Icons.short_text),  
+              icon: Icon(Icons.short_text),  
               hintText: 'Enter title for report',  
               labelText: 'Title',  
             ), 
@@ -85,16 +88,17 @@ class AddFormState extends State<AddForm> {
             mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
-            padding: new EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 20),
             child: FloatingActionButton(
-            backgroundColor: Color(0xfff8a55f),
+            heroTag: UniqueKey(),
+            backgroundColor: const Color(0xfff8a55f),
             onPressed: () {
               if(_formKey.currentState!.validate()){
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (context) => const HomePage()));};
+                      builder: (context) => const HomePage()));}
             },
-            child: Icon(Icons.save)
+            child: const Icon(Icons.save)
           ))])
         ],  
       ),

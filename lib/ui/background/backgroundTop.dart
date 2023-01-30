@@ -17,11 +17,9 @@ class _MyPainterState extends State<BackgroundTop> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Center(
-      child: Container(
-        child: CustomPaint(
-          size: Size(size.width, size.height),
-          painter: Curved(),
-        ),
+      child: CustomPaint(
+        size: Size(size.width, size.height),
+        painter: Curved(),
       ),
     );
   }
