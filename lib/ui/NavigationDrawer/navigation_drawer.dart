@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:praksa_frontend/ui/forms/user_form.dart';
 
 import '../forms/home_form.dart';
 
@@ -33,30 +34,24 @@ class NavigationDrawer extends StatelessWidget {
               onTap: () => Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const HomePage())),
             ),
-            // const Divider(color: Colors.black54),
             ListTile(
-              leading: const Icon(Icons.home_outlined),
-              title: const Text('Link 2'),
+              leading: const Icon(Icons.person),
+              title: const Text('Profile'),
               onTap: () {
                 Navigator.pop(context);
 
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Scaffold(
-                          appBar: AppBar(
-                            title: const Text('Display 2'),
-                            backgroundColor: Colors.green,
-                          ),
-                        )));
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const UserForm()));
               },
             ),
             ListTile(
-              leading: const Icon(Icons.home_outlined),
-              title: const Text('Link 3'),
+              leading: const Icon(Icons.assignment_rounded),
+              title: const Text('My reports'),
               onTap: () {},
             ),
             ListTile(
-              leading: const Icon(Icons.home_outlined),
-              title: const Text('Link 4'),
+              leading: const Icon(Icons.people),
+              title: const Text('Tenants'),
               onTap: () {},
             ),
           ],
