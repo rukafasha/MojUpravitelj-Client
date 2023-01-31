@@ -10,6 +10,10 @@ class ReportAdd extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: BackButton(
+            onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => const HomePage()))),
           title: const Center(child: Text("Moj upravitelj",)),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
@@ -20,19 +24,8 @@ class ReportAdd extends StatelessWidget {
               ),
             ),
         ),
-        body: const AddForm(),
-        drawer: const NavigationDrawer(),
-        floatingActionButton: FloatingActionButton(
-              heroTag: UniqueKey(),
-              backgroundColor: const Color(0xfff8a55f),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const HomePage()));},
-              child: const Icon(Icons.keyboard_arrow_left, size: 40,)
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
-      );
+        body: AddForm(),
+          );
   }
 }
 class AddForm extends StatefulWidget {
@@ -53,54 +46,57 @@ class AddFormState extends State<AddForm> {
   @override  
   Widget build(BuildContext context) {  
     // Build a Form widget using the _formKey created above.  
-    return Form(  
-      key: _formKey,  
-      child: Column(  
-        crossAxisAlignment: CrossAxisAlignment.start,  
-        children: <Widget>[  
-          TextFormField(  
-            decoration: const InputDecoration(  
-              icon: Icon(Icons.short_text),  
-              hintText: 'Enter title for report',  
-              labelText: 'Title',  
-            ), 
-            validator: (String? value) {
-              return (value!.isEmpty) ? 'Enter the title of your report.' : null; 
-            }
-          ),  
-          SizedBox(
-            height: 150,
-          child: TextFormField(  
-            expands: true,
-            maxLines: null,
-            minLines: null,
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Form(  
+        key: _formKey,  
+        child: Column(  
+          crossAxisAlignment: CrossAxisAlignment.start,  
+          children: <Widget>[  
+            TextFormField(  
               decoration: const InputDecoration(  
-               icon:  Icon(Icons.assignment_rounded),  
-                hintText: 'Enter a description',  
-                labelText: 'Description',  
-              ),
-            validator: (String? value) {
-              return (value!.isEmpty) ? 'Enter the description of your report.' : null; 
-            } 
-          ),), 
+                icon: const Icon(Icons.short_text),  
+                hintText: 'Enter title for report',  
+                labelText: 'Title',  
+              ), 
+              validator: (String? value) {
+                return (value!.isEmpty) ? 'Enter the title of your report.' : null; 
+              }
+            ),  
+            SizedBox(
+              height: 150,
+            child: TextFormField(  
+              expands: true,
+              maxLines: null,
+              minLines: null,
+                decoration: const InputDecoration(  
+                 icon:  Icon(Icons.assignment_rounded),  
+                  hintText: 'Enter a description',  
+                  labelText: 'Description',  
+                ),
+              validator: (String? value) {
+                return (value!.isEmpty) ? 'Enter the description of your report.' : null; 
+              } 
+            ),), 
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: FloatingActionButton(
-            heroTag: UniqueKey(),
-            backgroundColor: const Color(0xfff8a55f),
-            onPressed: () {
-              if(_formKey.currentState!.validate()){
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const HomePage()));}
-            },
-            child: const Icon(Icons.save)
-          ))])
-        ],  
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+              padding: new EdgeInsets.only(top: MediaQuery.of(context).size.height/2.2, right: 20),
+              child: FloatingActionButton(
+              backgroundColor: const Color(0xfff8a55f),
+              onPressed: () {
+                if(_formKey.currentState!.validate()){
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const HomePage()));};
+              },
+              child: const Icon(Icons.save)
+            ))])
+          ],  
+        ),
       ),
     );  
   }  
