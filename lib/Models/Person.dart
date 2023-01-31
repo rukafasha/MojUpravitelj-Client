@@ -57,7 +57,7 @@ class Person {
       firstName: map['firstName'] as String,
       lastName: map['lastName'] as String,
       dateOfBirth:
-          DateTime.fromMillisecondsSinceEpoch(map['dateOfBirth'] as int),
+          DateTime.parse(map['dateOfBirth']),
       companyId: map['companyId'] != null ? map['companyId'] as int : null,
       userAccountId: map['userAccountId'] as int,
       isActive: map['isActive'] as bool,

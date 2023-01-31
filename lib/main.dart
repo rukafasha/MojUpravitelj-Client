@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'ZEV',
+        title: 'Moj upravitelj',
         debugShowCheckedModeBanner: false,
         home: Scaffold(
             body: Stack(

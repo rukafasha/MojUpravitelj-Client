@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Report {
@@ -67,9 +66,9 @@ class Report {
       title: map['title'] as String,
       description: map['description'] as String,
       timeCreated:
-          DateTime.fromMillisecondsSinceEpoch(map['timeCreated'] as int),
+          DateTime.parse(map['timeCreated']),
       timeFinished: map['timeFinished'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['timeFinished'] as int)
+          ? DateTime.parse(map['timeFinished'])
           : null,
       madeBy: map['madeBy'] as int,
       closedBy: map['closedBy'] != null ? map['closedBy'] as int : null,

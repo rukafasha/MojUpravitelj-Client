@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/Helper/DemoValues.dart';
+import 'package:praksa_frontend/Models/Person.dart';
+import 'package:praksa_frontend/Models/Report.dart';
 import 'package:praksa_frontend/ui/forms/reportAdd_form.dart';
+import 'package:http/http.dart' as http;
 
 import '../NavigationDrawer/navigation_drawer.dart';
 
@@ -22,24 +26,40 @@ class HomePage extends StatelessWidget {
           ),
         ),
         drawer: const NavigationDrawer(),
-        body: ListView.builder(
-            itemCount: 10,
-            itemBuilder: (BuildContext context, int index) {
-              return const PostCard();
-            }),
+        body: FutureBuilder<List<Report>>(
+          future: fetchReports(),
+          builder:(context, snapshot){
+            if(snapshot.hasData){
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return PostCard(snapshot, index);
+                  },
+                );
+            }else if(snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+            return const CircularProgressIndicator();
+            }
+            ), 
             floatingActionButton: FloatingActionButton(
-              backgroundColor: Color(0xfff8a55f),
+              heroTag: UniqueKey(),
+              backgroundColor: const Color(0xfff8a55f),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (context) => const ReportAdd()));},
-              child: Icon(Icons.add_outlined)
-            ),);
+              child: const Icon(Icons.add_outlined)
+            ),
+            );
   }
 }
 
+
 class PostCard extends StatelessWidget {
-  const PostCard({super.key});
+  final AsyncSnapshot<List<Report>> snapshot;
+  final int index;
+  const PostCard(this.snapshot, this.index, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +71,10 @@ class PostCard extends StatelessWidget {
           margin: const EdgeInsets.all(4.0),
           padding: const EdgeInsets.all(4.0),
           child: Column(
-            children: const <Widget>[
-              _Post(),
-              Divider(color: Colors.grey),
-              _PostDetails(),
+            children:  <Widget>[
+              _Post(snapshot, index),
+              const Divider(color: Colors.grey),
+              _PostDetails(snapshot, index),
             ],
           ),
         ),
@@ -64,29 +84,34 @@ class PostCard extends StatelessWidget {
 }
 
 class _Post extends StatelessWidget {
-  const _Post({Key? key}) : super(key: key);
+  final AsyncSnapshot<List<Report>> snapshot;
+  final int index;
+  const _Post(this.snapshot, this.index);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       flex: 3,
-      child: Row(children: const <Widget>[_PostTitleAndSummary()]),
+      child: Row(children: <Widget>[_PostTitleAndSummary(snapshot, index)]),
     );
   }
 }
 
 class _PostTitleAndSummary extends StatelessWidget {
-  const _PostTitleAndSummary({Key? key}) : super(key: key);
+  final AsyncSnapshot<List<Report>> snapshot;
+  final int index;
+  const _PostTitleAndSummary(this.snapshot,this.index, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextStyle? titleTheme = Theme.of(context).textTheme.headline6;
     final TextStyle? summaryTheme = Theme.of(context).textTheme.bodyText2;
-    const String title = DemoValues.title;
-    const String summary = DemoValues.description;
+    String title = snapshot.data![index].title;
+    String summary = snapshot.data![index].description;
 
     return Expanded(
       flex: 3,
+      
       child: Padding(
         padding: const EdgeInsets.only(left: 4.0),
         child: Column(
@@ -104,54 +129,97 @@ class _PostTitleAndSummary extends StatelessWidget {
 }
 
 class _PostDetails extends StatelessWidget {
-  const _PostDetails({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: const <Widget>[
-        _UserNameAndEmail(),
-        _PostTimeStamp(),
-      ],
-    );
-  }
-}
-
-class _UserNameAndEmail extends StatelessWidget {
-  const _UserNameAndEmail({Key? key}) : super(key: key);
+  final AsyncSnapshot<List<Report>> lista;
+  final int index;
+  const _PostDetails(this.lista, this.index, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextStyle? nameTheme = Theme.of(context).textTheme.subtitle1;
-
-    return Expanded(
-      flex: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(DemoValues.userName, style: nameTheme),
-            const SizedBox(height: 2.0),
-          ],
-        ),
-      ),
+    final int made = lista.data![index].madeBy;
+    return FutureBuilder<Person>(
+      future: fetchUsers(made),
+      builder:(context, snapshot) {
+          if(snapshot.hasData){
+        return Row(
+      children: <Widget>[
+        _UserNameAndEmail(lista, snapshot.data!.firstName, snapshot.data!.lastName, nameTheme, index),
+        _PostTimeStamp(lista, index),
+      ],
     );
+     }else if(snapshot.hasError) {
+        return Text(snapshot.error.toString());
+        }
+      return const CircularProgressIndicator();
+      }
+    );}
+    
   }
+
+
+class _UserNameAndEmail extends StatelessWidget {
+  final AsyncSnapshot<List<Report>> snapshot;
+  final int index;
+  final String name;
+  final String lastName;
+  final TextStyle? nameTheme;
+  const _UserNameAndEmail(this.snapshot, this.name, this.lastName, this.nameTheme, this.index,{Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+        return Expanded(
+          flex: 5,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("$name $lastName", style: nameTheme),
+                const SizedBox(height: 2.0),
+              ],
+            ),
+          ),
+        );
+      }
+   
 }
 
 class _PostTimeStamp extends StatelessWidget {
-  const _PostTimeStamp({Key? key}) : super(key: key);
+  final AsyncSnapshot<List<Report>> snapshot;
+  final int index;
+  const _PostTimeStamp(this.snapshot, this.index, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextStyle? timeTheme = Theme.of(context).textTheme.caption;
     return Expanded(
       flex: 2,
-      child: Text(DemoValues.timeCreated, style: timeTheme),
+      child: Text(snapshot.data![index].timeCreated.toString(), style: timeTheme),
     );
   }
 }
 
 
+Future<List<Report>> fetchReports() async{
+  var url = Uri.parse('http://10.0.2.2:8000/report/');
+  final response = await http.get(url);
+
+  if(response.statusCode == 200){
+    List jsonResponse = json.decode(response.body);
+    return jsonResponse.map((report) => Report.fromMap(report)).toList();
+  }else {
+    throw Exception('Unexpected error occured');
+  }
+}
+
+Future<Person> fetchUsers(int id) async{
+  var url = Uri.parse('http://10.0.2.2:8000/person/$id');
+  final response = await http.get(url);
+
+  if(response.statusCode == 200){
+    return Person.fromMap(json.decode(response.body));
+  }else{
+    throw Exception('Unexpected error occured');
+  }
+}

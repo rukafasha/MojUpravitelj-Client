@@ -28,7 +28,9 @@ class ReportAdd extends StatelessWidget {
           );
   }
 }
-class AddForm extends StatefulWidget {  
+class AddForm extends StatefulWidget {
+  const AddForm({super.key});
+  
   @override  
   AddFormState createState() {  
     return AddFormState();  
