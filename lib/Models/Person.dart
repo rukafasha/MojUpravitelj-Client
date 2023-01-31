@@ -56,8 +56,7 @@ class Person {
       personId: map['personId'] as int,
       firstName: map['firstName'] as String,
       lastName: map['lastName'] as String,
-      dateOfBirth:
-          DateTime.parse(map['dateOfBirth']),
+      dateOfBirth: DateTime.parse(map['dateOfBirth']),
       companyId: map['companyId'] != null ? map['companyId'] as int : null,
       userAccountId: map['userAccountId'] as int,
       isActive: map['isActive'] as bool,
