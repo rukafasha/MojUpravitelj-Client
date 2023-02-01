@@ -6,7 +6,9 @@ import 'package:praksa_frontend/Models/Report.dart';
 import 'package:praksa_frontend/ui/forms/reportAdd_form.dart';
 import 'package:http/http.dart' as http;
 
+import '../../Helper/GlobalUrl.dart';
 import '../NavigationDrawer/navigation_drawer.dart';
+import 'package:praksa_frontend/Helper/RoleUtil.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -202,8 +204,14 @@ class _PostTimeStamp extends StatelessWidget {
 
 
 Future<List<Report>> fetchReports() async{
-  var url = Uri.parse('http://10.0.2.2:8000/report/');
-  final response = await http.get(url);
+  final response;
+  if(RoleUtil.HasRole('Company')){
+    var url = Uri.parse('${GlobalUrl.url}report/get/company/<int:id>');
+    response = await http.get(url);
+  }else{
+    var url = Uri.parse('${GlobalUrl.url}report/get/building/<int:id>');
+    response = await http.get(url);
+  }
 
   if(response.statusCode == 200){
     List jsonResponse = json.decode(response.body);
