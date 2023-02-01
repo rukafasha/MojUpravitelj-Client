@@ -21,7 +21,7 @@ class _LoginFormState extends State<LoginForm> {
 
   void saveDataToLocalStorage(data) async {
     var personData = data["person"];
-    var buildingData = data["building"];
+    //var buildingData = data["building"];
     var listOfRoles = data["list_of_roles"];
 
     _myBox.put(1, {
@@ -29,7 +29,8 @@ class _LoginFormState extends State<LoginForm> {
       "firstName": personData["firstName"],
       "lastName": personData["lastName"],
       "DOB": personData["dateOfBirth"],
-      "buildingId": buildingData["buildingId"],
+      "companyId": personData["companyId"],
+      "buildingId": 1,
       "roles": listOfRoles,
     });
   }

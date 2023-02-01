@@ -9,8 +9,7 @@ static dynamic GetData(){
 }
 
 static bool HasRole(role){
-  var i;
-  for(i in data["roles"]){
+  for(var i = 0; i < data["roles"].length; i++){
     if(data["roles"][i] == role) {
       return true;
     }

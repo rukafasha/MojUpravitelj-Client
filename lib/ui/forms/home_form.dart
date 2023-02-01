@@ -208,9 +208,14 @@ class _PostTimeStamp extends StatelessWidget {
 Future<List<Report>> fetchReports() async{
   final response;
   var data = RoleUtil.GetData();
+  if(RoleUtil.HasRole("company")){
+    var url = Uri.parse('${GlobalUrl.url}report/get/building/${data["companyId"]}');
+    response = await http.get(url);
+  }
+  else{
     var url = Uri.parse('${GlobalUrl.url}report/get/building/${data["buildingId"]}');
     response = await http.get(url);
-
+  }
 
   if (response.statusCode == 200) {
     List jsonResponse = json.decode(response.body);
@@ -221,7 +226,7 @@ Future<List<Report>> fetchReports() async{
 }
 
 Future<Person> fetchUsers(int id) async {
-  var url = Uri.parse('http://10.0.2.2:8000/person/$id');
+  var url = Uri.parse('${GlobalUrl.url}person/$id');
   final response = await http.get(url);
 
   if (response.statusCode == 200) {
