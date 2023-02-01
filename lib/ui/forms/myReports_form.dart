@@ -7,16 +7,21 @@ import 'package:praksa_frontend/ui/forms/reportAdd_form.dart';
 import 'package:http/http.dart' as http;
 
 import '../../Helper/GlobalUrl.dart';
-import '../NavigationDrawer/navigation_drawer.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+import 'home_form.dart';
+
+class MyReport extends StatelessWidget {
+  const MyReport({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: BackButton(
+            onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                )),
           title: const Center(child: Text("Moj upravitelj",)),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
@@ -27,7 +32,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
-        drawer: const NavigationDrawer(),
+
         body: FutureBuilder<List<Report>>(
           future: fetchReports(),
           builder:(context, snapshot){
@@ -205,7 +210,8 @@ class _PostTimeStamp extends StatelessWidget {
 
 Future<List<Report>> fetchReports() async{
   final response;
-    var url = Uri.parse('${GlobalUrl.url}report/');
+  var data = RoleUtil.GetData();
+    var url = Uri.parse('${GlobalUrl.url}report/get/user/${data["personId"]}');
     response = await http.get(url);
 
 

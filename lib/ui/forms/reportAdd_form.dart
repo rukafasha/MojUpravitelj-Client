@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 
-import '../NavigationDrawer/navigation_drawer.dart';
 
 class ReportAdd extends StatelessWidget {
   const ReportAdd({super.key});
@@ -24,7 +23,7 @@ class ReportAdd extends StatelessWidget {
               ),
             ),
         ),
-        body: AddForm(),
+        body: const AddForm(),
           );
   }
 }
@@ -56,7 +55,7 @@ class AddFormState extends State<AddForm> {
           children: <Widget>[  
             TextFormField(  
               decoration: const InputDecoration(  
-                icon: const Icon(Icons.short_text),  
+                icon: Icon(Icons.short_text),  
                 hintText: 'Enter title for report',  
                 labelText: 'Title',  
               ), 
@@ -84,14 +83,14 @@ class AddFormState extends State<AddForm> {
               mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
-              padding: new EdgeInsets.only(top: MediaQuery.of(context).size.height/2.2, right: 20),
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height/2.2, right: 20),
               child: FloatingActionButton(
               backgroundColor: const Color(0xfff8a55f),
               onPressed: () {
                 if(_formKey.currentState!.validate()){
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => const HomePage()));};
+                        builder: (context) => const HomePage()));}
               },
               child: const Icon(Icons.save)
             ))])

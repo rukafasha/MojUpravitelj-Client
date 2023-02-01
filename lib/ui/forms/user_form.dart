@@ -193,7 +193,7 @@ class _UserFormState extends State<UserForm> {
                     Container(
                       margin: const EdgeInsets.all(10),
                       child: FloatingActionButton(
-                        backgroundColor: Color(0xfff8a55f),
+                        backgroundColor: const Color(0xfff8a55f),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
