@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:praksa_frontend/Models/Building.dart';
+import 'package:praksa_frontend/Models/RolePerson.dart';
 import 'package:praksa_frontend/ui/background/background.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/register_form.dart';
@@ -13,6 +16,27 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final _myBox = Hive.box("myBox");
+
+  void saveDataToLocalStorage(data) async {
+    var personData = data["person"];
+    var buildingData = data["building"];
+    var listOfRoles = data["list_of_roles"];
+
+    _myBox.put(1, {
+      "personId": personData["personId"],
+      "firstName": personData["firstName"],
+      "lastName": personData["lastName"],
+      "DOB": personData["dateOfBirth"],
+      "buildingId": buildingData["buildingId"],
+      "roles": listOfRoles,
+    });
+  }
+
+  dynamic readData() {
+    return _myBox.get(1);
+  }
+
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -22,12 +46,12 @@ class _LoginFormState extends State<LoginForm> {
     map['username'] = _usernameController.text;
     map['password'] = _passwordController.text;
 
-    final response = await http.post(
+    final personDetails = await http.post(
       Uri.parse('http://10.0.3.2:8000/login'),
       body: map,
     );
 
-    return response.statusCode;
+    return personDetails;
   }
 
   @override
@@ -152,10 +176,16 @@ class _LoginFormState extends State<LoginForm> {
                       child: InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            var loginStatusCode = await login();
+                            var personDetails = await login();
+                            var loginStatusCode = personDetails.statusCode;
 
                             if (loginStatusCode >= 200 &&
                                 loginStatusCode < 300) {
+                              var personDetailsConverted =
+                                  json.decode(personDetails.body);
+
+                              saveDataToLocalStorage(personDetailsConverted);
+
                               _usernameController.clear();
                               _passwordController.clear();
 
