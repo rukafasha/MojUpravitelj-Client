@@ -1,59 +1,47 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
-import 'package:praksa_frontend/ui/background/background.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'package:praksa_frontend/ui/forms/register_form.dart';
+import 'package:intl/intl.dart';
+import 'package:praksa_frontend/ui/forms/login_form.dart';
+import '../../Helper/GlobalUrl.dart';
+import '../background/background.dart';
 import 'package:http/http.dart' as http;
 
-import '../../Helper/GlobalUrl.dart';
-
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class CompanyRegisterForm extends StatefulWidget {
+  const CompanyRegisterForm({Key? key}) : super(key: key);
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  State<CompanyRegisterForm> createState() => _CompanyRegisterFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
-  static final _myBox = Hive.box("myBox");
-
-  void saveDataToLocalStorage(data) async {
-    var personData = data["person"];
-    var buildingData = data["building_ids"];
-    var listOfRoles = data["list_of_roles"];
-
-    _myBox.put(1, {
-      "personId": personData["personId"],
-      "firstName": personData["firstName"],
-      "lastName": personData["lastName"],
-      "DOB": personData["dateOfBirth"],
-      "companyId": personData["companyId"],
-      "buildingId": buildingData,
-      "roles": listOfRoles,
-    });
-  }
-
-  static dynamic readData() {
-    return _myBox.get(1);
-  }
-
+class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
   final _formKey = GlobalKey<FormState>();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
-  Future login() async {
-    var map = <String, dynamic>{};
-    map['username'] = _usernameController.text;
-    map['password'] = _passwordController.text;
+  final _companyNameController = TextEditingController();
 
-    final personDetails = await http.post(
-      Uri.parse('${GlobalUrl.url}login'),
-      body: map,
+  Future userRegistration() async {
+    
+     final response = await http.post(
+      Uri.parse('${GlobalUrl.url}companyRegistration'),
+      headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+      body: jsonEncode(<String,dynamic>{
+        'firstName': _firstNameController.text.toString(),
+        'lastName':_lastNameController.text.toString(),
+        'username': _usernameController.text.toString(),
+        'password': _passwordController.text.toString(),
+        'dateOfBirth': _dateController.text.toString(),
+        'companyName': _companyNameController.text.toString(),
+        'isCompany': true,
+      })
     );
-
-    return personDetails;
+    return response.statusCode;
   }
 
   @override
@@ -65,9 +53,9 @@ class _LoginFormState extends State<LoginForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              margin: const EdgeInsets.only(bottom: 60),
+              margin: const EdgeInsets.only(bottom: 55),
               child: const Text(
-                "Login",
+                "Register company",
                 style: TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
@@ -75,16 +63,13 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             SizedBox(
-              height: 150,
+              height: 350,
               child: Stack(
                 children: [
                   Form(
                     key: _formKey,
                     child: Container(
-                      height: 150,
-                      margin: const EdgeInsets.only(
-                        right: 70,
-                      ),
+                      margin: const EdgeInsets.only(right: 70),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: const BorderRadius.only(
@@ -106,6 +91,48 @@ class _LoginFormState extends State<LoginForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
+                              controller: _firstNameController,
+                              validator: (value) {
+                                if (value!.trim().isEmpty) {
+                                  return "Enter First Name";
+                                } else {
+                                  return value.trim().length < 3
+                                      ? 'Minimum character length is 3'
+                                      : null;
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                hintStyle: TextStyle(fontSize: 16),
+                                border: InputBorder.none,
+                                icon: Icon(Icons.person),
+                                hintText: "First Name",
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, right: 32),
+                            child: TextFormField(
+                              controller: _lastNameController,
+                              validator: (value) {
+                                if (value!.trim().isEmpty) {
+                                  return "Enter Last Name";
+                                } else {
+                                  return value.trim().length < 3
+                                      ? 'Minimum character length is 3'
+                                      : null;
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                hintStyle: TextStyle(fontSize: 16),
+                                border: InputBorder.none,
+                                icon: Icon(Icons.person),
+                                hintText: "Last Name",
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, right: 32),
+                            child: TextFormField(
                               controller: _usernameController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
@@ -117,7 +144,7 @@ class _LoginFormState extends State<LoginForm> {
                                 }
                               },
                               decoration: const InputDecoration(
-                                hintStyle: TextStyle(fontSize: 20),
+                                hintStyle: TextStyle(fontSize: 16),
                                 border: InputBorder.none,
                                 icon: Icon(Icons.account_circle_rounded),
                                 hintText: "Username",
@@ -139,13 +166,66 @@ class _LoginFormState extends State<LoginForm> {
                               },
                               obscureText: true,
                               decoration: const InputDecoration(
-                                hintStyle: TextStyle(fontSize: 22),
+                                hintStyle: TextStyle(fontSize: 16),
                                 border: InputBorder.none,
                                 icon: Icon(Icons.lock),
-                                hintText: "********",
+                                hintText: "Password",
                               ),
                             ),
-                          )
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, right: 32),
+                            child: TextFormField(
+                                controller: _dateController,
+                                validator: (value) {
+                                  if (value!.trim().isEmpty) {
+                                    return "Enter Date";
+                                  }
+                                },
+                                decoration: const InputDecoration(
+                                  hintStyle: TextStyle(fontSize: 16),
+                                  border: InputBorder.none,
+                                  icon: Icon(Icons.date_range),
+                                  hintText: "Select Date",
+                                ),
+                                readOnly: true,
+                                onTap: () async {
+                                  DateTime? pickedDate = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(1900),
+                                      lastDate: DateTime.now());
+
+                                  if (pickedDate != null) {
+                                    setState(() {
+                                      _dateController.text =
+                                          DateFormat('yyyy-MM-dd')
+                                              .format(pickedDate);
+                                    });
+                                  }
+                                }),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, right: 32),
+                            child: TextFormField(
+                              controller: _companyNameController,
+                              validator: (value) {
+                                if (value!.trim().isEmpty) {
+                                  return "Enter Company Name";
+                                } else {
+                                  return value.trim().length < 3
+                                      ? 'Minimum character length is 3'
+                                      : null;
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                hintStyle: TextStyle(fontSize: 16),
+                                border: InputBorder.none,
+                                icon: Icon(Icons.business),
+                                hintText: "Company Name",
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -178,26 +258,21 @@ class _LoginFormState extends State<LoginForm> {
                       child: InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            var personDetails = await login();
-                            var loginStatusCode = personDetails.statusCode;
-                            
+                            var statusCode = await userRegistration();
 
-                            if (loginStatusCode >= 200 &&
-                                loginStatusCode < 300) {
-                              var personDetailsConverted =
-                                  json.decode(personDetails.body);
-
-                              saveDataToLocalStorage(personDetailsConverted);
-                              RoleUtil(readData());
+                            if (statusCode >= 200 && statusCode < 300) {
+                              _firstNameController.clear();
+                              _lastNameController.clear();
                               _usernameController.clear();
                               _passwordController.clear();
+                              _dateController.clear();
 
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => const HomePage(),
+                                  builder: (context) => const LoginForm(),
                                 ),
                               );
-                            } else if (loginStatusCode == 401) {
+                            } else if (statusCode == 409) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                       backgroundColor: Colors.transparent,
@@ -219,47 +294,10 @@ class _LoginFormState extends State<LoginForm> {
                                                       CrossAxisAlignment.start,
                                                   children: const [
                                                     Text(
-                                                      "The Password You Entered Is Incorrect. Please Try Again",
+                                                      "Unsuccessful registration. Username is already registered.",
                                                       style: TextStyle(
                                                           fontSize: 16,
                                                           color: Colors.white),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ])));
-                            } else if (loginStatusCode == 404) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      backgroundColor: Colors.transparent,
-                                      elevation: 0.0,
-                                      content: Stack(children: [
-                                        Container(
-                                          padding: const EdgeInsets.all(16),
-                                          height: 60,
-                                          decoration: const BoxDecoration(
-                                              color: Color(0xFFC72C41),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20))),
-                                          child: Row(
-                                            children: [
-                                              const SizedBox(width: 12),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: const [
-                                                    Text(
-                                                      "User does not exist",
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
                                                     ),
                                                   ],
                                                 ),
@@ -283,7 +321,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   margin: const EdgeInsets.only(left: 16, top: 24),
@@ -291,28 +329,17 @@ class _LoginFormState extends State<LoginForm> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const RegisterForm(),
+                          builder: (context) => const LoginForm(),
                         ),
                       );
                     },
                     child: const Text(
-                      "Register",
+                      "Login",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
                         color: Color(0xffe98f60),
                       ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(right: 16, top: 16),
-                  child: Text(
-                    "Forgot ?",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[400],
                     ),
                   ),
                 ),

@@ -116,9 +116,6 @@ class AddFormState extends State<AddForm> {
 
 Future<Report> AddReport(titleController, descriptionController) async {
     var data = RoleUtil.GetData();
-    print(data);
-    print(descriptionController);
-    print(titleController);
 
     final response = await http.post(
       Uri.parse('${GlobalUrl.url}report/add'),

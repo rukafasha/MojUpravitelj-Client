@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:praksa_frontend/ui/forms/company_register_form.dart';
+import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
 import '../background/background.dart';
 import 'package:http/http.dart' as http;
@@ -26,6 +28,7 @@ class _RegisterFormState extends State<RegisterForm> {
     map['username'] = _usernameController.text;
     map['password'] = _passwordController.text;
     map['dateOfBirth'] = _dateController.text;
+    map['isCompany'] = false;
 
     final response = await http.post(
       Uri.parse('http://10.0.3.2:8000/registration'),
@@ -95,7 +98,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               decoration: const InputDecoration(
                                 hintStyle: TextStyle(fontSize: 16),
                                 border: InputBorder.none,
-                                icon: Icon(Icons.account_circle_rounded),
+                                icon: Icon(Icons.person),
                                 hintText: "First Name",
                               ),
                             ),
@@ -116,7 +119,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               decoration: const InputDecoration(
                                 hintStyle: TextStyle(fontSize: 16),
                                 border: InputBorder.none,
-                                icon: Icon(Icons.account_circle_rounded),
+                                icon: Icon(Icons.person),
                                 hintText: "Last Name",
                               ),
                             ),
@@ -137,7 +140,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               decoration: const InputDecoration(
                                 hintStyle: TextStyle(fontSize: 16),
                                 border: InputBorder.none,
-                                icon: Icon(Icons.person),
+                                icon: Icon(Icons.account_circle_rounded),
                                 hintText: "Username",
                               ),
                             ),
@@ -159,7 +162,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               decoration: const InputDecoration(
                                 hintStyle: TextStyle(fontSize: 16),
                                 border: InputBorder.none,
-                                icon: Icon(Icons.password),
+                                icon: Icon(Icons.lock),
                                 hintText: "Password",
                               ),
                             ),
@@ -305,6 +308,31 @@ class _RegisterFormState extends State<RegisterForm> {
                     },
                     child: const Text(
                       "Login",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xffe98f60),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 16, top: 24),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const CompanyRegisterForm(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "Register company",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
