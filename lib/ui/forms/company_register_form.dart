@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
+import '../../Helper/GlobalUrl.dart';
 import '../background/background.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,20 +25,22 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
   final _companyNameController = TextEditingController();
 
   Future userRegistration() async {
-    var map = <String, dynamic>{};
-    map['firstName'] = _firstNameController.text;
-    map['lastName'] = _lastNameController.text;
-    map['username'] = _usernameController.text;
-    map['password'] = _passwordController.text;
-    map['dateOfBirth'] = _dateController.text;
-    map['companyName'] = _companyNameController.text;
-    map['isCompany'] = true;
-
-    final response = await http.post(
-      Uri.parse('http://10.0.3.2:8000/registration'),
-      body: map,
+    
+     final response = await http.post(
+      Uri.parse('${GlobalUrl.url}companyRegistration'),
+      headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+      body: jsonEncode(<String,dynamic>{
+        'firstName': _firstNameController.text.toString(),
+        'lastName':_lastNameController.text.toString(),
+        'username': _usernameController.text.toString(),
+        'password': _passwordController.text.toString(),
+        'dateOfBirth': _dateController.text.toString(),
+        'companyName': _companyNameController.text.toString(),
+        'isCompany': true,
+      })
     );
-
     return response.statusCode;
   }
 
