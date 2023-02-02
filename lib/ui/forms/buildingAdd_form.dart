@@ -1,8 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
-import 'package:praksa_frontend/Models/Report.dart';
+import 'package:praksa_frontend/Models/Appartment.dart';
+import 'package:praksa_frontend/Models/Building.dart';
+import 'package:praksa_frontend/ui/forms/buildingView_form.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'dart:convert';
 
@@ -10,8 +10,9 @@ import '../../Helper/GlobalUrl.dart';
 import 'package:http/http.dart' as http;
 
 
-class ReportAdd extends StatelessWidget {
-  const ReportAdd({super.key});
+
+class BuildingAdd extends StatelessWidget {
+  const BuildingAdd({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +48,8 @@ class AddForm extends StatefulWidget {
 
 class AddFormState extends State<AddForm> {   
   final _formKey = GlobalKey<FormState>();  
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final _addressController = TextEditingController();
+  final _numbOfAppController = TextEditingController();
   @override  
   Widget build(BuildContext context) {   
     return Container(
@@ -62,31 +63,31 @@ class AddFormState extends State<AddForm> {
             SizedBox(
               height: MediaQuery.of(context).size.height/8,
               child: TextFormField(
-                controller: _titleController,
+                controller: _addressController,
                 decoration: const InputDecoration(  
                   icon: Icon(Icons.short_text),  
-                  hintText: 'Enter title for report',  
-                  labelText: 'Title',  
+                  hintText: 'Enter address for building',  
+                  labelText: 'Address',  
                 ), 
                 validator: (String? value) {
-                  return (value!.isEmpty) ? 'Enter the title of your report.' : null; 
+                  return (value!.isEmpty) ? 'Enter the address for your building.' : null; 
                 }
               ),
             ),  
             SizedBox(
               height: MediaQuery.of(context).size.height/6,
             child: TextFormField(  
-              controller: _descriptionController,
+              controller: _numbOfAppController,
               expands: true,
               maxLines: null,
               minLines: null,
                 decoration: const InputDecoration(  
                  icon:  Icon(Icons.assignment_rounded),  
-                  hintText: 'Enter a description',  
-                  labelText: 'Description',  
+                  hintText: 'Enter the number of appartments',  
+                  labelText: 'Number of appartments',  
                 ),
               validator: (String? value) {
-                return (value!.isEmpty) ? 'Enter the description of your report.' : null; 
+                return (value!.isEmpty) ? 'Enter the number of appartmentsin your building.' : null; 
               } 
             ),), 
             
@@ -97,45 +98,63 @@ class AddFormState extends State<AddForm> {
               padding: EdgeInsets.only(top: MediaQuery.of(context).size.height/2.2, right: 20),
               child: FloatingActionButton(
               backgroundColor: const Color(0xfff8a55f),
-              onPressed: () {
-                if(_formKey.currentState!.validate() && RoleUtil.HasRole("Tenant")){
-                  AddReport(_titleController.text, _descriptionController.text);
+              onPressed: () async {
+                if(_formKey.currentState!.validate() && RoleUtil.HasRole("Company")){
+                  var building = await AddBuilding(_addressController.text, _numbOfAppController.text);
+                  for(var i = 0; i < int.parse(_numbOfAppController.text); i++){
+                    await AddAppartment(building,  (i+1));
+                  }
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => const HomePage()));}
+                        builder: (context) => const BuildingView()));}
               },
               child: const Icon(Icons.save)
             ))])
+            
           ],  
         ),
       ),
     );  
-  }  
+  }
+  
 }  
 
 
-Future<Report> AddReport(titleController, descriptionController) async {
+Future<int> AddBuilding(addressController,numbOfAppController) async {
     var data = RoleUtil.GetData();
 
     final response = await http.post(
-      Uri.parse('${GlobalUrl.url}report/add'),
+      Uri.parse('${GlobalUrl.url}building/add'),
       headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
       body: jsonEncode(<String,dynamic>{
-        'title': titleController.toString(),
-        'description': descriptionController.toString(),
-        'madeBy': data["personId"].toString(),
-        'timeCreated': DateTime.now().toString(),
-        'timeFinished': null,
-        'status': 1,
+        'address': addressController.toString(),
+        'companyId': data["companyId"].toString(),
+        'numberOfAppartment': numbOfAppController.toString(),
+        'countyId': "1",
+        'representativeId': null,
         'isActive': true,
-        'closedBy': null,
       }),
     );
    if (response.statusCode == 201) {
-    return Report.fromJson(response.body);
+    var building = Building.fromJson(response.body);
+    return building.buildingId;
   } else {
-    throw Exception('Report loading failed!');
+    throw Exception('Building loading failed!');
   }
   }
+
+    Future<Appartment> AddAppartment(building, numbOfApps) async {
+      http.Response response;
+      var map = <String, dynamic>{};
+      map['appartmentNumber'] = numbOfApps.toString();
+      map['buildingId'] = building.toString();
+      map['numberOfPeople'] = 0.toString();
+      map['isActive'] = true.toString();
+        response = await http.post(
+          Uri.parse('${GlobalUrl.url}appartment/add'),
+          body: map,
+          );
+      return Appartment.fromMap(json.decode(response.body) as Map<String, dynamic>);
+    }  

@@ -224,7 +224,7 @@ Future<List<Report>> fetchReports() async{
 }
 
 Future<Person> fetchUsers(int id) async{
-  var url = Uri.parse('http://10.0.2.2:8000/person/$id');
+  var url = Uri.parse('${GlobalUrl.url}person/$id');
   final response = await http.get(url);
 
   if(response.statusCode == 200){

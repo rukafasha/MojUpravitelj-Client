@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:praksa_frontend/ui/forms/myReports_form.dart';
 import 'package:praksa_frontend/ui/forms/user_form.dart';
 
+import '../forms/buildingView_form.dart';
 import '../forms/home_form.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -53,10 +55,16 @@ class NavigationDrawer extends StatelessWidget {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const MyReport()));},
             ),
-            ListTile(
-              leading: const Icon(Icons.people),
-              title: const Text('Tenants'),
-              onTap: () {},
+            Visibility(
+              visible: RoleUtil.HasRole("Company"),
+              child: ListTile(
+                leading: const Icon(Icons.people),
+                title: const Text('Buildings'),
+                onTap: () {Navigator.pop(context);
+
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const BuildingView()));},
+              ),
             ),
           ],
         ),
