@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:praksa_frontend/ui/forms/login_form.dart';
 import 'package:praksa_frontend/ui/forms/myReports_form.dart';
 import 'package:praksa_frontend/ui/forms/user_form.dart';
 
+import '../../Helper/RoleUtil.dart';
 import '../forms/home_form.dart';
 
 class NavigationDrawer extends StatelessWidget {
-  const NavigationDrawer({super.key});
+  NavigationDrawer({super.key});
+
+  final _myBox = Hive.box("myBox");
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +53,28 @@ class NavigationDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.assignment_rounded),
               title: const Text('My reports'),
-              onTap: () {Navigator.pop(context);
+              onTap: () {
+                Navigator.pop(context);
 
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const MyReport()));},
+                    MaterialPageRoute(builder: (context) => const MyReport()));
+              },
             ),
             ListTile(
               leading: const Icon(Icons.people),
               title: const Text('Tenants'),
               onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () {
+                _myBox.clear();
+                RoleUtil.DeleteDataFromBox();
+
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const LoginForm()));
+              },
             ),
           ],
         ),

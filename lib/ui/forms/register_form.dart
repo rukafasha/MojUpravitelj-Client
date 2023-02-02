@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:praksa_frontend/ui/forms/company_register_form.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
+import '../../Helper/GlobalUrl.dart';
 import '../background/background.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,7 +32,7 @@ class _RegisterFormState extends State<RegisterForm> {
     map['isCompany'] = false;
 
     final response = await http.post(
-      Uri.parse('http://10.0.3.2:8000/registration'),
+      Uri.parse('${GlobalUrl.url}registration'),
       body: map,
     );
 
