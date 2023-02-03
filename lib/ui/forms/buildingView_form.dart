@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:praksa_frontend/Models/Building.dart';
+import 'package:praksa_frontend/Models/Company.dart';
 import 'package:praksa_frontend/Models/Person.dart';
 import 'package:praksa_frontend/Models/Report.dart';
 import 'package:praksa_frontend/ui/forms/reportAdd_form.dart';
@@ -10,13 +12,20 @@ import '../../Helper/GlobalUrl.dart';
 import '../NavigationDrawer/navigation_drawer.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+import 'buildingAdd_form.dart';
+import 'home_form.dart';
+
+class BuildingView extends StatelessWidget {
+  const BuildingView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+            onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                )),
         title: const Center(
             child: Text(
           "Moj upravitelj",
@@ -30,8 +39,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      drawer: NavigationDrawer(),
-      body: FutureBuilder<List<Report>>(
+      body: FutureBuilder<List<Building>>(
           future: fetchReports(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -51,7 +59,7 @@ class HomePage extends StatelessWidget {
           backgroundColor: const Color(0xfff8a55f),
           onPressed: () {
             Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const ReportAdd()));
+                MaterialPageRoute(builder: (context) => const BuildingAdd()));
           },
           child: const Icon(Icons.add_outlined)),
     );
@@ -59,7 +67,7 @@ class HomePage extends StatelessWidget {
 }
 
 class PostCard extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> snapshot;
+  final AsyncSnapshot<List<Building>> snapshot;
   final int index;
   const PostCard(this.snapshot, this.index, {super.key});
 
@@ -86,7 +94,7 @@ class PostCard extends StatelessWidget {
 }
 
 class _Post extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> snapshot;
+  final AsyncSnapshot<List<Building>> snapshot;
   final int index;
   const _Post(this.snapshot, this.index);
 
@@ -100,7 +108,7 @@ class _Post extends StatelessWidget {
 }
 
 class _PostTitleAndSummary extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> snapshot;
+  final AsyncSnapshot<List<Building>> snapshot;
   final int index;
   const _PostTitleAndSummary(this.snapshot, this.index, {Key? key})
       : super(key: key);
@@ -109,8 +117,8 @@ class _PostTitleAndSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle? titleTheme = Theme.of(context).textTheme.headline6;
     final TextStyle? summaryTheme = Theme.of(context).textTheme.bodyText2;
-    String title = snapshot.data![index].title;
-    String summary = snapshot.data![index].description;
+    String title = snapshot.data![index].address;
+    int summary = snapshot.data![index].numberOfAppartment;
 
     return Expanded(
       flex: 3,
@@ -122,7 +130,7 @@ class _PostTitleAndSummary extends StatelessWidget {
           children: <Widget>[
             Text(title, style: titleTheme),
             const SizedBox(height: 2.0),
-            Text(summary, style: summaryTheme),
+            Text(summary.toString(), style: summaryTheme),
           ],
         ),
       ),
@@ -131,23 +139,22 @@ class _PostTitleAndSummary extends StatelessWidget {
 }
 
 class _PostDetails extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> lista;
+  final AsyncSnapshot<List<Building>> lista;
   final int index;
   const _PostDetails(this.lista, this.index, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextStyle? nameTheme = Theme.of(context).textTheme.subtitle1;
-    final int made = lista.data![index].madeBy;
-    return FutureBuilder<Person>(
-        future: fetchUsers(made),
+    final int made = lista.data![index].companyId;
+    return FutureBuilder<Company>(
+        future: fetchCompany(made),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Row(
               children: <Widget>[
-                _UserNameAndEmail(lista, snapshot.data!.firstName,
-                    snapshot.data!.lastName, nameTheme, index),
-                _PostTimeStamp(lista, index),
+                _UserNameAndEmail(lista, snapshot.data!.companyName, nameTheme, index),
+                //_PostTimeStamp(lista, index),
               ],
             );
           } else if (snapshot.hasError) {
@@ -159,13 +166,12 @@ class _PostDetails extends StatelessWidget {
 }
 
 class _UserNameAndEmail extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> snapshot;
+  final AsyncSnapshot<List<Building>> snapshot;
   final int index;
   final String name;
-  final String lastName;
   final TextStyle? nameTheme;
   const _UserNameAndEmail(
-      this.snapshot, this.name, this.lastName, this.nameTheme, this.index,
+      this.snapshot, this.name,  this.nameTheme, this.index,
       {Key? key})
       : super(key: key);
 
@@ -179,7 +185,7 @@ class _UserNameAndEmail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("$name $lastName", style: nameTheme),
+            Text(name, style: nameTheme),
             const SizedBox(height: 2.0),
           ],
         ),
@@ -188,51 +194,26 @@ class _UserNameAndEmail extends StatelessWidget {
   }
 }
 
-class _PostTimeStamp extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> snapshot;
-  final int index;
-  const _PostTimeStamp(this.snapshot, this.index, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final TextStyle? timeTheme = Theme.of(context).textTheme.caption;
-    return Expanded(
-      flex: 2,
-      child:
-          Text(snapshot.data![index].timeCreated.toString(), style: timeTheme),
-    );
-  }
-}
-
-
-Future<List<Report>> fetchReports() async{
-  var response;
+Future<List<Building>> fetchReports() async{
+  final http.Response response;
   var data = RoleUtil.GetData();
-  if(RoleUtil.HasRole("Company")){
-    var url = Uri.parse('${GlobalUrl.url}report/get/building/${data["companyId"]}');
+    var url = Uri.parse('${GlobalUrl.url}building/get/company/${data["companyId"]}');
     response = await http.get(url);
-  }
-  else{
-      var url = Uri.parse('${GlobalUrl.url}report/get/building/${data["buildingId"][0]}');
-      response = await http.get(url);
-
-  }
 
   if (response.statusCode == 200) {
     List jsonResponse = json.decode(response.body);
-    return jsonResponse.map((report) => Report.fromMap(report)).toList();
+    return jsonResponse.map((building) => Building.fromMap(building)).toList();
   } else {
     throw Exception('Unexpected error occured');
   }
 }
 
-
-Future<Person> fetchUsers(int id) async {
-  var url = Uri.parse('${GlobalUrl.url}person/$id');
+Future<Company> fetchCompany(int id) async {
+  var url = Uri.parse('${GlobalUrl.url}company/$id');
   final response = await http.get(url);
 
   if (response.statusCode == 200) {
-    return Person.fromMap(json.decode(response.body));
+    return Company.fromMap(json.decode(response.body));
   } else {
     throw Exception('Unexpected error occured');
   }
