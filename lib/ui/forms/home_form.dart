@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      drawer: const NavigationDrawer(),
+      drawer: NavigationDrawer(),
       body: FutureBuilder<List<Report>>(
           future: fetchReports(),
           builder: (context, snapshot) {
@@ -208,31 +208,24 @@ class _PostTimeStamp extends StatelessWidget {
 Future<List<Report>> fetchReports() async{
   var response;
   var data = RoleUtil.GetData();
-  List<Report> lista = [];
   if(RoleUtil.HasRole("Company")){
     var url = Uri.parse('${GlobalUrl.url}report/get/building/${data["companyId"]}');
     response = await http.get(url);
   }
   else{
-    for(var i = 0; i < data["buildingId"].length; i++){
-      var url = Uri.parse('${GlobalUrl.url}report/get/building/${data["buildingId"][i]}');
+      var url = Uri.parse('${GlobalUrl.url}report/get/building/${data["buildingId"][0]}');
       response = await http.get(url);
-      lista.insertAll(AddingToList(response).length, AddingToList(response));
-    }
+
   }
 
   if (response.statusCode == 200) {
-    return lista;
+    List jsonResponse = json.decode(response.body);
+    return jsonResponse.map((report) => Report.fromMap(report)).toList();
   } else {
     throw Exception('Unexpected error occured');
   }
 }
 
-List<Report> AddingToList(response) {
-  List jsonResponse = json.decode(response.body);
-  return jsonResponse.map((report) => Report.fromMap(report)).toList();
-
-}
 
 Future<Person> fetchUsers(int id) async {
   var url = Uri.parse('${GlobalUrl.url}person/$id');
