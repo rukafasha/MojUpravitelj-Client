@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:praksa_frontend/ui/forms/company_register_form.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
+import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
 import '../../Helper/GlobalUrl.dart';
 import '../background/background.dart';
 import 'package:http/http.dart' as http;
@@ -36,7 +37,8 @@ class _RegisterFormState extends State<RegisterForm> {
       body: map,
     );
 
-    return response.statusCode;
+    // return response.statusCode;
+    return response;
   }
 
   @override
@@ -231,57 +233,62 @@ class _RegisterFormState extends State<RegisterForm> {
                       ),
                       child: InkWell(
                         onTap: () async {
-                          if (_formKey.currentState!.validate()) {
-                            var statusCode = await userRegistration();
+                          // if (_formKey.currentState!.validate()) {
+                          // var statusCode = await userRegistration();
+                          // var response = await userRegistration();
+                          var statusCode = 200;
+                          // var statusCode = response.statusCode;
+                          // var user_id = response.userId;
+                          var user_id = 983;
 
-                            if (statusCode >= 200 && statusCode < 300) {
-                              _firstNameController.clear();
-                              _lastNameController.clear();
-                              _usernameController.clear();
-                              _passwordController.clear();
-                              _dateController.clear();
+                          if (statusCode >= 200 && statusCode < 300) {
+                            _firstNameController.clear();
+                            _lastNameController.clear();
+                            _usernameController.clear();
+                            _passwordController.clear();
+                            _dateController.clear();
 
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginForm(),
-                                ),
-                              );
-                            } else if (statusCode == 409) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      backgroundColor: Colors.transparent,
-                                      elevation: 0.0,
-                                      content: Stack(children: [
-                                        Container(
-                                          padding: const EdgeInsets.all(16),
-                                          height: 80,
-                                          decoration: const BoxDecoration(
-                                              color: Color(0xFFC72C41),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20))),
-                                          child: Row(
-                                            children: [
-                                              const SizedBox(width: 12),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: const [
-                                                    Text(
-                                                      "Unsuccessful registration. Username is already registered.",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.white),
-                                                    ),
-                                                  ],
-                                                ),
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BuildingsByAddress(user_id: user_id),
+                              ),
+                            );
+                          } else if (statusCode == 409) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: Colors.transparent,
+                                elevation: 0.0,
+                                content: Stack(children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(16),
+                                    height: 80,
+                                    decoration: const BoxDecoration(
+                                        color: Color(0xFFC72C41),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    child: Row(
+                                      children: [
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: const [
+                                              Text(
+                                                "Unsuccessful registration. Username is already registered.",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.white),
                                               ),
                                             ],
                                           ),
                                         ),
-                                      ])));
-                            }
+                                      ],
+                                    ),
+                                  ),
+                                ])));
                           }
+                          // }
                         },
                         child: const Icon(
                           Icons.arrow_forward_outlined,
