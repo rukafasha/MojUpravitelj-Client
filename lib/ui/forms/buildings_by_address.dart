@@ -49,8 +49,8 @@ class ModelBuildingsByAddress {
 }
 
 class BuildingsByAddress extends StatefulWidget {
-  var user_id;
-  BuildingsByAddress({super.key, required this.user_id});
+  var person_id;
+  BuildingsByAddress({super.key, required this.person_id});
 
   @override
   State<BuildingsByAddress> createState() => _BuildingsByAddressState();
@@ -60,12 +60,15 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
   late Future<List<ModelBuildingsByAddress>> buildingsFuture = Future.value([]);
   final _searchController = TextEditingController();
   var buildingsNotFound = "Buildings not found.";
-  var _user_id;
+  var _person_id;
 
   @override
   void initState() {
     super.initState();
-    _user_id = widget.user_id;
+    _person_id = widget.person_id;
+
+    print("Widget person_iddddddd je: ${widget.person_id}");
+    print("___person_iddddddd je: ${_person_id}");
   }
 
   Future<List<ModelBuildingsByAddress>> getBuildingsByAddress(address) async {
@@ -183,11 +186,12 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => ListOfApartmentsInTheBuilding(
-                        building_id: building.buildingId, user_id: _user_id),
+                        building_id: building.buildingId,
+                        person_id: _person_id),
                   ),
                 );
-                print("building_id: ${building.buildingId}");
-                print("user_id: $_user_id");
+                // print("building_id: ${building.buildingId}");
+                // print("person_id: $_person_id");
               },
               title: Text(
                   "Building ID: ${building.buildingId}   |   County: ${building.countyName}"),

@@ -239,7 +239,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           var statusCode = 200;
                           // var statusCode = response.statusCode;
                           // var user_id = response.userId;
-                          var user_id = 983;
+                          var person_id = 983;
 
                           if (statusCode >= 200 && statusCode < 300) {
                             _firstNameController.clear();
@@ -251,7 +251,7 @@ class _RegisterFormState extends State<RegisterForm> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    BuildingsByAddress(user_id: user_id),
+                                    BuildingsByAddress(person_id: person_id),
                               ),
                             );
                           } else if (statusCode == 409) {

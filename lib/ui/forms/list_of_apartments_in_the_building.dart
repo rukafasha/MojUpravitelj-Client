@@ -27,9 +27,9 @@ class Apartment {
 
 class ListOfApartmentsInTheBuilding extends StatefulWidget {
   var building_id;
-  var user_id;
+  var person_id;
   ListOfApartmentsInTheBuilding(
-      {super.key, required this.building_id, required this.user_id});
+      {super.key, required this.building_id, required this.person_id});
 
   @override
   State<ListOfApartmentsInTheBuilding> createState() =>
@@ -41,29 +41,30 @@ class _ListOfApartmentsInTheBuildingState
   // late Future<List<Apartment>> apartmentsFuture = Future.value([]);
   late Future<List<Apartment>> apartmentsFuture;
   var apartmentsNotFound = "Apartments not found.";
-  var _building_id;
+  var _building_id, _person_id;
 
   @override
   void initState() {
     super.initState();
     _building_id = widget.building_id;
-    apartmentsFuture = getListOfApartmentsInTheBuilding(widget.building_id);
+    _person_id = widget.person_id;
 
-    // _user_id = widget.user_id;
+    apartmentsFuture = getListOfApartmentsInTheBuilding(widget.building_id);
   }
 
-  // Future addApartment(String apartment_id) async {
-  //   var map = <String, dynamic>{};
-  //   map['apartment_id'] = apartment_id;
-  //   map['user_id'] = _user_id;
+  // Dodavanje apartmana
+  Future addApartment(String apartment_id, String person_id) async {
+    var map = <String, dynamic>{};
+    map['apartment_id'] = apartment_id;
+    map['person_id'] = _person_id;
 
-  //   final response = await http.post(
-  //     Uri.parse('${GlobalUrl.url}testna'),
-  //     body: map,
-  //   );
+    final response = await http.post(
+      Uri.parse('${GlobalUrl.url}testna'),
+      body: map,
+    );
 
-  //   return response.statusCode;
-  // }
+    return response.statusCode;
+  }
 
   Future<List<Apartment>> getListOfApartmentsInTheBuilding(building_id) async {
     final response = await http.get(
@@ -81,7 +82,8 @@ class _ListOfApartmentsInTheBuildingState
           centerTitle: true,
           leading: BackButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => BuildingsByAddress(user_id: 2)))),
+                  builder: (context) =>
+                      BuildingsByAddress(person_id: _person_id)))),
           title: const Text(
             "Apartments",
           ),
@@ -129,7 +131,7 @@ class _ListOfApartmentsInTheBuildingState
             child: ListTile(
               onTap: () {
                 print("building_id: ${apartment.buildingId}");
-                // print("user_id: $_user_id");
+                print("person_id: $_person_id");
               },
               title: Text(
                   "Building ID: ${apartment.buildingId}   |   Apartment number: ${apartment.apartmentNumber}"),
