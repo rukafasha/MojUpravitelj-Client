@@ -1,13 +1,14 @@
-import 'dart:io';
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:praksa_frontend/Models/Report.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'dart:convert';
 
 import '../../Helper/GlobalUrl.dart';
-import 'package:http/http.dart' as http;
+import '../../Service/ReportService.dart';
 
 
 class ReportAdd extends StatelessWidget {
@@ -97,9 +98,9 @@ class AddFormState extends State<AddForm> {
               padding: EdgeInsets.only(top: MediaQuery.of(context).size.height/2.2, right: 20),
               child: FloatingActionButton(
               backgroundColor: const Color(0xfff8a55f),
-              onPressed: () {
+              onPressed: () async {
                 if(_formKey.currentState!.validate() && RoleUtil.HasRole("Tenant")){
-                  AddReport(_titleController.text, _descriptionController.text);
+                  await AddReport(_titleController.text, _descriptionController.text);
                   Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (context) => const HomePage()));}
@@ -116,26 +117,16 @@ class AddFormState extends State<AddForm> {
 
 Future<Report> AddReport(titleController, descriptionController) async {
     var data = RoleUtil.GetData();
-
-    final response = await http.post(
-      Uri.parse('${GlobalUrl.url}report/add'),
-      headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-      body: jsonEncode(<String,dynamic>{
-        'title': titleController.toString(),
-        'description': descriptionController.toString(),
-        'madeBy': data["personId"].toString(),
-        'timeCreated': DateTime.now().toString(),
-        'timeFinished': null,
-        'status': 1,
-        'isActive': true,
-        'closedBy': null,
-      }),
+    Report report = Report(
+      id: 1,
+      title: titleController,
+      description: descriptionController,
+      timeCreated: DateTime.now(),
+      timeFinished: null,
+      madeBy: data["personId"],
+      closedBy: null,
+      status: 1,
+      isActive: true,
     );
-   if (response.statusCode == 201) {
-    return Report.fromJson(response.body);
-  } else {
-    throw Exception('Report loading failed!');
-  }
-  }
+    return await ReportService(data).addReport(report);
+}

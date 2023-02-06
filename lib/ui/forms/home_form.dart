@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Models/Person.dart';
 import 'package:praksa_frontend/Models/Report.dart';
+import 'package:praksa_frontend/Service/ReportService.dart';
 import 'package:praksa_frontend/ui/forms/reportAdd_form.dart';
 import 'package:http/http.dart' as http;
 
@@ -206,23 +207,12 @@ class _PostTimeStamp extends StatelessWidget {
 
 
 Future<List<Report>> fetchReports() async{
-  var response;
   var data = RoleUtil.GetData();
   if(RoleUtil.HasRole("Company")){
-    var url = Uri.parse('${GlobalUrl.url}report/get/building/${data["companyId"]}');
-    response = await http.get(url);
+    return ReportService(data).getReportByCompany(data["companyId"]);
   }
   else{
-      var url = Uri.parse('${GlobalUrl.url}report/get/building/${data["buildingId"][0]}');
-      response = await http.get(url);
-
-  }
-
-  if (response.statusCode == 200) {
-    List jsonResponse = json.decode(response.body);
-    return jsonResponse.map((report) => Report.fromMap(report)).toList();
-  } else {
-    throw Exception('Unexpected error occured');
+      return ReportService(data).getReportByBuilding(data["buildingId"][0]);
   }
 }
 

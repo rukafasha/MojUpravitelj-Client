@@ -52,7 +52,7 @@ class AddFormState extends State<AddForm> {
   final _numbOfAppController = TextEditingController();
   @override  
   Widget build(BuildContext context) {   
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: Form(  
@@ -146,15 +146,17 @@ Future<int> AddBuilding(addressController,numbOfAppController) async {
   }
 
     Future<Appartment> AddAppartment(building, numbOfApps) async {
-      http.Response response;
-      var map = <String, dynamic>{};
-      map['appartmentNumber'] = numbOfApps.toString();
-      map['buildingId'] = building.toString();
-      map['numberOfPeople'] = 0.toString();
-      map['isActive'] = true.toString();
-        response = await http.post(
-          Uri.parse('${GlobalUrl.url}appartment/add'),
-          body: map,
-          );
-      return Appartment.fromMap(json.decode(response.body) as Map<String, dynamic>);
+      final response = await http.post(
+      Uri.parse('${GlobalUrl.url}appartment/add'),
+      headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+      body: jsonEncode(<String,dynamic>{
+        'appartmentNumber': numbOfApps.toString(),
+        'buildingId': building,
+        'numberOfPeople': 0,
+        'isActive': true,
+      }),
+    );
+      return Appartment.fromMap(json.decode(response.body));
     }  
