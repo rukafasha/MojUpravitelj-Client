@@ -180,8 +180,6 @@ class _LoginFormState extends State<LoginForm> {
                           if (_formKey.currentState!.validate()) {
                             var personDetails = await login();
                             var loginStatusCode = personDetails.statusCode;
-                            
-
                             if (loginStatusCode >= 200 &&
                                 loginStatusCode < 300) {
                               var personDetailsConverted =
