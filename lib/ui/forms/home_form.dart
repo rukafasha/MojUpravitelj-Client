@@ -212,7 +212,7 @@ Future<List<Report>> fetchReports() async{
     return ReportService(data).getReportByCompany(data["companyId"]);
   }
   else{
-      return ReportService(data).getReportByBuilding(data["buildingId"][0]);
+      return ReportService(data).getReportByBuilding(data["buildingId"]);
   }
 }
 

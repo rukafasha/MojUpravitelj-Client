@@ -71,12 +71,12 @@ class ReportService{
       body: jsonEncode(<String,dynamic>{
         'title': report.title.toString(),
         'description': report.description.toString(),
-        'madeBy': report.madeBy.toString(),
+        'madeBy': report.madeBy,
         'timeCreated': report.timeCreated.toString(),
         'timeFinished': report.timeFinished.toString(),
-        'status': report.status.toString(),
-        'isActive': report.isActive.toString(),
-        'closedBy': report.closedBy.toString(),
+        'status': report.status,
+        'isActive': report.isActive,
+        'closedBy': report.closedBy,
       }),
     );
 
@@ -88,9 +88,15 @@ class ReportService{
   }
 
   Future<List<Report>> getReportByBuilding(listaZgrada) async {
-    var url = Uri.parse('${GlobalUrl.url}report/get/building/$listaZgrada');
-    final response = await http.get(url);
-
+    List<int> lista = List<int>.from(listaZgrada);
+   
+    final response = await http.post(
+      Uri.parse('${GlobalUrl.url}report/get/building'),
+      headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+      body: jsonEncode(lista),
+    );
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -101,7 +107,7 @@ class ReportService{
   }
   
   Future<List<Report>> getReportByCompany(companyId) async{
-    var url = Uri.parse('${GlobalUrl.url}report/get/building/$companyId');
+    var url = Uri.parse('${GlobalUrl.url}report/get/company/$companyId');
     final response = await http.get(url);
 
 
