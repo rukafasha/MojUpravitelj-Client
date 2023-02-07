@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'package:praksa_frontend/Helper/RoleUtil.dart';
+import 'package:praksa_frontend/Service/PersonService.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 
 class UserForm extends StatefulWidget {
@@ -11,16 +14,16 @@ class UserForm extends StatefulWidget {
 
 class _UserFormState extends State<UserForm> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _date = TextEditingController();
+  final TextEditingController dataController = TextEditingController();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  static const fName = "Shakleen";
-  static const lName = "Ishfar";
+  final TextEditingController companyController = TextEditingController();
+
+  static var data = RoleUtil.GetData();
   static const uName = "Shakleen Ishfar";
-  static const pass = "********";
-  static const dob = "1996-06-12";
+  static const companyId = '1';
 
   @override
   void dispose() {
@@ -69,11 +72,11 @@ class _UserFormState extends State<UserForm> {
                 Container(
                   margin: const EdgeInsets.all(10),
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: fName,
-                      icon: Icon(Icons.person),
-                      hintStyle: TextStyle(fontSize: 20),
-                      enabledBorder: OutlineInputBorder(
+                    decoration: InputDecoration(
+                      labelText: data["firstName"],
+                      icon: const Icon(Icons.person),
+                      hintStyle: const TextStyle(fontSize: 20),
+                      enabledBorder: const OutlineInputBorder(
                         borderSide:
                             BorderSide(width: 3, color: Color(0xfff8a55f)),
                       ),
@@ -90,11 +93,11 @@ class _UserFormState extends State<UserForm> {
                 Container(
                   margin: const EdgeInsets.all(10),
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: lName,
-                      icon: Icon(Icons.person),
-                      hintStyle: TextStyle(fontSize: 20),
-                      enabledBorder: OutlineInputBorder(
+                    decoration: InputDecoration(
+                      labelText: data["lastName"],
+                      icon: const Icon(Icons.person),
+                      hintStyle: const TextStyle(fontSize: 20),
+                      enabledBorder: const OutlineInputBorder(
                         borderSide:
                             BorderSide(width: 3, color: Color(0xfff8a55f)),
                       ),
@@ -114,7 +117,7 @@ class _UserFormState extends State<UserForm> {
                     decoration: const InputDecoration(
                       hintStyle: TextStyle(fontSize: 20),
                       labelText: uName,
-                      icon: Icon(Icons.people),
+                      icon: Icon(Icons.account_circle_rounded),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
                             BorderSide(width: 3, color: Color(0xfff8a55f)),
@@ -132,17 +135,16 @@ class _UserFormState extends State<UserForm> {
                 Container(
                   margin: const EdgeInsets.all(10),
                   child: TextFormField(
-                    obscureText: true,
                     decoration: const InputDecoration(
-                      labelText: pass,
-                      icon: Icon(Icons.lock),
                       hintStyle: TextStyle(fontSize: 20),
+                      labelText: companyId,
+                      icon: Icon(Icons.account_circle_rounded),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
                             BorderSide(width: 3, color: Color(0xfff8a55f)),
                       ),
                     ),
-                    controller: passwordController,
+                    controller: companyController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
@@ -154,19 +156,19 @@ class _UserFormState extends State<UserForm> {
                 Container(
                   margin: const EdgeInsets.all(10),
                   child: TextFormField(
-                      controller: _date,
+                      controller: dataController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please pick some date';
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(
-                        hintStyle: TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        hintStyle: const TextStyle(fontSize: 16),
                         border: InputBorder.none,
-                        icon: Icon(Icons.date_range),
-                        hintText: dob,
-                        enabledBorder: OutlineInputBorder(
+                        icon: const Icon(Icons.date_range),
+                        hintText: data["DOB"].toString(),
+                        enabledBorder: const OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 3, color: Color(0xfff8a55f)),
                         ),
@@ -181,7 +183,7 @@ class _UserFormState extends State<UserForm> {
 
                         if (pickedDate != null) {
                           setState(() {
-                            _date.text =
+                            dataController.text =
                                 DateFormat('yyyy-MM-dd').format(pickedDate);
                           });
                         }
@@ -194,11 +196,16 @@ class _UserFormState extends State<UserForm> {
                       margin: const EdgeInsets.all(10),
                       child: FloatingActionButton(
                         backgroundColor: const Color(0xfff8a55f),
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processing Data')),
-                            );
+                            await PersonService.editPerson(
+                                firstNameController.text,
+                                lastNameController.text,
+                                usernameController.text,
+                                passwordController.text,
+                                dataController.text);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const HomePage()));
                           }
                         },
                         child: const Icon(Icons.save),
