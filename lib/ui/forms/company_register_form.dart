@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:praksa_frontend/Services/Auth/AuthService.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
 import '../../Helper/GlobalUrl.dart';
 import '../background/background.dart';
@@ -24,25 +25,23 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
 
   final _companyNameController = TextEditingController();
 
-  Future userRegistration() async {
-    
-     final response = await http.post(
-      Uri.parse('${GlobalUrl.url}companyRegistration'),
-      headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-      body: jsonEncode(<String,dynamic>{
-        'firstName': _firstNameController.text.toString(),
-        'lastName':_lastNameController.text.toString(),
-        'username': _usernameController.text.toString(),
-        'password': _passwordController.text.toString(),
-        'dateOfBirth': _dateController.text.toString(),
-        'companyName': _companyNameController.text.toString(),
-        'isCompany': true,
-      })
-    );
-    return response.statusCode;
-  }
+  // Future companyRegistration() async {
+  //   final response =
+  //       await http.post(Uri.parse('${GlobalUrl.url}companyRegistration'),
+  //           headers: <String, String>{
+  //             'Content-Type': 'application/json; charset=UTF-8',
+  //           },
+  //           body: jsonEncode(<String, dynamic>{
+  //             'firstName': _firstNameController.text.toString(),
+  //             'lastName': _lastNameController.text.toString(),
+  //             'username': _usernameController.text.toString(),
+  //             'password': _passwordController.text.toString(),
+  //             'dateOfBirth': _dateController.text.toString(),
+  //             'companyName': _companyNameController.text.toString(),
+  //             'isCompany': true,
+  //           }));
+  //   return response.statusCode;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +257,14 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                       child: InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            var statusCode = await userRegistration();
+                            var statusCode =
+                                await AuthService.companyRegistration(
+                                    _firstNameController,
+                                    _lastNameController,
+                                    _usernameController,
+                                    _passwordController,
+                                    _dateController,
+                                    _companyNameController);
 
                             if (statusCode >= 200 && statusCode < 300) {
                               _firstNameController.clear();

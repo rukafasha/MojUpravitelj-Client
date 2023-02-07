@@ -40,7 +40,7 @@ class BuildingView extends StatelessWidget {
         ),
       ),
       body: FutureBuilder<List<Building>>(
-          future: fetchReports(),
+          future: fetchReports(), // ovo treba biti fetchBuildings
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -153,7 +153,8 @@ class _PostDetails extends StatelessWidget {
           if (snapshot.hasData) {
             return Row(
               children: <Widget>[
-                _UserNameAndEmail(lista, snapshot.data!.companyName, nameTheme, index),
+                _UserNameAndEmail(
+                    lista, snapshot.data!.companyName, nameTheme, index),
                 //_PostTimeStamp(lista, index),
               ],
             );
@@ -170,8 +171,7 @@ class _UserNameAndEmail extends StatelessWidget {
   final int index;
   final String name;
   final TextStyle? nameTheme;
-  const _UserNameAndEmail(
-      this.snapshot, this.name,  this.nameTheme, this.index,
+  const _UserNameAndEmail(this.snapshot, this.name, this.nameTheme, this.index,
       {Key? key})
       : super(key: key);
 
@@ -194,11 +194,13 @@ class _UserNameAndEmail extends StatelessWidget {
   }
 }
 
-Future<List<Building>> fetchReports() async{
+// ovo je fetchBuilings
+Future<List<Building>> fetchReports() async {
   final http.Response response;
   var data = RoleUtil.GetData();
-    var url = Uri.parse('${GlobalUrl.url}building/get/company/${data["companyId"]}');
-    response = await http.get(url);
+  var url =
+      Uri.parse('${GlobalUrl.url}building/get/company/${data["companyId"]}');
+  response = await http.get(url);
 
   if (response.statusCode == 200) {
     List jsonResponse = json.decode(response.body);
