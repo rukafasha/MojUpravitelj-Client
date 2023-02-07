@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:praksa_frontend/Models/Appartment.dart';
 import 'package:praksa_frontend/Models/Building.dart';
+import 'package:praksa_frontend/Services/AppartmentService.dart';
 import 'package:praksa_frontend/ui/forms/buildingView_form.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'dart:convert';
@@ -150,15 +151,5 @@ Future<int> AddBuilding(addressController, numbOfAppController) async {
 }
 
 Future<Appartment> AddAppartment(building, numbOfApps) async {
-  http.Response response;
-  var map = <String, dynamic>{};
-  map['appartmentNumber'] = numbOfApps.toString();
-  map['buildingId'] = building.toString();
-  map['numberOfPeople'] = 0.toString();
-  map['isActive'] = true.toString();
-  response = await http.post(
-    Uri.parse('${GlobalUrl.url}appartment/add'),
-    body: map,
-  );
-  return Appartment.fromMap(json.decode(response.body) as Map<String, dynamic>);
+  return await AppartmentService().AddAppartment(building, numbOfApps);
 }

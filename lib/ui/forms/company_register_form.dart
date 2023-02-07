@@ -25,24 +25,6 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
 
   final _companyNameController = TextEditingController();
 
-  // Future companyRegistration() async {
-  //   final response =
-  //       await http.post(Uri.parse('${GlobalUrl.url}companyRegistration'),
-  //           headers: <String, String>{
-  //             'Content-Type': 'application/json; charset=UTF-8',
-  //           },
-  //           body: jsonEncode(<String, dynamic>{
-  //             'firstName': _firstNameController.text.toString(),
-  //             'lastName': _lastNameController.text.toString(),
-  //             'username': _usernameController.text.toString(),
-  //             'password': _passwordController.text.toString(),
-  //             'dateOfBirth': _dateController.text.toString(),
-  //             'companyName': _companyNameController.text.toString(),
-  //             'isCompany': true,
-  //           }));
-  //   return response.statusCode;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

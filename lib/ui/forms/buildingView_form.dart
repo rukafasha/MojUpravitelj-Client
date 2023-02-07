@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Models/Building.dart';
 import 'package:praksa_frontend/Models/Company.dart';
 import 'package:http/http.dart' as http;
-import 'package:praksa_frontend/Service/CompanyService.dart';
+import 'package:praksa_frontend/Services/BuildingService.dart';
+import 'package:praksa_frontend/Services/CompanyService.dart';
 
 import '../../Helper/GlobalUrl.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
@@ -38,7 +39,6 @@ class BuildingView extends StatelessWidget {
       ),
       body: FutureBuilder<List<Building>>(
           future: fetchBuildings(),
-          future: fetchReports(), // ovo treba biti fetchBuildings
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -192,22 +192,12 @@ class _UserNameAndEmail extends StatelessWidget {
   }
 }
 
-Future<List<Building>> fetchBuildings() async {
-  final http.Response response;
-  var data = RoleUtil.GetData();
-  var url =
-      Uri.parse('${GlobalUrl.url}building/get/company/${data["companyId"]}');
-  response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    List jsonResponse = json.decode(response.body);
-    return jsonResponse.map((building) => Building.fromMap(building)).toList();
-  } else {
-    throw Exception('Unexpected error occured');
-  }
-}
-
 Future<Company> fetchCompany(int id) async {
   var data = RoleUtil.GetData();
   return CompanyService(data).getCompanyById(id);
+}
+
+Future<List<Building>> fetchBuildings() async {
+  var data = RoleUtil.GetData();
+  return await BuildingService(data).fetchBuildings();
 }
