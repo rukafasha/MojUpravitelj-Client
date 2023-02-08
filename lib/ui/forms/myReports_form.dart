@@ -6,6 +6,7 @@ import 'package:praksa_frontend/Models/Report.dart';
 import 'package:praksa_frontend/Service/ReportService.dart';
 import 'package:praksa_frontend/ui/forms/reportAdd_form.dart';
 import 'package:http/http.dart' as http;
+import 'package:praksa_frontend/ui/forms/reportView_form.dart';
 
 import '../../Helper/GlobalUrl.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
@@ -75,15 +76,22 @@ class PostCard extends StatelessWidget {
       aspectRatio: 6 / 3,
       child: Card(
         elevation: 2,
-        child: Container(
-          margin: const EdgeInsets.all(4.0),
-          padding: const EdgeInsets.all(4.0),
-          child: Column(
-            children:  <Widget>[
-              _Post(snapshot, index),
-              const Divider(color: Colors.grey),
-              _PostDetails(snapshot, index),
-            ],
+        child: InkWell(
+          onTap: () {
+            var report = snapshot.data![index];
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ReportView(report)));
+          },
+          child: Container(
+            margin: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(4.0),
+            child: Column(
+              children: <Widget>[
+                _Post(snapshot, index),
+                const Divider(color: Colors.grey),
+                _PostDetails(snapshot, index),
+              ],
+            ),
           ),
         ),
       ),

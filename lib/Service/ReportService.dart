@@ -72,7 +72,7 @@ class ReportService{
         'description': report.description.toString(),
         'madeBy': report.madeBy,
         'timeCreated': report.timeCreated.toString(),
-        'timeFinished': report.timeFinished.toString(),
+        'timeFinished': report.timeFinished,
         'status': report.status,
         'closedBy': report.closedBy,
       }),
@@ -128,5 +128,13 @@ class ReportService{
     } else {
       throw Exception('Unexpected error occured');
     }
+  }
+
+  Future<http.Response> deleteReport(Report report) async {
+    final http.Response response = await http.delete(
+      Uri.parse('${GlobalUrl.url}report/delete/${report.id}'),
+    );
+
+    return response;
   }
 }
