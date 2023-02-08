@@ -8,7 +8,6 @@ class Person {
   final DateTime dateOfBirth;
   final int? companyId;
   final int userAccountId;
-  final bool isActive;
   Person({
     required this.personId,
     required this.firstName,
@@ -16,7 +15,6 @@ class Person {
     required this.dateOfBirth,
     this.companyId,
     required this.userAccountId,
-    required this.isActive,
   });
 
   Person copyWith({
@@ -26,7 +24,6 @@ class Person {
     DateTime? dateOfBirth,
     int? companyId,
     int? userAccountId,
-    bool? isActive,
   }) {
     return Person(
       personId: personId ?? this.personId,
@@ -34,8 +31,7 @@ class Person {
       lastName: lastName ?? this.lastName,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       companyId: companyId ?? this.companyId,
-      userAccountId: userAccountId ?? this.userAccountId,
-      isActive: isActive ?? this.isActive,
+      userAccountId: userAccountId ?? this.userAccountId
     );
   }
 
@@ -47,7 +43,6 @@ class Person {
       'dateOfBirth': dateOfBirth.millisecondsSinceEpoch,
       'companyId': companyId,
       'userAccountId': userAccountId,
-      'isActive': isActive,
     };
   }
 
@@ -59,7 +54,6 @@ class Person {
       dateOfBirth: DateTime.parse(map['dateOfBirth']),
       companyId: map['companyId'] != null ? map['companyId'] as int : null,
       userAccountId: map['userAccountId'] as int,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -70,7 +64,7 @@ class Person {
 
   @override
   String toString() {
-    return 'Person(personId: $personId, firstName: $firstName, lastName: $lastName, dateOfBirth: $dateOfBirth, companyId: $companyId, userAccountId: $userAccountId, isActive: $isActive)';
+    return 'Person(personId: $personId, firstName: $firstName, lastName: $lastName, dateOfBirth: $dateOfBirth, companyId: $companyId, userAccountId: $userAccountId)';
   }
 
   @override
@@ -82,8 +76,7 @@ class Person {
         other.lastName == lastName &&
         other.dateOfBirth == dateOfBirth &&
         other.companyId == companyId &&
-        other.userAccountId == userAccountId &&
-        other.isActive == isActive;
+        other.userAccountId == userAccountId;
   }
 
   @override
@@ -93,7 +86,6 @@ class Person {
         lastName.hashCode ^
         dateOfBirth.hashCode ^
         companyId.hashCode ^
-        userAccountId.hashCode ^
-        isActive.hashCode;
+        userAccountId.hashCode;
   }
 }

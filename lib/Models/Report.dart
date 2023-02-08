@@ -9,7 +9,6 @@ class Report {
   final int madeBy;
   final int? closedBy;
   final int status;
-  final bool isActive;
   Report({
     required this.id,
     required this.title,
@@ -19,7 +18,6 @@ class Report {
     required this.madeBy,
     this.closedBy,
     required this.status,
-    required this.isActive,
   });
 
   Report copyWith({
@@ -31,7 +29,6 @@ class Report {
     int? madeBy,
     int? closedBy,
     int? status,
-    bool? isActive,
   }) {
     return Report(
       id: id ?? this.id,
@@ -42,7 +39,6 @@ class Report {
       madeBy: madeBy ?? this.madeBy,
       closedBy: closedBy ?? this.closedBy,
       status: status ?? this.status,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -56,7 +52,6 @@ class Report {
       'madeBy': madeBy,
       'closedBy': closedBy,
       'status': status,
-      'isActive': isActive,
     };
   }
 
@@ -73,7 +68,6 @@ class Report {
       madeBy: map['madeBy'] as int,
       closedBy: map['closedBy'] != null ? map['closedBy'] as int : null,
       status: map['status'] as int,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -84,7 +78,7 @@ class Report {
 
   @override
   String toString() {
-    return 'Report(id: $id, title: $title, description: $description, timeCreated: $timeCreated, timeFinished: $timeFinished, madeBy: $madeBy, closedBy: $closedBy, status: $status, isActive: $isActive)';
+    return 'Report(id: $id, title: $title, description: $description, timeCreated: $timeCreated, timeFinished: $timeFinished, madeBy: $madeBy, closedBy: $closedBy, status: $status)';
   }
 
   @override
@@ -98,8 +92,7 @@ class Report {
         other.timeFinished == timeFinished &&
         other.madeBy == madeBy &&
         other.closedBy == closedBy &&
-        other.status == status &&
-        other.isActive == isActive;
+        other.status == status;
   }
 
   @override
@@ -111,7 +104,6 @@ class Report {
         timeFinished.hashCode ^
         madeBy.hashCode ^
         closedBy.hashCode ^
-        status.hashCode ^
-        isActive.hashCode;
+        status.hashCode;
   }
 }

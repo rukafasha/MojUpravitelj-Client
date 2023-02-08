@@ -126,7 +126,6 @@ Future<Report> AddReport(titleController, descriptionController) async {
       madeBy: data["personId"],
       closedBy: null,
       status: 1,
-      isActive: true,
     );
     return await ReportService(data).addReport(report);
 }

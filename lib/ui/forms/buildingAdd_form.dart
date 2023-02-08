@@ -134,7 +134,6 @@ Future<int> AddBuilding(addressController,numbOfAppController) async {
         'numberOfAppartment': numbOfAppController.toString(),
         'countyId': "1",
         'representativeId': null,
-        'isActive': true,
       }),
     );
    if (response.statusCode == 201) {
@@ -155,7 +154,6 @@ Future<int> AddBuilding(addressController,numbOfAppController) async {
         'appartmentNumber': numbOfApps.toString(),
         'buildingId': building,
         'numberOfPeople': 0,
-        'isActive': true,
       }),
     );
       return Appartment.fromMap(json.decode(response.body));

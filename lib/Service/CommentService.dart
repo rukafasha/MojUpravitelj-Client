@@ -45,7 +45,6 @@ class CommentService{
     },
       body: jsonEncode(<String,dynamic>{
         "content": comment.content,
-        "isActive": comment.isActive,
         "personId": comment.personId,
         "reportId": comment.reportId
       }),
@@ -67,7 +66,6 @@ class CommentService{
     },
       body: jsonEncode(<String,dynamic>{
         "content": comment.content,
-        "isActive": comment.isActive,
         "personId": comment.personId,
         "reportId": comment.reportId
       }),

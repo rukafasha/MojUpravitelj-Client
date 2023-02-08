@@ -5,25 +5,21 @@ class Role {
   final int roleId;
   final String roleName;
   final String roleDescription;
-  final bool isActive;
   Role({
     required this.roleId,
     required this.roleName,
     required this.roleDescription,
-    required this.isActive,
   });
 
   Role copyWith({
     int? roleId,
     String? roleName,
     String? roleDescription,
-    bool? isActive,
   }) {
     return Role(
       roleId: roleId ?? this.roleId,
       roleName: roleName ?? this.roleName,
       roleDescription: roleDescription ?? this.roleDescription,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -32,7 +28,6 @@ class Role {
       'roleId': roleId,
       'roleName': roleName,
       'roleDescription': roleDescription,
-      'isActive': isActive,
     };
   }
 
@@ -41,7 +36,6 @@ class Role {
       roleId: map['roleId'] as int,
       roleName: map['roleName'] as String,
       roleDescription: map['roleDescription'] as String,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -52,7 +46,7 @@ class Role {
 
   @override
   String toString() {
-    return 'Role(roleId: $roleId, roleName: $roleName, roleDescription: $roleDescription, isActive: $isActive)';
+    return 'Role(roleId: $roleId, roleName: $roleName, roleDescription: $roleDescription)';
   }
 
   @override
@@ -61,15 +55,13 @@ class Role {
 
     return other.roleId == roleId &&
         other.roleName == roleName &&
-        other.roleDescription == roleDescription &&
-        other.isActive == isActive;
+        other.roleDescription == roleDescription;
   }
 
   @override
   int get hashCode {
     return roleId.hashCode ^
         roleName.hashCode ^
-        roleDescription.hashCode ^
-        isActive.hashCode;
+        roleDescription.hashCode;
   }
 }

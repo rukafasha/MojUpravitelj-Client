@@ -50,7 +50,6 @@ class ReportService{
         'timeCreated':report.timeCreated.toString(),
         'timeFinished': report.timeFinished,
         'status': report.status,
-        'isActive': report.isActive,
         'closedBy': report.closedBy,
       }),
     );
@@ -75,7 +74,6 @@ class ReportService{
         'timeCreated': report.timeCreated.toString(),
         'timeFinished': report.timeFinished.toString(),
         'status': report.status,
-        'isActive': report.isActive,
         'closedBy': report.closedBy,
       }),
     );

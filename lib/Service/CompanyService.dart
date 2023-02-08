@@ -45,7 +45,6 @@ class CompanyService{
     },
       body: jsonEncode(<String,dynamic>{
         "companyName": company.companyName,
-        "isActive": company.isActive,
       }),
     );
 
@@ -65,7 +64,6 @@ class CompanyService{
     },
       body: jsonEncode(<String,dynamic>{
         "companyName": company.companyName,
-        "isActive": company.isActive,
       }),
     );
 

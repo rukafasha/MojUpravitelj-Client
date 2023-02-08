@@ -45,7 +45,6 @@ class CountryService{
     },
       body: jsonEncode(<String,dynamic>{
         "countryName": country.countryName,
-        "isActive": country.isActive
       }),
     );
 
@@ -65,7 +64,6 @@ class CountryService{
     },
       body: jsonEncode(<String,dynamic>{
         "countryName": country.countryName,
-        "isActive": country.isActive
       }),
     );
 

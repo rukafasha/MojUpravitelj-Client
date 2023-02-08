@@ -4,22 +4,18 @@ import 'dart:convert';
 class Country {
   final int countryId;
   final String countryName;
-  final bool isActive;
   Country({
     required this.countryId,
     required this.countryName,
-    required this.isActive,
   });
 
   Country copyWith({
     int? countryId,
     String? countryName,
-    bool? isActive,
   }) {
     return Country(
       countryId: countryId ?? this.countryId,
       countryName: countryName ?? this.countryName,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -27,7 +23,6 @@ class Country {
     return <String, dynamic>{
       'countryId': countryId,
       'countryName': countryName,
-      'isActive': isActive,
     };
   }
 
@@ -35,7 +30,6 @@ class Country {
     return Country(
       countryId: map['countryId'] as int,
       countryName: map['countryName'] as String,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -46,18 +40,17 @@ class Country {
 
   @override
   String toString() =>
-      'Country(countryId: $countryId, countryName: $countryName, isActive: $isActive)';
+      'Country(countryId: $countryId, countryName: $countryName)';
 
   @override
   bool operator ==(covariant Country other) {
     if (identical(this, other)) return true;
 
     return other.countryId == countryId &&
-        other.countryName == countryName &&
-        other.isActive == isActive;
+        other.countryName == countryName;
   }
 
   @override
   int get hashCode =>
-      countryId.hashCode ^ countryName.hashCode ^ isActive.hashCode;
+      countryId.hashCode ^ countryName.hashCode;
 }

@@ -5,25 +5,21 @@ class RolePerson {
   final int id;
   final int personId;
   final int roleId;
-  final bool isActive;
   RolePerson({
     required this.id,
     required this.personId,
     required this.roleId,
-    required this.isActive,
   });
 
   RolePerson copyWith({
     int? id,
     int? personId,
     int? roleId,
-    bool? isActive,
   }) {
     return RolePerson(
       id: id ?? this.id,
       personId: personId ?? this.personId,
       roleId: roleId ?? this.roleId,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -32,7 +28,6 @@ class RolePerson {
       'id': id,
       'personId': personId,
       'roleId': roleId,
-      'isActive': isActive,
     };
   }
 
@@ -41,7 +36,6 @@ class RolePerson {
       id: map['id'] as int,
       personId: map['personId'] as int,
       roleId: map['roleId'] as int,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -52,7 +46,7 @@ class RolePerson {
 
   @override
   String toString() {
-    return 'RolePerson(id: $id, personId: $personId, roleId: $roleId, isActive: $isActive)';
+    return 'RolePerson(id: $id, personId: $personId, roleId: $roleId)';
   }
 
   @override
@@ -61,15 +55,13 @@ class RolePerson {
 
     return other.id == id &&
         other.personId == personId &&
-        other.roleId == roleId &&
-        other.isActive == isActive;
+        other.roleId == roleId;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
         personId.hashCode ^
-        roleId.hashCode ^
-        isActive.hashCode;
+        roleId.hashCode;
   }
 }
