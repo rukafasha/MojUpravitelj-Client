@@ -6,13 +6,11 @@ class Comment {
   final int personId;
   final int reportId;
   final String content;
-  final bool isActive;
   Comment({
     required this.commentId,
     required this.personId,
     required this.reportId,
     required this.content,
-    required this.isActive,
   });
 
   Comment copyWith({
@@ -20,14 +18,12 @@ class Comment {
     int? personId,
     int? reportId,
     String? content,
-    bool? isActive,
   }) {
     return Comment(
       commentId: commentId ?? this.commentId,
       personId: personId ?? this.personId,
       reportId: reportId ?? this.reportId,
       content: content ?? this.content,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -37,7 +33,6 @@ class Comment {
       'personId': personId,
       'reportId': reportId,
       'content': content,
-      'isActive': isActive,
     };
   }
 
@@ -47,7 +42,6 @@ class Comment {
       personId: map['personId'] as int,
       reportId: map['reportId'] as int,
       content: map['content'] as String,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -58,7 +52,7 @@ class Comment {
 
   @override
   String toString() {
-    return 'Comment(commentId: $commentId, personId: $personId, reportId: $reportId, content: $content, isActive: $isActive)';
+    return 'Comment(commentId: $commentId, personId: $personId, reportId: $reportId, content: $content)';
   }
 
   @override
@@ -68,8 +62,7 @@ class Comment {
     return other.commentId == commentId &&
         other.personId == personId &&
         other.reportId == reportId &&
-        other.content == content &&
-        other.isActive == isActive;
+        other.content == content;
   }
 
   @override
@@ -77,7 +70,6 @@ class Comment {
     return commentId.hashCode ^
         personId.hashCode ^
         reportId.hashCode ^
-        content.hashCode ^
-        isActive.hashCode;
+        content.hashCode;
   }
 }

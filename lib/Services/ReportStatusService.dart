@@ -45,7 +45,6 @@ class ReportStatusService {
       },
       body: jsonEncode(<String, dynamic>{
         "statusDescription": reportStatus.statusDescription,
-        "isActive": reportStatus.isActive
       }),
     );
 
@@ -65,7 +64,6 @@ class ReportStatusService {
       },
       body: jsonEncode(<String, dynamic>{
         "statusDescription": reportStatus.statusDescription,
-        "isActive": reportStatus.isActive
       }),
     );
 

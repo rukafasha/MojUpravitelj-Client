@@ -8,7 +8,6 @@ class Building {
   final int countyId;
   final int companyId;
   final int? representativeId;
-  final bool isActive;
   Building({
     required this.buildingId,
     required this.address,
@@ -16,7 +15,6 @@ class Building {
     required this.countyId,
     required this.companyId,
     this.representativeId,
-    required this.isActive,
   });
 
   Building copyWith({
@@ -26,7 +24,6 @@ class Building {
     int? countyId,
     int? companyId,
     int? representativeId,
-    bool? isActive,
   }) {
     return Building(
       buildingId: buildingId ?? this.buildingId,
@@ -35,7 +32,6 @@ class Building {
       countyId: countyId ?? this.countyId,
       companyId: companyId ?? this.companyId,
       representativeId: representativeId ?? this.representativeId,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -47,7 +43,6 @@ class Building {
       'countyId': countyId,
       'companyId': companyId,
       'representativeId': representativeId,
-      'isActive': isActive,
     };
   }
 
@@ -61,7 +56,6 @@ class Building {
       representativeId: map['representativeId'] != null
           ? map['representativeId'] as int
           : null,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -72,7 +66,7 @@ class Building {
 
   @override
   String toString() {
-    return 'Building(buildingId: $buildingId, address: $address, numberOfAppartment: $numberOfAppartment, countyId: $countyId, companyId: $companyId, representativeId: $representativeId, isActive: $isActive)';
+    return 'Building(buildingId: $buildingId, address: $address, numberOfAppartment: $numberOfAppartment, countyId: $countyId, companyId: $companyId, representativeId: $representativeId)';
   }
 
   @override
@@ -84,8 +78,7 @@ class Building {
         other.numberOfAppartment == numberOfAppartment &&
         other.countyId == countyId &&
         other.companyId == companyId &&
-        other.representativeId == representativeId &&
-        other.isActive == isActive;
+        other.representativeId == representativeId;
   }
 
   @override
@@ -95,7 +88,6 @@ class Building {
         numberOfAppartment.hashCode ^
         countyId.hashCode ^
         companyId.hashCode ^
-        representativeId.hashCode ^
-        isActive.hashCode;
+        representativeId.hashCode;
   }
 }

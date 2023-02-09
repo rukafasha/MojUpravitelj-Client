@@ -5,25 +5,21 @@ class County {
   final int countyId;
   final String countyName;
   final int countryId;
-  final bool isActive;
   County({
     required this.countyId,
     required this.countyName,
     required this.countryId,
-    required this.isActive,
   });
 
   County copyWith({
     int? countyId,
     String? countyName,
     int? countryId,
-    bool? isActive,
   }) {
     return County(
       countyId: countyId ?? this.countyId,
       countyName: countyName ?? this.countyName,
       countryId: countryId ?? this.countryId,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -32,7 +28,6 @@ class County {
       'countyId': countyId,
       'countyName': countyName,
       'countryId': countryId,
-      'isActive': isActive,
     };
   }
 
@@ -41,7 +36,6 @@ class County {
       countyId: map['countyId'] as int,
       countyName: map['countyName'] as String,
       countryId: map['countryId'] as int,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -52,7 +46,7 @@ class County {
 
   @override
   String toString() {
-    return 'Country(countyId: $countyId, countyName: $countyName, countryId: $countryId, isActive: $isActive)';
+    return 'Country(countyId: $countyId, countyName: $countyName, countryId: $countryId)';
   }
 
   @override
@@ -61,15 +55,13 @@ class County {
 
     return other.countyId == countyId &&
         other.countyName == countyName &&
-        other.countryId == countryId &&
-        other.isActive == isActive;
+        other.countryId == countryId;
   }
 
   @override
   int get hashCode {
     return countyId.hashCode ^
         countyName.hashCode ^
-        countryId.hashCode ^
-        isActive.hashCode;
+        countryId.hashCode;
   }
 }

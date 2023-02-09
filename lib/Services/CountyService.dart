@@ -43,7 +43,6 @@ class CountyService {
       },
       body: jsonEncode(<String, dynamic>{
         "countyName": county.countyName,
-        "isActive": county.isActive
       }),
     );
 
@@ -62,7 +61,6 @@ class CountyService {
       },
       body: jsonEncode(<String, dynamic>{
         "countryName": county.countyName,
-        "isActive": county.isActive,
       }),
     );
 

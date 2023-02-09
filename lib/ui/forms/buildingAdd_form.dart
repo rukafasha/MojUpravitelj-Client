@@ -139,7 +139,6 @@ Future<int> AddBuilding(addressController, numbOfAppController) async {
       'numberOfAppartment': numbOfAppController.toString(),
       'countyId': "1",
       'representativeId': null,
-      'isActive': true,
     }),
   );
   if (response.statusCode == 201) {
@@ -151,5 +150,16 @@ Future<int> AddBuilding(addressController, numbOfAppController) async {
 }
 
 Future<Appartment> AddAppartment(building, numbOfApps) async {
-  return await AppartmentService().AddAppartment(building, numbOfApps);
+  final response = await http.post(
+    Uri.parse('${GlobalUrl.url}appartment/add'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'appartmentNumber': numbOfApps.toString(),
+      'buildingId': building,
+      'numberOfPeople': 0,
+    }),
+  );
+  return Appartment.fromMap(json.decode(response.body));
 }
