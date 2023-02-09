@@ -8,6 +8,7 @@ import 'package:praksa_frontend/ui/forms/register_form.dart';
 import 'package:http/http.dart' as http;
 
 import '../../Helper/GlobalUrl.dart';
+import '../../Services/Auth/AuthService.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -42,19 +43,6 @@ class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  Future login() async {
-    var map = <String, dynamic>{};
-    map['username'] = _usernameController.text;
-    map['password'] = _passwordController.text;
-
-    final personDetails = await http.post(
-      Uri.parse('${GlobalUrl.url}login'),
-      body: map,
-    );
-
-    return personDetails;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,8 +166,10 @@ class _LoginFormState extends State<LoginForm> {
                       child: InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            var personDetails = await login();
+                            var personDetails = await AuthService.login(
+                                _usernameController, _passwordController);
                             var loginStatusCode = personDetails.statusCode;
+
                             if (loginStatusCode >= 200 &&
                                 loginStatusCode < 300) {
                               var personDetailsConverted =

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:praksa_frontend/Services/Auth/AuthService.dart';
 import 'package:praksa_frontend/ui/forms/company_register_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
+import '../../Helper/GlobalUrl.dart';
 import '../../Helper/GlobalUrl.dart';
 import '../background/background.dart';
 import 'package:http/http.dart' as http;
@@ -231,7 +233,12 @@ class _RegisterFormState extends State<RegisterForm> {
                       child: InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            var statusCode = await userRegistration();
+                            var statusCode = await AuthService.userRegistration(
+                                _firstNameController,
+                                _lastNameController,
+                                _usernameController,
+                                _passwordController,
+                                _dateController);
 
                             if (statusCode >= 200 && statusCode < 300) {
                               _firstNameController.clear();

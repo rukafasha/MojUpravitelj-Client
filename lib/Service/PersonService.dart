@@ -27,10 +27,23 @@ class PersonService {
         'userAccountId': 1,
       }),
     );
+
     if (response.statusCode == 201) {
       return Person.fromJson(response.body);
     } else {
       throw Exception('Person update failed!');
     }
+  }
+
+  static dynamic getData(firstNameController, lastNameController,
+      usernameController, passwordController, dataController) {
+    var data = {
+      'firstName': firstNameController,
+      'lastName': lastNameController,
+      'DOB': dataController,
+      'username': usernameController,
+      'password': passwordController
+    };
+    return data;
   }
 }

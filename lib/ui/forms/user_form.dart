@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
@@ -13,6 +14,7 @@ class UserForm extends StatefulWidget {
 }
 
 class _UserFormState extends State<UserForm> {
+  static final _myBox = Hive.box("myBox");
   final _formKey = GlobalKey<FormState>();
   final TextEditingController dataController = TextEditingController();
   final TextEditingController firstNameController = TextEditingController();
@@ -24,6 +26,14 @@ class _UserFormState extends State<UserForm> {
   static var data = RoleUtil.GetData();
   static const uName = "Shakleen Ishfar";
   static const companyId = '1';
+
+  void saveDataToLocalStorage(data) async {
+    _myBox.put(1, {
+      "firstName": data["firstName"],
+      "lastName": data["lastName"],
+      "DOB": data["DOB"],
+    });
+  }
 
   @override
   void dispose() {
@@ -46,6 +56,12 @@ class _UserFormState extends State<UserForm> {
 
   @override
   Widget build(BuildContext context) {
+    firstNameController.text = data["firstName"];
+    lastNameController.text = data["lastName"];
+    dataController.text = data["DOB"];
+    usernameController.text = "Shakleen Ishfar";
+    companyController.text = "1";
+
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
@@ -198,12 +214,19 @@ class _UserFormState extends State<UserForm> {
                         backgroundColor: const Color(0xfff8a55f),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
+                            data = PersonService.getData(
+                                firstNameController.text,
+                                lastNameController.text,
+                                usernameController.text,
+                                passwordController.text,
+                                dataController.text);
                             await PersonService.editPerson(
                                 firstNameController.text,
                                 lastNameController.text,
                                 usernameController.text,
                                 passwordController.text,
                                 dataController.text);
+                            saveDataToLocalStorage(data);
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => const HomePage()));
                           }
