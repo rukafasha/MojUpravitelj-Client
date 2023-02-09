@@ -5,25 +5,21 @@ class AppartmentPerson {
   final int id;
   final int personId;
   final int appartmentId;
-  final bool isActive;
   AppartmentPerson({
     required this.id,
     required this.personId,
     required this.appartmentId,
-    required this.isActive,
   });
 
   AppartmentPerson copyWith({
     int? id,
     int? personId,
     int? appartmentId,
-    bool? isActive,
   }) {
     return AppartmentPerson(
       id: id ?? this.id,
       personId: personId ?? this.personId,
       appartmentId: appartmentId ?? this.appartmentId,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -32,7 +28,6 @@ class AppartmentPerson {
       'id': id,
       'personId': personId,
       'appartmentId': appartmentId,
-      'isActive': isActive,
     };
   }
 
@@ -41,7 +36,6 @@ class AppartmentPerson {
       id: map['id'] as int,
       personId: map['personId'] as int,
       appartmentId: map['appartmentId'] as int,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -52,7 +46,7 @@ class AppartmentPerson {
 
   @override
   String toString() {
-    return 'AppartmentPerson(id: $id, personId: $personId, appartmentId: $appartmentId, isActive: $isActive)';
+    return 'AppartmentPerson(id: $id, personId: $personId, appartmentId: $appartmentId)';
   }
 
   @override
@@ -61,15 +55,13 @@ class AppartmentPerson {
 
     return other.id == id &&
         other.personId == personId &&
-        other.appartmentId == appartmentId &&
-        other.isActive == isActive;
+        other.appartmentId == appartmentId;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
         personId.hashCode ^
-        appartmentId.hashCode ^
-        isActive.hashCode;
+        appartmentId.hashCode;
   }
 }

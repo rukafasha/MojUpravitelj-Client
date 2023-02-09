@@ -4,22 +4,18 @@ import 'dart:convert';
 class ReportStatus {
   final int reportStatusId;
   final String statusDescription;
-  final bool isActive;
   ReportStatus({
     required this.reportStatusId,
     required this.statusDescription,
-    required this.isActive,
   });
 
   ReportStatus copyWith({
     int? reportStatusId,
     String? statusDescription,
-    bool? isActive,
   }) {
     return ReportStatus(
       reportStatusId: reportStatusId ?? this.reportStatusId,
       statusDescription: statusDescription ?? this.statusDescription,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -27,7 +23,6 @@ class ReportStatus {
     return <String, dynamic>{
       'reportStatusId': reportStatusId,
       'statusDescription': statusDescription,
-      'isActive': isActive,
     };
   }
 
@@ -35,7 +30,6 @@ class ReportStatus {
     return ReportStatus(
       reportStatusId: map['reportStatusId'] as int,
       statusDescription: map['statusDescription'] as String,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -46,18 +40,17 @@ class ReportStatus {
 
   @override
   String toString() =>
-      'ReportStatus(reportStatusId: $reportStatusId, statusDescription: $statusDescription, isActive: $isActive)';
+      'ReportStatus(reportStatusId: $reportStatusId, statusDescription: $statusDescription)';
 
   @override
   bool operator ==(covariant ReportStatus other) {
     if (identical(this, other)) return true;
 
     return other.reportStatusId == reportStatusId &&
-        other.statusDescription == statusDescription &&
-        other.isActive == isActive;
+        other.statusDescription == statusDescription;
   }
 
   @override
   int get hashCode =>
-      reportStatusId.hashCode ^ statusDescription.hashCode ^ isActive.hashCode;
+      reportStatusId.hashCode ^ statusDescription.hashCode;
 }

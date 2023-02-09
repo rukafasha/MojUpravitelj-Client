@@ -48,7 +48,6 @@ class ReportService {
         'timeCreated': report.timeCreated.toString(),
         'timeFinished': report.timeFinished,
         'status': report.status,
-        'isActive': report.isActive,
         'closedBy': report.closedBy,
       }),
     );
@@ -68,12 +67,11 @@ class ReportService {
       body: jsonEncode(<String, dynamic>{
         'title': report.title.toString(),
         'description': report.description.toString(),
-        'madeBy': report.madeBy.toString(),
+        'madeBy': report.madeBy,
         'timeCreated': report.timeCreated.toString(),
-        'timeFinished': report.timeFinished.toString(),
-        'status': report.status.toString(),
-        'isActive': report.isActive.toString(),
-        'closedBy': report.closedBy.toString(),
+        'timeFinished': report.timeFinished,
+        'status': report.status,
+        'closedBy': report.closedBy,
       }),
     );
 
@@ -85,8 +83,15 @@ class ReportService {
   }
 
   Future<List<Report>> getReportByBuilding(listaZgrada) async {
-    var url = Uri.parse('${GlobalUrl.url}report/get/building/$listaZgrada');
-    final response = await http.get(url);
+    List<int> lista = List<int>.from(listaZgrada);
+
+    final response = await http.post(
+      Uri.parse('${GlobalUrl.url}report/get/building'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(lista),
+    );
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -97,8 +102,6 @@ class ReportService {
   }
 
   Future<List<Report>> getReportByCompany(companyId) async {
-    print("dckdcjdcnjdchdcdc");
-    print(data["companyId"]);
     var url = Uri.parse('${GlobalUrl.url}report/get/company/$companyId');
     final response = await http.get(url);
 
@@ -120,5 +123,13 @@ class ReportService {
     } else {
       throw Exception('Unexpected error occured');
     }
+  }
+
+  Future<http.Response> deleteReport(Report report) async {
+    final http.Response response = await http.delete(
+      Uri.parse('${GlobalUrl.url}report/delete/${report.id}'),
+    );
+
+    return response;
   }
 }
