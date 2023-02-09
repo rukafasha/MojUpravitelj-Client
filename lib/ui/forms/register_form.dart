@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:praksa_frontend/Services/Auth/AuthService.dart';
 import 'package:praksa_frontend/ui/forms/company_register_form.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
 import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
 import '../../Helper/GlobalUrl.dart';
@@ -22,24 +22,6 @@ class _RegisterFormState extends State<RegisterForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-
-  Future userRegistration() async {
-    var map = <String, dynamic>{};
-    map['firstName'] = _firstNameController.text;
-    map['lastName'] = _lastNameController.text;
-    map['username'] = _usernameController.text;
-    map['password'] = _passwordController.text;
-    map['dateOfBirth'] = _dateController.text;
-    map['isCompany'] = false;
-
-    final response = await http.post(
-      Uri.parse('${GlobalUrl.url}registration'),
-      body: map,
-    );
-
-    // return response.statusCode;
-    return response;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,13 +215,13 @@ class _RegisterFormState extends State<RegisterForm> {
                       ),
                       child: InkWell(
                         onTap: () async {
-                          // if (_formKey.currentState!.validate()) {
-                          // var statusCode = await userRegistration();
-                          // var response = await userRegistration();
-                          var statusCode = 200;
-                          // var statusCode = response.statusCode;
-                          // var user_id = response.userId;
-                          var person_id = 983;
+                          if (_formKey.currentState!.validate()) {
+                            var statusCode = await AuthService.userRegistration(
+                                _firstNameController,
+                                _lastNameController,
+                                _usernameController,
+                                _passwordController,
+                                _dateController);
 
                           if (statusCode >= 200 && statusCode < 300) {
                             _firstNameController.clear();
@@ -251,7 +233,7 @@ class _RegisterFormState extends State<RegisterForm> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    BuildingsByAddress(person_id: person_id),
+                                    BuildingsByAddress(person_id: 11),
                               ),
                             );
                           } else if (statusCode == 409) {
@@ -289,12 +271,12 @@ class _RegisterFormState extends State<RegisterForm> {
                                 ])));
                           }
                           // }
-                        },
+                        };
                         child: const Icon(
                           Icons.arrow_forward_outlined,
                           color: Colors.white,
                           size: 32,
-                        ),
+                        );
                       ),
                     ),
                   ),

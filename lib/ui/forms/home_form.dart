@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Models/Person.dart';
 import 'package:praksa_frontend/Models/Report.dart';
+import 'package:praksa_frontend/Services/PersonService.dart';
+import 'package:praksa_frontend/Services/ReportService.dart';
 import 'package:praksa_frontend/ui/forms/reportAdd_form.dart';
 import 'package:http/http.dart' as http;
 
@@ -140,7 +142,7 @@ class _PostDetails extends StatelessWidget {
     final TextStyle? nameTheme = Theme.of(context).textTheme.subtitle1;
     final int made = lista.data![index].madeBy;
     return FutureBuilder<Person>(
-        future: fetchUsers(made),
+        future: fetchUserById(made),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Row(
@@ -205,33 +207,14 @@ class _PostTimeStamp extends StatelessWidget {
 }
 
 Future<List<Report>> fetchReports() async {
-  final response;
   var data = RoleUtil.GetData();
   if (RoleUtil.HasRole("Company")) {
-    var url =
-        Uri.parse('${GlobalUrl.url}report/get/building/${data["companyId"]}');
-    response = await http.get(url);
+    return ReportService(data).getReportByCompany(data["companyId"]);
   } else {
-    var url = Uri.parse(
-        '${GlobalUrl.url}report/get/building/${data["buildingId"][0]}');
-    response = await http.get(url);
-  }
-
-  if (response.statusCode == 200) {
-    List jsonResponse = json.decode(response.body);
-    return jsonResponse.map((report) => Report.fromMap(report)).toList();
-  } else {
-    throw Exception('Unexpected error occured');
+    return ReportService(data).getReportByBuilding(data["buildingId"][0]);
   }
 }
 
-Future<Person> fetchUsers(int id) async {
-  var url = Uri.parse('${GlobalUrl.url}person/$id');
-  final response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    return Person.fromMap(json.decode(response.body));
-  } else {
-    throw Exception('Unexpected error occured');
-  }
+Future<Person> fetchUserById(int id) async {
+  return PersonService.fetchUserById(id);
 }
