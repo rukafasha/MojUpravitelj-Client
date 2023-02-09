@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import '../Helper/GlobalUrl.dart';
 import '../Models/Appartment.dart';
+import 'package:http/http.dart' as http;
 
 class AppartmentService {
-  get http => null;
-
   Future<Appartment> AddAppartment(building, numbOfApps) async {
     final response = await http.post(
       Uri.parse('${GlobalUrl.url}appartment/add'),
@@ -16,7 +15,6 @@ class AppartmentService {
         'appartmentNumber': numbOfApps.toString(),
         'buildingId': building,
         'numberOfPeople': 0,
-        'isActive': true,
       }),
     );
     return Appartment.fromMap(json.decode(response.body));

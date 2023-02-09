@@ -1,35 +1,54 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:praksa_frontend/Models/AppartmentPerson.dart';
+import 'package:praksa_frontend/Services/AppartmentPersonService.dart';
+import 'package:praksa_frontend/Services/AppartmentService.dart';
+import 'package:praksa_frontend/Services/Auth/AuthService.dart';
 import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
+import 'package:praksa_frontend/ui/forms/login_form.dart';
 import 'package:praksa_frontend/ui/forms/register_form.dart';
 import 'package:http/http.dart' as http;
-
 import '../../Helper/GlobalUrl.dart';
 
 class Apartment {
   final int buildingId;
+  final int apartmentId;
   final int apartmentNumber;
   final String address;
 
   const Apartment({
     required this.buildingId,
+    required this.apartmentId,
     required this.apartmentNumber,
     required this.address,
   });
 
   static Apartment fromJson(json) => Apartment(
         buildingId: json["buildingId"],
+        apartmentId: json["apartmentId"],
         apartmentNumber: json["apartmentNumber"],
         address: json["address"],
       );
 }
 
 class ListOfApartmentsInTheBuilding extends StatefulWidget {
-  var building_id;
-  var person_id;
-  ListOfApartmentsInTheBuilding(
-      {super.key, required this.building_id, required this.person_id});
+  final building_id;
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
+  final TextEditingController usernameController;
+  final TextEditingController passwordController;
+  final TextEditingController dateController;
+
+  ListOfApartmentsInTheBuilding({
+    super.key,
+    required this.building_id,
+    required this.firstNameController,
+    required this.lastNameController,
+    required this.usernameController,
+    required this.passwordController,
+    required this.dateController,
+  });
 
   @override
   State<ListOfApartmentsInTheBuilding> createState() =>
@@ -38,32 +57,14 @@ class ListOfApartmentsInTheBuilding extends StatefulWidget {
 
 class _ListOfApartmentsInTheBuildingState
     extends State<ListOfApartmentsInTheBuilding> {
-  // late Future<List<Apartment>> apartmentsFuture = Future.value([]);
   late Future<List<Apartment>> apartmentsFuture;
-  var apartmentsNotFound = "Apartments not found.";
   var _building_id, _person_id;
 
   @override
   void initState() {
     super.initState();
     _building_id = widget.building_id;
-    _person_id = widget.person_id;
-
     apartmentsFuture = getListOfApartmentsInTheBuilding(widget.building_id);
-  }
-
-  // Dodavanje apartmana
-  Future addApartment(String apartment_id, String person_id) async {
-    var map = <String, dynamic>{};
-    map['apartment_id'] = apartment_id;
-    map['person_id'] = _person_id;
-
-    final response = await http.post(
-      Uri.parse('${GlobalUrl.url}testna'),
-      body: map,
-    );
-
-    return response.statusCode;
   }
 
   Future<List<Apartment>> getListOfApartmentsInTheBuilding(building_id) async {
@@ -82,8 +83,13 @@ class _ListOfApartmentsInTheBuildingState
           centerTitle: true,
           leading: BackButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      BuildingsByAddress(person_id: _person_id)))),
+                  builder: (context) => BuildingsByAddress(
+                        firstNameController: widget.firstNameController,
+                        lastNameController: widget.lastNameController,
+                        usernameController: widget.usernameController,
+                        passwordController: widget.passwordController,
+                        dateController: widget.dateController,
+                      )))),
           title: const Text(
             "Apartments",
           ),
@@ -111,9 +117,9 @@ class _ListOfApartmentsInTheBuildingState
                           } else if (snapshot.hasData &&
                               snapshot.data!.isNotEmpty) {
                             final apartments = snapshot.data!;
-                            return buildApartments(apartments);
+                            return buildApartments(apartments, context);
                           } else {
-                            return Text(apartmentsNotFound);
+                            return const Text("Apartments not found.");
                           }
                         })),
               ),
@@ -122,22 +128,44 @@ class _ListOfApartmentsInTheBuildingState
         ));
   }
 
-  Widget buildApartments(List<Apartment> apartments) => ListView.builder(
+  Widget buildApartments(List<Apartment> apartments, dynamic context) =>
+      ListView.builder(
         itemCount: apartments.length,
         itemBuilder: (context, index) {
           final apartment = apartments[index];
 
           return Card(
             child: ListTile(
-              onTap: () {
-                print("building_id: ${apartment.buildingId}");
-                print("person_id: $_person_id");
+              onTap: () async {
+                final response = await AuthService.userRegistration(
+                  widget.firstNameController,
+                  widget.lastNameController,
+                  widget.usernameController,
+                  widget.passwordController,
+                  widget.dateController,
+                );
+
+                var person__id = json.decode(response.body);
+                await newOwner(apartment.apartmentId, person__id, context);
               },
-              title: Text(
-                  "Building ID: ${apartment.buildingId}   |   Apartment number: ${apartment.apartmentNumber}"),
+              title: Text("Apartment number: ${apartment.apartmentNumber}"),
               subtitle: Text("Address: ${apartment.address}"),
             ),
           );
         },
       );
+}
+
+Future newOwner(int apartment_id, int person_id, dynamic context) async {
+  final response =
+      await AppartmentPersonService.newOwner(apartment_id, person_id);
+  if (response.statusCode >= 200 && response.statusCode < 300) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginForm(),
+      ),
+    );
+  } else {
+    throw Exception('Apartment registration failed!');
+  }
 }

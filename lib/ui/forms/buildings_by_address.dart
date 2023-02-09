@@ -49,8 +49,19 @@ class ModelBuildingsByAddress {
 }
 
 class BuildingsByAddress extends StatefulWidget {
-  var person_id;
-  BuildingsByAddress({super.key, required this.person_id});
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
+  final TextEditingController usernameController;
+  final TextEditingController passwordController;
+  final TextEditingController dateController;
+
+  BuildingsByAddress({
+    required this.firstNameController,
+    required this.lastNameController,
+    required this.usernameController,
+    required this.passwordController,
+    required this.dateController,
+  });
 
   @override
   State<BuildingsByAddress> createState() => _BuildingsByAddressState();
@@ -59,16 +70,10 @@ class BuildingsByAddress extends StatefulWidget {
 class _BuildingsByAddressState extends State<BuildingsByAddress> {
   late Future<List<ModelBuildingsByAddress>> buildingsFuture = Future.value([]);
   final _searchController = TextEditingController();
-  var buildingsNotFound = "Buildings not found.";
-  var _person_id;
 
   @override
   void initState() {
     super.initState();
-    _person_id = widget.person_id;
-
-    print("Widget person_iddddddd je: ${widget.person_id}");
-    print("___person_iddddddd je: ${_person_id}");
   }
 
   Future<List<ModelBuildingsByAddress>> getBuildingsByAddress(address) async {
@@ -110,11 +115,6 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
               Center(
                 child: TextFormField(
                   controller: _searchController,
-                  // validator: (value) {
-                  //   if (value!.trim().isEmpty) {
-                  //     return "Enter Address";
-                  //   }
-                  // },
                   style: const TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     filled: true,
@@ -162,10 +162,10 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
                             return const CircularProgressIndicator();
                           } else if (snapshot.hasData &&
                               snapshot.data!.isNotEmpty) {
-                            final apartments = snapshot.data!;
-                            return buildApartments(apartments);
+                            final buildings = snapshot.data!;
+                            return buildBuildings(buildings);
                           } else {
-                            return Text(buildingsNotFound);
+                            return const Text("Buildings not found.");
                           }
                         })),
               ),
@@ -174,7 +174,7 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
         ));
   }
 
-  Widget buildApartments(List<ModelBuildingsByAddress> buildings) =>
+  Widget buildBuildings(List<ModelBuildingsByAddress> buildings) =>
       ListView.builder(
         itemCount: buildings.length,
         itemBuilder: (context, index) {
@@ -186,17 +186,19 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => ListOfApartmentsInTheBuilding(
-                        building_id: building.buildingId,
-                        person_id: _person_id),
+                      building_id: building.buildingId,
+                      firstNameController: widget.firstNameController,
+                      lastNameController: widget.lastNameController,
+                      usernameController: widget.usernameController,
+                      passwordController: widget.passwordController,
+                      dateController: widget.dateController,
+                    ),
                   ),
                 );
-                // print("building_id: ${building.buildingId}");
-                // print("person_id: $_person_id");
               },
-              title: Text(
-                  "Building ID: ${building.buildingId}   |   County: ${building.countyName}"),
+              title: Text("Building: ${building.buildingId}"),
               subtitle: Text(
-                  "Company name: ${building.companyName}   |   NoA: ${building.numberOfApartments}"),
+                  "Company: ${building.companyName}   |   ${building.numberOfApartments} apartments"),
             ),
           );
         },
