@@ -149,7 +149,7 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
                       });
                     }
                   },
-                  child: const Text('Dobavi podatke'),
+                  child: const Text('Search'),
                 ),
               ),
               Expanded(
