@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
-import 'package:praksa_frontend/Service/PersonService.dart';
+import 'package:praksa_frontend/Services/PersonService.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 
 class UserForm extends StatefulWidget {

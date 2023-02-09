@@ -48,7 +48,6 @@ class ReportService {
         'timeCreated': report.timeCreated.toString(),
         'timeFinished': report.timeFinished,
         'status': report.status,
-        'isActive': report.isActive,
         'closedBy': report.closedBy,
       }),
     );
@@ -72,7 +71,6 @@ class ReportService {
         'timeCreated': report.timeCreated.toString(),
         'timeFinished': report.timeFinished.toString(),
         'status': report.status.toString(),
-        'isActive': report.isActive.toString(),
         'closedBy': report.closedBy.toString(),
       }),
     );
@@ -120,5 +118,12 @@ class ReportService {
     } else {
       throw Exception('Unexpected error occured');
     }
+  }
+
+  Future<http.Response> deleteReport(Report report) async {
+    final http.Response response = await http.delete(
+      Uri.parse('${GlobalUrl.url}report/delete/${report.id}'),
+    );
+    return response;
   }
 }

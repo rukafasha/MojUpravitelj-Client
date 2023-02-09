@@ -221,9 +221,6 @@ Future<List<Report>> fetchReports() async {
   } else {
     return ReportService(data).getReportByBuilding(data["buildingId"][0]);
   }
-  else{
-      return ReportService(data).getReportByBuilding(data["buildingId"]);
-  }
 }
 
 Future<Person> fetchUserById(int id) async {

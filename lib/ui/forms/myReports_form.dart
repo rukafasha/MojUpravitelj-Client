@@ -95,18 +95,6 @@ class PostCard extends StatelessWidget {
           ),
         ),
       ),
-        child: Container(
-          margin: const EdgeInsets.all(4.0),
-          padding: const EdgeInsets.all(4.0),
-          child: Column(
-            children: <Widget>[
-              _Post(snapshot, index),
-              const Divider(color: Colors.grey),
-              _PostDetails(snapshot, index),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
