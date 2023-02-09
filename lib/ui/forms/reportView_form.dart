@@ -175,22 +175,15 @@ class ReportView extends StatelessWidget {
         floatingActionButton: 
         Visibility(
           visible: report.madeBy == data["personId"] && report.status == 1,
-            child:  Align(
-                alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                    width: double.infinity,
-                      child:ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => ReportEdit(report)));
-                  },
-                        style: ElevatedButton.styleFrom(backgroundColor: const Color(0xfff8a55f)),
-                        child: const Text('Edit report '),
-                        ),
-                      ),
-                    ),
+            child:  FloatingActionButton(
+              backgroundColor: const Color(0xfff8a55f),
+              onPressed: () async {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => ReportEdit(report)));},
+              child: const Icon(Icons.edit)
+            )
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

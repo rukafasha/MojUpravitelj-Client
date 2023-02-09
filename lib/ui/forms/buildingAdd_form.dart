@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:praksa_frontend/Models/Appartment.dart';
 import 'package:praksa_frontend/Models/Building.dart';
-import 'package:praksa_frontend/ui/forms/buildingView_form.dart';
+import 'package:praksa_frontend/ui/forms/buildingAll_form.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'dart:convert';
 
@@ -106,7 +106,7 @@ class AddFormState extends State<AddForm> {
                   }
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => const BuildingView()));}
+                        builder: (context) => const BuildingAll()));}
               },
               child: const Icon(Icons.save)
             ))])
