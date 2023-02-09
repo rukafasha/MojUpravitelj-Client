@@ -4,22 +4,18 @@ import 'dart:convert';
 class Company {
   final int companyId;
   final String companyName;
-  final bool isActive;
   Company({
     required this.companyId,
     required this.companyName,
-    required this.isActive,
   });
 
   Company copyWith({
     int? companyId,
     String? companyName,
-    bool? isActive,
   }) {
     return Company(
       companyId: companyId ?? this.companyId,
       companyName: companyName ?? this.companyName,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -27,7 +23,6 @@ class Company {
     return <String, dynamic>{
       'companyId': companyId,
       'companyName': companyName,
-      'isActive': isActive,
     };
   }
 
@@ -35,7 +30,6 @@ class Company {
     return Company(
       companyId: map['companyId'] as int,
       companyName: map['companyName'] as String,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -46,18 +40,17 @@ class Company {
 
   @override
   String toString() =>
-      'Company(companyId: $companyId, companyName: $companyName, isActive: $isActive)';
+      'Company(companyId: $companyId, companyName: $companyName)';
 
   @override
   bool operator ==(covariant Company other) {
     if (identical(this, other)) return true;
 
     return other.companyId == companyId &&
-        other.companyName == companyName &&
-        other.isActive == isActive;
+        other.companyName == companyName;
   }
 
   @override
   int get hashCode =>
-      companyId.hashCode ^ companyName.hashCode ^ isActive.hashCode;
+      companyId.hashCode ^ companyName.hashCode;
 }

@@ -5,25 +5,21 @@ class UserAccount {
   final int userAccountId;
   final String username;
   final String password;
-  final bool isActive;
   UserAccount({
     required this.userAccountId,
     required this.username,
     required this.password,
-    required this.isActive,
   });
 
   UserAccount copyWith({
     int? userAccountId,
     String? username,
     String? password,
-    bool? isActive,
   }) {
     return UserAccount(
       userAccountId: userAccountId ?? this.userAccountId,
       username: username ?? this.username,
       password: password ?? this.password,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -32,7 +28,6 @@ class UserAccount {
       'userAccountId': userAccountId,
       'username': username,
       'password': password,
-      'isActive': isActive,
     };
   }
 
@@ -41,7 +36,6 @@ class UserAccount {
       userAccountId: map['userAccountId'] as int,
       username: map['username'] as String,
       password: map['password'] as String,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -52,7 +46,7 @@ class UserAccount {
 
   @override
   String toString() {
-    return 'UserAccount(userAccountId: $userAccountId, username: $username, password: $password, isActive: $isActive)';
+    return 'UserAccount(userAccountId: $userAccountId, username: $username, password: $password)';
   }
 
   @override
@@ -61,15 +55,13 @@ class UserAccount {
 
     return other.userAccountId == userAccountId &&
         other.username == username &&
-        other.password == password &&
-        other.isActive == isActive;
+        other.password == password;
   }
 
   @override
   int get hashCode {
     return userAccountId.hashCode ^
         username.hashCode ^
-        password.hashCode ^
-        isActive.hashCode;
+        password.hashCode;
   }
 }

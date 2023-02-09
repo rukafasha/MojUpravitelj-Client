@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Appartment {
@@ -6,14 +5,12 @@ class Appartment {
   final int appartmentNumber;
   final int buildingId;
   final int numberOfPeople;
-  final bool isActive;
 
   Appartment({
     required this.appartmentId,
     required this.appartmentNumber,
     required this.buildingId,
     required this.numberOfPeople,
-    required this.isActive,
   });
 
   Appartment copyWith({
@@ -21,14 +18,12 @@ class Appartment {
     int? appartmentNumber,
     int? buildingId,
     int? numberOfPeople,
-    bool? isActive,
   }) {
     return Appartment(
       appartmentId: appartmentId ?? this.appartmentId,
       appartmentNumber: appartmentNumber ?? this.appartmentNumber,
       buildingId: buildingId ?? this.buildingId,
       numberOfPeople: numberOfPeople ?? this.numberOfPeople,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -38,7 +33,6 @@ class Appartment {
       'appartmentNumber': appartmentNumber,
       'buildingId': buildingId,
       'numberOfPeople': numberOfPeople,
-      'isActive': isActive,
     };
   }
 
@@ -48,7 +42,6 @@ class Appartment {
       appartmentNumber: map['appartmentNumber'] as int,
       buildingId: map['buildingId'] as int,
       numberOfPeople: map['numberOfPeople'] as int,
-      isActive: map['isActive'] as bool,
     );
   }
 
@@ -59,7 +52,7 @@ class Appartment {
 
   @override
   String toString() {
-    return 'Appartment(appartmentId: $appartmentId, appartmentNumber: $appartmentNumber, buildingId: $buildingId, numberOfPeople: $numberOfPeople, isActive: $isActive)';
+    return 'Appartment(appartmentId: $appartmentId, appartmentNumber: $appartmentNumber, buildingId: $buildingId, numberOfPeople: $numberOfPeople)';
   }
 
   @override
@@ -69,8 +62,7 @@ class Appartment {
     return other.appartmentId == appartmentId &&
         other.appartmentNumber == appartmentNumber &&
         other.buildingId == buildingId &&
-        other.numberOfPeople == numberOfPeople &&
-        other.isActive == isActive;
+        other.numberOfPeople == numberOfPeople;
   }
 
   @override
@@ -78,7 +70,6 @@ class Appartment {
     return appartmentId.hashCode ^
         appartmentNumber.hashCode ^
         buildingId.hashCode ^
-        numberOfPeople.hashCode ^
-        isActive.hashCode;
+        numberOfPeople.hashCode;
   }
 }
