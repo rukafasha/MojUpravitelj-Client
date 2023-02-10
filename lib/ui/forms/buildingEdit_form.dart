@@ -1,17 +1,9 @@
-
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
-import 'package:praksa_frontend/Models/Report.dart';
+import 'package:praksa_frontend/Services/BuildingService.dart';
 import 'package:praksa_frontend/ui/forms/buildingView_form.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'package:praksa_frontend/ui/forms/reportView_form.dart';
 
-import '../../Helper/GlobalUrl.dart';
 import '../../Models/Building.dart';
-import '../../Service/ReportService.dart';
 import 'buildingAll_form.dart';
 
 
@@ -62,7 +54,7 @@ class EditFormState extends State<EditForm> {
   @override  
   Widget build(BuildContext context) { 
     _descriptionController.text = building.address;
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: Form(  
@@ -96,7 +88,7 @@ class EditFormState extends State<EditForm> {
               backgroundColor: const Color(0xfff1665f),
               heroTag: null,
               onPressed: () async {
-              await buildingDelete(building);
+              await DeleteBuilding(building);
               Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const BuildingAll()));
@@ -137,29 +129,10 @@ Future<Building> EditBuilding(descriptionController, r) async {
       representativeId: building.representativeId
     );
 
-    final response = await http.put(
-      Uri.parse('${GlobalUrl.url}building/edit/${building.buildingId}'),
-      headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-      body: jsonEncode(<String,dynamic>{
-        'address': rep.address.toString(),
-        'companyId':rep.companyId.toString(),
-        'numberOfAppartment': rep.numberOfAppartment.toString(),
-        'countyId': rep.countyId.toString(),
-        'representativeId': rep.representativeId,
-      }),
-    );
-   if (response.statusCode == 200) {
-    return Building.fromJson(response.body);
-  } else {
-    throw Exception('Building loading failed!');
-  }
+    return await BuildingService(data).editBuilding(rep);
 }
 
- Future buildingDelete(Building building) async {
-    var data = RoleUtil.GetData();
-    final http.Response response = await http.delete(
-      Uri.parse('${GlobalUrl.url}building/delete/${building.buildingId}'),
-    );
+ Future DeleteBuilding(Building building) async {
+  var data = RoleUtil.GetData();
+    await BuildingService(data).buildingDelete(building);
  }

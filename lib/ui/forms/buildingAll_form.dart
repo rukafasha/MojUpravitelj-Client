@@ -1,12 +1,10 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Models/Building.dart';
 import 'package:praksa_frontend/Models/Company.dart';
-import 'package:http/http.dart' as http;
-import 'package:praksa_frontend/Service/CompanyService.dart';
+import 'package:praksa_frontend/Services/BuildingService.dart';
+import 'package:praksa_frontend/Services/CompanyService.dart';
 
-import '../../Helper/GlobalUrl.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 
 import 'buildingAdd_form.dart';
@@ -199,17 +197,8 @@ class _UserNameAndEmail extends StatelessWidget {
 }
 
 Future<List<Building>> fetchBuildings() async{
-  final http.Response response;
   var data = RoleUtil.GetData();
-    var url = Uri.parse('${GlobalUrl.url}building/get/company/${data["companyId"]}');
-    response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    List jsonResponse = json.decode(response.body);
-    return jsonResponse.map((building) => Building.fromMap(building)).toList();
-  } else {
-    throw Exception('Unexpected error occured');
-  }
+    return await BuildingService(data).fetchBuildings();
 }
 
 Future<Company> fetchCompany(int id) async {

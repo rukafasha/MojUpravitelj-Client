@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:praksa_frontend/Services/Auth/AuthService.dart';
 import 'package:praksa_frontend/ui/forms/company_register_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
-import '../../Helper/GlobalUrl.dart';
+import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
 import '../background/background.dart';
-import 'package:http/http.dart' as http;
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({Key? key}) : super(key: key);
@@ -19,24 +19,9 @@ class _RegisterFormState extends State<RegisterForm> {
   final _lastNameController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _dateController =
+      TextEditingController(); // Ovo vidjeti na kraju
 
-  Future userRegistration() async {
-    var map = <String, dynamic>{};
-    map['firstName'] = _firstNameController.text;
-    map['lastName'] = _lastNameController.text;
-    map['username'] = _usernameController.text;
-    map['password'] = _passwordController.text;
-    map['dateOfBirth'] = _dateController.text;
-    map['isCompany'] = false;
-
-    final response = await http.post(
-      Uri.parse('${GlobalUrl.url}registration'),
-      body: map,
-    );
-
-    return response.statusCode;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -231,18 +216,20 @@ class _RegisterFormState extends State<RegisterForm> {
                       child: InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            var statusCode = await userRegistration();
+                            var statusCode =
+                                await AuthService.usernameVerification(
+                                    _usernameController.text);
 
                             if (statusCode >= 200 && statusCode < 300) {
-                              _firstNameController.clear();
-                              _lastNameController.clear();
-                              _usernameController.clear();
-                              _passwordController.clear();
-                              _dateController.clear();
-
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => const LoginForm(),
+                                  builder: (context) => BuildingsByAddress(
+                                    firstNameController: _firstNameController,
+                                    lastNameController: _lastNameController,
+                                    usernameController: _usernameController,
+                                    passwordController: _passwordController,
+                                    dateController: _dateController,
+                                  ),
                                 ),
                               );
                             } else if (statusCode == 409) {
@@ -267,7 +254,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                                       CrossAxisAlignment.start,
                                                   children: const [
                                                     Text(
-                                                      "Unsuccessful registration. Username is already registered.",
+                                                      "Registration failed. The username is already taken.",
                                                       style: TextStyle(
                                                           fontSize: 16,
                                                           color: Colors.white),
