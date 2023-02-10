@@ -103,10 +103,10 @@ class AddFormState extends State<AddForm> {
                           var building = await AddBuilding(
                               _addressController.text,
                               _numbOfAppController.text);
-                          for (var i = 0;
-                              i < int.parse(_numbOfAppController.text);
-                              i++) {
+                          if(int.parse(_numbOfAppController.text) != 0){
+                          for (var i = 0; i < int.parse(_numbOfAppController.text);i++) {
                             await AddAppartment(building, (i + 1));
+                          }
                           }
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const BuildingAll()));

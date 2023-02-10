@@ -71,8 +71,8 @@ class EditFormState extends State<EditForm> {
               minLines: null,
                 decoration: const InputDecoration(  
                  icon:  Icon(Icons.assignment_rounded),  
-                  hintText: 'Enter a description',  
-                  labelText: 'Description',  
+                  hintText: 'Enter an address',  
+                  labelText: 'Address',  
                 ),
               validator: (String? value) {
                 return (value!.isEmpty) ? 'Enter the description of your report.' : null; 

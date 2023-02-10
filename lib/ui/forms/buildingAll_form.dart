@@ -121,7 +121,7 @@ class _PostTitleAndSummary extends StatelessWidget {
     final TextStyle? titleTheme = Theme.of(context).textTheme.headline6;
     final TextStyle? summaryTheme = Theme.of(context).textTheme.bodyText2;
     String title = snapshot.data![index].address;
-    int summary = snapshot.data![index].numberOfAppartment;
+    String summary = snapshot.data![index].numberOfAppartment.toString();
 
     return Expanded(
       flex: 3,
@@ -133,7 +133,7 @@ class _PostTitleAndSummary extends StatelessWidget {
           children: <Widget>[
             Text(title, style: titleTheme),
             const SizedBox(height: 2.0),
-            Text(summary.toString(), style: summaryTheme),
+            Text("Number of apartments $summary", style: summaryTheme),
           ],
         ),
       ),
