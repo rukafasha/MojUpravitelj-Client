@@ -29,7 +29,7 @@ class BuildingService {
     }
   }
 
-  Future<int> AddBuilding(addressController, numbOfAppController) async {
+  Future<int> AddBuilding(addressController, numbOfAppController, dropDownValueOpstina) async {
     final response = await http.post(
       Uri.parse('${GlobalUrl.url}building/add'),
       headers: <String, String>{
@@ -39,7 +39,7 @@ class BuildingService {
         'address': addressController.toString(),
         'companyId': data["companyId"].toString(),
         'numberOfAppartment': numbOfAppController.toString(),
-        'countyId': "1",
+        'countyId': dropDownValueOpstina,
         'representativeId': null,
       }),
     );

@@ -13,7 +13,7 @@ class CountryService {
   }
 
   Future<List<Country>> getAllCountry() async {
-    var url = Uri.parse('${GlobalUrl.url}country');
+    var url = Uri.parse('${GlobalUrl.url}country/');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
