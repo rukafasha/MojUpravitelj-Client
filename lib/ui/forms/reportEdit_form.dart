@@ -108,7 +108,7 @@ class EditFormState extends State<EditForm> {
                       onPressed: () async {
                         await ReportDelete(report);
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const HomePage()));
+                            builder: (context) => HomePage()));
                       },
                       child: const Icon(
                         Icons.delete,

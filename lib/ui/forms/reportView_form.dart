@@ -1,29 +1,40 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:praksa_frontend/Models/Report.dart';
+import 'package:praksa_frontend/Services/ReportService.dart';
+import 'package:praksa_frontend/Services/ReportStatusService.dart';
 import 'package:praksa_frontend/ui/forms/reportEdit_form.dart';
 import '../../Helper/GlobalUrl.dart';
 import '../../Models/Person.dart';
 import 'package:http/http.dart' as http;
 import 'home_form.dart';
 
-
-class ReportView extends StatelessWidget {
+class ReportView extends StatefulWidget{
   final Report report;
   const ReportView(this.report, {super.key});
 
   @override
+  State<ReportView> createState() => _ReportViewState(report);
+}
+
+class _ReportViewState extends State<ReportView> {
+  final Report report;
+  _ReportViewState(this.report);
+  String? status;
+  @override
+  void initState() {
+  getStatus(report.status).then((value) => status = value);
+    super.initState();
+  }
   Widget build(BuildContext context) { 
    var data = RoleUtil.GetData();
-
     return Scaffold(
         appBar: AppBar(
           leading: BackButton(
             onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (context) => const HomePage()))),
+                      builder: (context) => HomePage()))),
           title: const Center(child: Text("Moj upravitelj",)),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
@@ -148,6 +159,41 @@ class ReportView extends StatelessWidget {
                     ],
                   ),
                 ),
+                if((RoleUtil.HasRole("Representative") || RoleUtil.HasRole("Company") && status != "closed"))
+                 Container(
+                height: 65,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: FutureBuilder(
+                    future:getReportStatus(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return snapshot.hasData
+                          ? Container(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                hint: Text(status!),
+                                items: snapshot.data.map<DropdownMenuItem<String>>((item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item.statusDescription,
+                                    child: Text(item.statusDescription),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    status = value!;
+                                });
+                                },
+                              ),
+                            )
+                          : Container(
+                              child: const Center(
+                                child: Text('Loading...'),
+                              ),
+                            );
+                    },
+                  ),
+                ),
+              ),
                 Container(
                   child: Column(
                     children: <Widget>[
@@ -173,17 +219,35 @@ class ReportView extends StatelessWidget {
           }
         ),
         floatingActionButton: 
-        Visibility(
-          visible: report.madeBy == data["personId"] && report.status == 1,
-            child:  FloatingActionButton(
-              backgroundColor: const Color(0xfff8a55f),
-              onPressed: () async {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => ReportEdit(report)));},
-              child: const Icon(Icons.edit)
-            )
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [ 
+            Visibility(
+                visible: (RoleUtil.HasRole("Representative") || RoleUtil.HasRole("Company")) && report.status != 2,
+                  child:  FloatingActionButton(
+                    backgroundColor: const Color(0xfff8a55f),
+                    onPressed: () async {
+                      var report2 = await updateReport(report, status);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => ReportView(report2)));},
+                    child: const Icon(Icons.edit)
+                  )
+            ),
+            Visibility(
+              visible: report.madeBy == data["personId"] && report.status == 1,
+                child:  FloatingActionButton(
+                  backgroundColor: const Color(0xfff8a55f),
+                  onPressed: () async {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => ReportEdit(report)));},
+                  child: const Icon(Icons.edit)
+                )
+            ),
+          ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
@@ -198,4 +262,14 @@ Future<Person> fetchUsers(int id) async {
   } else {
     throw Exception('Unexpected error occured');
   }
+}
+
+Future<String> getStatus(id)async {
+  var data = RoleUtil.GetData();
+  return await ReportStatusService(data).getStatusById(id);
+}
+
+Future<Report> updateReport(Report report, String? status) async {
+  var data = RoleUtil.GetData();
+  return await ReportService(data).changeReportStatus(report, status);
 }
