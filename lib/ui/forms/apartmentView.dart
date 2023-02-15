@@ -2,8 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:praksa_frontend/Models/Building.dart';
+import 'package:praksa_frontend/Services/BuildingService.dart';
 import 'package:praksa_frontend/Services/PersonService.dart';
 import '../../Models/Person.dart';
+import '../../Services/RolePersonService.dart';
+import '../../Services/RoleService.dart';
 import 'buildingView_form.dart';
 import 'list_of_apartments_in_the_building.dart';
 
@@ -82,14 +85,43 @@ Widget buildUsers(List<Person> users, dynamic context, Building building) =>
           final user = users[index];
 
           return  Card(
-              child: ListTile(
-                title: Text(" ${user.firstName} ${user.lastName}"),
-                subtitle: Text("Date of birth: ${user.dateOfBirth.day}.${user.dateOfBirth.month}.${user.dateOfBirth.year}"),
-              ),
-            );
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ListTile(
+                        title: Text(" ${user.firstName} ${user.lastName}"),
+                        subtitle: Text("Date of birth: ${user.dateOfBirth.day}.${user.dateOfBirth.month}.${user.dateOfBirth.year}"),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async{
+                        var building2 = await addRepresentative(user, building);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => BuildingView(building2)));
+                      },
+                      child: Icon(Icons.add),
+                    )
+                  ],
+                ),
+          );
         },
       );
 
 Future<List<Person>> getUsersInApartment(Apartment apartment) async {
   return await PersonService.getUsersByApartment(apartment);
+}
+
+Future<Building> addRepresentative(Person person, Building b)async{
+  var data = RoleUtil.GetData();
+  Building building = Building(
+    buildingId: b.buildingId,
+    address: b.address, 
+    numberOfAppartment: b.numberOfAppartment, 
+    countyId: b.countyId, 
+    companyId: b.companyId,
+    representativeId: person.personId
+  );
+  var roleId = await RoleService.GetByString("Representative");
+  await RolePersonService.AddRepresentativeRole(person.personId, roleId);
+  return await BuildingService(data).addRepresentative(building);
 }

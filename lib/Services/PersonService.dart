@@ -18,6 +18,17 @@ class PersonService {
     }
   }
 
+ static Future<String> fetchUsersName(int id) async {
+    var url = Uri.parse('${GlobalUrl.url}person/$id');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var person = Person.fromMap(json.decode(response.body));
+      return "${person.firstName} ${person.lastName}";
+    } else {
+      throw Exception('Unexpected error occured');
+    }
+  }
 
   static Future<List<Person>> getUsersByApartment(Apartment apartment) async{
     var url = Uri.parse('${GlobalUrl.url}person/get/apartment/${apartment.apartmentId}');
