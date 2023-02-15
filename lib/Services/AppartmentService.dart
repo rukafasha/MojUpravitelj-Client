@@ -4,7 +4,22 @@ import '../Helper/GlobalUrl.dart';
 import '../Models/Appartment.dart';
 
 class AppartmentService {
+  AppartmentService(data);
+
   get http => null;
+  Future<List<Appartment>> fetchApartments() async {
+    var url = Uri.parse('${GlobalUrl.url}appartment/');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse
+          .map((appartment) => Appartment.fromMap(appartment))
+          .toList();
+    } else {
+      throw Exception('Unexpected error occured');
+    }
+  }
 
   Future<Appartment> AddAppartment(building, numbOfApps) async {
     final response = await http.post(
