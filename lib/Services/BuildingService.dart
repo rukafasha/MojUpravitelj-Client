@@ -5,6 +5,8 @@ import '../Helper/RoleUtil.dart';
 import '../Models/Building.dart';
 import 'package:http/http.dart' as http;
 
+import '../Models/ModelBuildingsByAddress.dart';
+
 class BuildingService {
   static var data;
 
@@ -49,5 +51,17 @@ class BuildingService {
     } else {
       throw Exception('Building loading failed!');
     }
+  }
+
+  Future<List<ModelBuildingsByAddress>> getBuildingsByAddress(address) async {
+    final response = await http.get(
+      Uri.parse('${GlobalUrl.url}building/details/$address'),
+    );
+
+    final body = json.decode(response.body);
+
+    return body
+        .map<ModelBuildingsByAddress>(ModelBuildingsByAddress.fromJson)
+        .toList();
   }
 }

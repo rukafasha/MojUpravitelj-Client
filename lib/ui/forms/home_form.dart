@@ -219,7 +219,7 @@ Future<List<Report>> fetchReports() async {
   if (RoleUtil.HasRole("Company")) {
     return ReportService(data).getReportByCompany(data["companyId"]);
   } else {
-    return ReportService(data).getReportByBuilding(data["buildingId"][0]);
+    return ReportService(data).getReportByBuilding(data["buildingId"]);
   }
 }
 

@@ -8,45 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:praksa_frontend/ui/forms/register_form.dart';
 
 import '../../Helper/GlobalUrl.dart';
-
-class ModelBuildingsByAddress {
-  final int buildingId;
-  final String address;
-  final int numberOfApartments;
-  final String countyName;
-  final String countryName;
-  final int representativeId;
-  final String representativeFirstName;
-  final String representativeLastName;
-  final int companyId;
-  final String companyName;
-
-  const ModelBuildingsByAddress({
-    required this.buildingId,
-    required this.address,
-    required this.numberOfApartments,
-    required this.countyName,
-    required this.countryName,
-    required this.representativeId,
-    required this.representativeFirstName,
-    required this.representativeLastName,
-    required this.companyId,
-    required this.companyName,
-  });
-
-  static ModelBuildingsByAddress fromJson(json) => ModelBuildingsByAddress(
-        buildingId: json["buildingId"],
-        address: json["address"],
-        numberOfApartments: json["numberOfApartments"],
-        countyName: json["countyName"],
-        countryName: json["countryName"],
-        representativeId: json["representativeId"],
-        representativeFirstName: json["representativeFirstName"],
-        representativeLastName: json["representativeLastName"],
-        companyId: json["companyId"],
-        companyName: json["companyName"],
-      );
-}
+import '../../Models/ModelBuildingsByAddress.dart';
+import '../../Services/BuildingService.dart';
 
 class BuildingsByAddress extends StatefulWidget {
   final TextEditingController firstNameController;
@@ -77,15 +40,8 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
   }
 
   Future<List<ModelBuildingsByAddress>> getBuildingsByAddress(address) async {
-    final response = await http.get(
-      Uri.parse('${GlobalUrl.url}building/details/$address'),
-    );
-
-    final body = json.decode(response.body);
-
-    return body
-        .map<ModelBuildingsByAddress>(ModelBuildingsByAddress.fromJson)
-        .toList();
+    var data = RoleUtil.GetData();
+    return await BuildingService(data).getBuildingsByAddress(address);
   }
 
   @override
