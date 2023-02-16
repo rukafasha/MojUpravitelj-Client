@@ -24,7 +24,7 @@ class CommentService {
     }
   }
 
-  Future<Comment> getCountryById(int id) async {
+  Future<Comment> getCommentById(int id) async {
     var url = Uri.parse('${GlobalUrl.url}comment/$id');
     final response = await http.get(url);
 
@@ -35,7 +35,7 @@ class CommentService {
     }
   }
 
-  Future<Comment> addCountry(Comment comment) async {
+  Future<Comment> addComment(Comment comment) async {
     final response = await http.post(
       Uri.parse('${GlobalUrl.url}comment/add'),
       headers: <String, String>{
@@ -43,8 +43,28 @@ class CommentService {
       },
       body: jsonEncode(<String, dynamic>{
         "content": comment.content,
-        "personId": comment.personId,
-        "reportId": comment.reportId
+        "personId": comment.personId.toString(),
+        "reportId": comment.reportId.toString()
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      return Comment.fromMap(json.decode(response.body));
+    } else {
+      throw Exception('Unexpected error occured');
+    }
+  }
+
+  Future<Comment> editComment(Comment comment) async {
+    final response = await http.put(
+      Uri.parse('${GlobalUrl.url}comment/edit/${comment.commentId}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        "content": comment.content,
+        "personId": comment.personId.toString(),
+        "reportId": comment.reportId.toString()
       }),
     );
 
@@ -55,23 +75,22 @@ class CommentService {
     }
   }
 
-  Future<Comment> editCountry(Comment comment) async {
-    final response = await http.put(
-      Uri.parse('${GlobalUrl.url}comment/edit/${comment.commentId}'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic>{
-        "content": comment.content,
-        "personId": comment.personId,
-        "reportId": comment.reportId
-      }),
-    );
+  Future<List<Comment>> getCommentsByReportId(int id) async {
+    var url = Uri.parse('${GlobalUrl.url}comment/get/report/$id');
+    final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      return Comment.fromMap(json.decode(response.body));
-    } else {
-      throw Exception('Unexpected error occured');
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((comment) => Comment.fromMap(comment)).toList();    } else {
+      throw Exception("Unexpected error ocured");
     }
+  }
+
+  Future<http.Response> deleteComment(Comment comment) async {
+    final http.Response response = await http.delete(
+      Uri.parse('${GlobalUrl.url}comment/delete/${comment.commentId}'),
+    );
+
+    return response;
   }
 }
