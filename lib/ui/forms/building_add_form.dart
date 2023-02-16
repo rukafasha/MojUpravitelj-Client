@@ -49,7 +49,7 @@ class AddFormState extends State<AddForm> {
   final _numbOfAppController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: Form(

@@ -5,7 +5,6 @@ import 'package:praksa_frontend/ui/forms/company_register_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
 import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
 import '../../helper/global_url.dart';
-import '../../helper/global_url.dart';
 import '../background/background.dart';
 import 'package:http/http.dart' as http;
 

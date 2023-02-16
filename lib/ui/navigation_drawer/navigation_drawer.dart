@@ -82,7 +82,7 @@ class NavigationDrawer extends StatelessWidget {
                 title: const Text('Requests'),
                 onTap: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => ApartmentRequests()));
+                      builder: (context) => const ApartmentRequests()));
                 },
               ),
             ),

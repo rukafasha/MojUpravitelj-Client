@@ -46,7 +46,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        Background(),
+        const Background(),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
