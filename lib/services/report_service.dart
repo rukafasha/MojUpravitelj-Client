@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../Helper/GlobalUrl.dart';
-import '../Models/Report.dart';
+import '../helper/global_url.dart';
+import '../models/report.dart';
 
 class ReportService {
   static var data;

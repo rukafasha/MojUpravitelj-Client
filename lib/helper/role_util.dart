@@ -5,15 +5,15 @@ class RoleUtil {
     data = readData;
   }
 
-  static dynamic GetData() {
+  static dynamic getData() {
     return data;
   }
 
-  static void DeleteDataFromBox() {
+  static void deleteDataFromBox() {
     data = null;
   }
 
-  static bool HasRole(role) {
+  static bool hasRole(role) {
     for (var i = 0; i < data["roles"].length; i++) {
       if (data["roles"][i] == role) {
         return true;

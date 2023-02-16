@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import '../Helper/GlobalUrl.dart';
-import '../Models/RequestModel.dart';
-
 import 'package:http/http.dart' as http;
+
+import '../helper/global_url.dart';
+import '../models/request_model.dart';
 
 class RequestService {
   static var data;

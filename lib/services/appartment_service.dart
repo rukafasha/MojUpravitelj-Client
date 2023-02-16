@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import '../Helper/GlobalUrl.dart';
-import '../Models/Appartment.dart';
+import '../helper/global_url.dart';
+import '../models/appartment.dart';
 import 'package:http/http.dart' as http;
 
 class AppartmentService {
@@ -19,7 +19,7 @@ class AppartmentService {
     }
   }
 
-  Future<Appartment> AddAppartment(building, numbOfApps) async {
+  Future<Appartment> addAppartment(building, numbOfApps) async {
     final response = await http.post(
       Uri.parse('${GlobalUrl.url}appartment/add'),
       headers: <String, String>{

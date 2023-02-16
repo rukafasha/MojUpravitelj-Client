@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-import '../Helper/GlobalUrl.dart';
-import '../Helper/RoleUtil.dart';
-import '../Models/Building.dart';
+import '../helper/global_url.dart';
+import '../models/building.dart';
 import 'package:http/http.dart' as http;
 
-import '../Models/ModelBuildingsByAddress.dart';
+import '../models/model_buildings_by_address.dart';
 
 class BuildingService {
   static var data;
@@ -31,7 +30,7 @@ class BuildingService {
     }
   }
 
-  Future<int> AddBuilding(addressController, numbOfAppController) async {
+  Future<int> addBuilding(addressController, numbOfAppController) async {
     final response = await http.post(
       Uri.parse('${GlobalUrl.url}building/add'),
       headers: <String, String>{

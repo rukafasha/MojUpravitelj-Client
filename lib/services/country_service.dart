@@ -2,73 +2,70 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../Helper/GlobalUrl.dart';
-import '../Models/ReportStatus.dart';
+import '../helper/global_url.dart';
+import '../models/country.dart';
 
-class ReportStatusService {
+class CountryService {
   static var data;
 
-  ReportStatusService(readData) {
+  CountryService(readData) {
     data = readData;
   }
 
-  Future<List<ReportStatus>> getAllCountry() async {
-    var url = Uri.parse('${GlobalUrl.url}reportStatus');
+  Future<List<Country>> getAllCountry() async {
+    var url = Uri.parse('${GlobalUrl.url}country');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
-      return jsonResponse
-          .map((reportStatus) => ReportStatus.fromMap(reportStatus))
-          .toList();
+      return jsonResponse.map((country) => Country.fromMap(country)).toList();
     } else {
       throw Exception('Unexpected error occured');
     }
   }
 
-  Future<ReportStatus> getCountryById(int id) async {
-    var url = Uri.parse('${GlobalUrl.url}reportStatus/$id');
+  Future<Country> getCountryById(int id) async {
+    var url = Uri.parse('${GlobalUrl.url}country/$id');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      return ReportStatus.fromMap(json.decode(response.body));
+      return Country.fromMap(json.decode(response.body));
     } else {
       throw Exception("Unexpected error ocured");
     }
   }
 
-  Future<ReportStatus> addCountry(ReportStatus reportStatus) async {
+  Future<Country> addCountry(Country country) async {
     final response = await http.post(
-      Uri.parse('${GlobalUrl.url}reportStatus/add'),
+      Uri.parse('${GlobalUrl.url}country/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        "statusDescription": reportStatus.statusDescription,
+        "countryName": country.countryName,
       }),
     );
 
     if (response.statusCode == 200) {
-      return ReportStatus.fromMap(json.decode(response.body));
+      return Country.fromMap(json.decode(response.body));
     } else {
       throw Exception('Unexpected error occured');
     }
   }
 
-  Future<ReportStatus> editCountry(ReportStatus reportStatus) async {
+  Future<Country> editCountry(Country country) async {
     final response = await http.put(
-      Uri.parse(
-          '${GlobalUrl.url}reportStatus/edit/${reportStatus.reportStatusId}'),
+      Uri.parse('${GlobalUrl.url}country/edit/${country.countryId}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        "statusDescription": reportStatus.statusDescription,
+        "countryName": country.countryName,
       }),
     );
 
     if (response.statusCode == 200) {
-      return ReportStatus.fromMap(json.decode(response.body));
+      return Country.fromMap(json.decode(response.body));
     } else {
       throw Exception('Unexpected error occured');
     }

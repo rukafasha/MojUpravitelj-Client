@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import '../Helper/GlobalUrl.dart';
-import '../Models/AppartmentPerson.dart';
+import '../helper/global_url.dart';
+import '../models/appartment_person.dart';
 import 'package:http/http.dart' as http;
 
 class AppartmentPersonService {
@@ -29,15 +29,15 @@ class AppartmentPersonService {
     }
   }
 
-  static Future newOwner(int apartment_id, int person_id) async {
+  static Future newOwner(int apartmentid, int personid) async {
     final response = await http.post(
       Uri.parse('${GlobalUrl.url}appartmentPerson/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        'apartment_id': apartment_id.toString(),
-        'person_id': person_id.toString(),
+        'apartment_id': apartmentid.toString(),
+        'person_id': personid.toString(),
       }),
     );
 

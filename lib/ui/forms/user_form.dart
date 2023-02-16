@@ -1,16 +1,14 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
+import 'package:praksa_frontend/helper/role_util.dart';
 import 'package:praksa_frontend/ui/forms/appartment_person_add_form.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 
-import '../../Models/AppartmentPerson.dart';
-import '../../Services/AppartmentPersonService.dart';
-import '../../Services/PersonService.dart';
+import '../../models/appartment_person.dart';
+import '../../services/appartment_person_service.dart';
+import '../../services/person_service.dart';
 
 class UserForm extends StatefulWidget {
   const UserForm({Key? key}) : super(key: key);
@@ -33,7 +31,7 @@ class _UserFormState extends State<UserForm> {
 
   bool _customTileExpanded = false;
 
-  static var data = RoleUtil.GetData();
+  static var data = RoleUtil.getData();
   static const uName = "Shakleen Ishfar";
   static const companyId = '1';
 
@@ -321,6 +319,6 @@ class _UserFormState extends State<UserForm> {
 }
 
 fetchAppartmentsByPerson() async {
-  var data = RoleUtil.GetData();
+  var data = RoleUtil.getData();
   return AppartmentPersonService(data).fetchAppartmentsByPerson();
 }

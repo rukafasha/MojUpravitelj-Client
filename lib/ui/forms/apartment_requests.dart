@@ -1,19 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
-import 'package:praksa_frontend/Models/AppartmentPerson.dart';
-import 'package:praksa_frontend/Services/AppartmentPersonService.dart';
-import 'package:praksa_frontend/Services/AppartmentService.dart';
-import 'package:praksa_frontend/Services/Auth/AuthService.dart';
-import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
+import 'package:praksa_frontend/helper/role_util.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'package:praksa_frontend/ui/forms/login_form.dart';
-import 'package:praksa_frontend/ui/forms/register_form.dart';
 import 'package:http/http.dart' as http;
-import '../../Helper/GlobalUrl.dart';
-import '../../Models/RequestModel.dart';
-import '../../Services/RequestService.dart';
+import '../../helper/global_url.dart';
+import '../../models/request_model.dart';
+import '../../services/request_service.dart';
 
 class ApartmentRequests extends StatefulWidget {
   ApartmentRequests({super.key});
@@ -34,7 +27,7 @@ class _ApartmentRequestsState extends State<ApartmentRequests> {
   }
 
   Future<List<RequestModel>> getApartmentRequests() async {
-    var data = RoleUtil.GetData();
+    var data = RoleUtil.getData();
 
     return await RequestService(data).getApartmentRequests();
   }

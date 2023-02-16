@@ -1,14 +1,10 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
-import 'package:praksa_frontend/Models/Report.dart';
+import 'package:praksa_frontend/helper/role_util.dart';
+import 'package:praksa_frontend/models/report.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'package:praksa_frontend/ui/forms/reportView_form.dart';
+import 'package:praksa_frontend/ui/forms/report_view_form.dart';
 
-import '../../Helper/GlobalUrl.dart';
-import '../../Services/ReportService.dart';
+import '../../services/report_service.dart';
 
 class ReportEdit extends StatelessWidget {
   final Report report;
@@ -125,7 +121,7 @@ class EditFormState extends State<EditForm> {
                       backgroundColor: const Color(0xfff8a55f),
                       onPressed: () async {
                         if (_formKey.currentState!.validate() &&
-                            RoleUtil.HasRole("Tenant")) {
+                            RoleUtil.hasRole("Tenant")) {
                           report = await EditReport(_titleController.text,
                               _descriptionController.text, report);
                           Navigator.of(context).push(MaterialPageRoute(
@@ -142,7 +138,7 @@ class EditFormState extends State<EditForm> {
 }
 
 Future<Report> EditReport(titleController, descriptionController, r) async {
-  var data = RoleUtil.GetData();
+  var data = RoleUtil.getData();
   Report report = r;
   Report rep = Report(
     id: report.id,
@@ -158,6 +154,6 @@ Future<Report> EditReport(titleController, descriptionController, r) async {
 }
 
 Future ReportDelete(Report report) async {
-  var data = RoleUtil.GetData();
+  var data = RoleUtil.getData();
   await ReportService(data).deleteReport(report);
 }

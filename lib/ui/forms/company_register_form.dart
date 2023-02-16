@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:praksa_frontend/Services/Auth/AuthService.dart';
+import 'package:praksa_frontend/services/auth/auth_service.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
-import '../../Helper/GlobalUrl.dart';
 import '../background/background.dart';
-import 'package:http/http.dart' as http;
 
 class CompanyRegisterForm extends StatefulWidget {
   const CompanyRegisterForm({Key? key}) : super(key: key);
@@ -17,13 +13,13 @@ class CompanyRegisterForm extends StatefulWidget {
 
 class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
   final _formKey = GlobalKey<FormState>();
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
 
-  final _companyNameController = TextEditingController();
+  final companyNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +68,7 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: _firstNameController,
+                              controller: firstNameController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter First Name";
@@ -93,7 +89,7 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: _lastNameController,
+                              controller: lastNameController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter Last Name";
@@ -114,7 +110,7 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: _usernameController,
+                              controller: usernameController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter Username";
@@ -135,7 +131,7 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: _passwordController,
+                              controller: passwordController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter Password";
@@ -157,7 +153,7 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                                controller: _dateController,
+                                controller: dateController,
                                 validator: (value) {
                                   if (value!.trim().isEmpty) {
                                     return "Enter Date";
@@ -179,7 +175,7 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
 
                                   if (pickedDate != null) {
                                     setState(() {
-                                      _dateController.text =
+                                      dateController.text =
                                           DateFormat('yyyy-MM-dd')
                                               .format(pickedDate);
                                     });
@@ -189,7 +185,7 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: _companyNameController,
+                              controller: companyNameController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter Company Name";
@@ -241,19 +237,19 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                           if (_formKey.currentState!.validate()) {
                             var statusCode =
                                 await AuthService.companyRegistration(
-                                    _firstNameController,
-                                    _lastNameController,
-                                    _usernameController,
-                                    _passwordController,
-                                    _dateController,
-                                    _companyNameController);
+                                    firstNameController,
+                                    lastNameController,
+                                    usernameController,
+                                    passwordController,
+                                    dateController,
+                                    companyNameController);
 
                             if (statusCode >= 200 && statusCode < 300) {
-                              _firstNameController.clear();
-                              _lastNameController.clear();
-                              _usernameController.clear();
-                              _passwordController.clear();
-                              _dateController.clear();
+                              firstNameController.clear();
+                              lastNameController.clear();
+                              usernameController.clear();
+                              passwordController.clear();
+                              dateController.clear();
 
                               Navigator.of(context).push(
                                 MaterialPageRoute(

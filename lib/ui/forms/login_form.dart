@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
+import 'package:praksa_frontend/helper/role_util.dart';
 import 'package:praksa_frontend/ui/background/background.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/register_form.dart';
-import 'package:http/http.dart' as http;
 
-import '../../Helper/GlobalUrl.dart';
-import '../../Services/Auth/AuthService.dart';
+import '../../services/auth/auth_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -41,8 +39,8 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +92,7 @@ class _LoginFormState extends State<LoginForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: _usernameController,
+                              controller: usernameController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter Username";
@@ -115,7 +113,7 @@ class _LoginFormState extends State<LoginForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: _passwordController,
+                              controller: passwordController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter Password";
@@ -167,7 +165,7 @@ class _LoginFormState extends State<LoginForm> {
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
                             var personDetails = await AuthService.login(
-                                _usernameController, _passwordController);
+                                usernameController, passwordController);
                             var loginStatusCode = personDetails.statusCode;
 
                             if (loginStatusCode >= 200 &&
@@ -177,8 +175,8 @@ class _LoginFormState extends State<LoginForm> {
 
                               saveDataToLocalStorage(personDetailsConverted);
                               RoleUtil(readData());
-                              _usernameController.clear();
-                              _passwordController.clear();
+                              usernameController.clear();
+                              passwordController.clear();
 
                               Navigator.of(context).push(
                                 MaterialPageRoute(

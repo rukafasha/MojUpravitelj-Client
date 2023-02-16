@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import '../Helper/GlobalUrl.dart';
-import '../Models/Person.dart';
+import '../helper/global_url.dart';
+import '../models/person.dart';
 import 'package:http/http.dart' as http;
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
+import 'package:praksa_frontend/helper/role_util.dart';
 
 class PersonService {
   static Future<Person> fetchUserById(int id) async {
@@ -19,7 +19,7 @@ class PersonService {
 
   static Future<Person> editPerson(firstNameController, lastNameController,
       userNameController, passwordController, dataController) async {
-    var data = RoleUtil.GetData();
+    var data = RoleUtil.getData();
     var id = data["personId"];
 
     final response = await http.put(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:praksa_frontend/Services/Auth/AuthService.dart';
+import 'package:praksa_frontend/services/auth/auth_service.dart';
 import 'package:praksa_frontend/ui/forms/company_register_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
 import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
-import '../../Helper/GlobalUrl.dart';
-import '../../Helper/GlobalUrl.dart';
+import '../../helper/global_url.dart';
+import '../../helper/global_url.dart';
 import '../background/background.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,38 +18,20 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final TextEditingController _dateController =
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final TextEditingController dateController =
       TextEditingController(); // Ovo vidjeti na kraju
-
-  // Future userRegistration() async {
-  //   var map = <String, dynamic>{};
-  //   map['firstName'] = _firstNameController.text;
-  //   map['lastName'] = _lastNameController.text;
-  //   map['username'] = _usernameController.text;
-  //   map['password'] = _passwordController.text;
-  //   map['dateOfBirth'] = _dateController.text;
-  //   map['isCompany'] = false;
-
-  //   final response = await http.post(
-  //     Uri.parse('${GlobalUrl.url}registration'),
-  //     body: map,
-  //   );
-
-  //   // return response.statusCode;
-  //   return response;
-  // }
 
   Future userRegistration() async {
     var map = <String, dynamic>{};
-    map['firstName'] = _firstNameController.text;
-    map['lastName'] = _lastNameController.text;
-    map['username'] = _usernameController.text;
-    map['password'] = _passwordController.text;
-    map['dateOfBirth'] = _dateController.text;
+    map['firstName'] = firstNameController.text;
+    map['lastName'] = lastNameController.text;
+    map['username'] = usernameController.text;
+    map['password'] = passwordController.text;
+    map['dateOfBirth'] = dateController.text;
     map['isCompany'] = false;
 
     final response = await http.post(
@@ -107,7 +89,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: _firstNameController,
+                              controller: firstNameController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter First Name";
@@ -128,7 +110,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: _lastNameController,
+                              controller: lastNameController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter Last Name";
@@ -149,7 +131,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: _usernameController,
+                              controller: usernameController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter Username";
@@ -170,7 +152,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: _passwordController,
+                              controller: passwordController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter Password";
@@ -192,7 +174,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                                controller: _dateController,
+                                controller: dateController,
                                 validator: (value) {
                                   if (value!.trim().isEmpty) {
                                     return "Enter Date";
@@ -214,7 +196,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
                                   if (pickedDate != null) {
                                     setState(() {
-                                      _dateController.text =
+                                      dateController.text =
                                           DateFormat('yyyy-MM-dd')
                                               .format(pickedDate);
                                     });
@@ -255,17 +237,17 @@ class _RegisterFormState extends State<RegisterForm> {
                           if (_formKey.currentState!.validate()) {
                             var statusCode =
                                 await AuthService.usernameVerification(
-                                    _usernameController.text);
+                                    usernameController.text);
 
                             if (statusCode >= 200 && statusCode < 300) {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => BuildingsByAddress(
-                                    firstNameController: _firstNameController,
-                                    lastNameController: _lastNameController,
-                                    usernameController: _usernameController,
-                                    passwordController: _passwordController,
-                                    dateController: _dateController,
+                                    firstNameController: firstNameController,
+                                    lastNameController: lastNameController,
+                                    usernameController: usernameController,
+                                    passwordController: passwordController,
+                                    dateController: dateController,
                                   ),
                                 ),
                               );
@@ -383,11 +365,11 @@ class _RegisterFormState extends State<RegisterForm> {
 
 // class _RegisterFormState extends State<RegisterForm> {
 //   final _formKey = GlobalKey<FormState>();
-//   final _firstNameController = TextEditingController();
-//   final _lastNameController = TextEditingController();
-//   final _usernameController = TextEditingController();
-//   final _passwordController = TextEditingController();
-//   final TextEditingController _dateController = TextEditingController();
+//   final firstNameController = TextEditingController();
+//   final lastNameController = TextEditingController();
+//   final usernameController = TextEditingController();
+//   final passwordController = TextEditingController();
+//   final TextEditingController dateController = TextEditingController();
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -436,7 +418,7 @@ class _RegisterFormState extends State<RegisterForm> {
 //                           Container(
 //                             margin: const EdgeInsets.only(left: 16, right: 32),
 //                             child: TextFormField(
-//                               controller: _firstNameController,
+//                               controller: firstNameController,
 //                               validator: (value) {
 //                                 if (value!.trim().isEmpty) {
 //                                   return "Enter First Name";
@@ -457,7 +439,7 @@ class _RegisterFormState extends State<RegisterForm> {
 //                           Container(
 //                             margin: const EdgeInsets.only(left: 16, right: 32),
 //                             child: TextFormField(
-//                               controller: _lastNameController,
+//                               controller: lastNameController,
 //                               validator: (value) {
 //                                 if (value!.trim().isEmpty) {
 //                                   return "Enter Last Name";
@@ -478,7 +460,7 @@ class _RegisterFormState extends State<RegisterForm> {
 //                           Container(
 //                             margin: const EdgeInsets.only(left: 16, right: 32),
 //                             child: TextFormField(
-//                               controller: _usernameController,
+//                               controller: usernameController,
 //                               validator: (value) {
 //                                 if (value!.trim().isEmpty) {
 //                                   return "Enter Username";
@@ -499,7 +481,7 @@ class _RegisterFormState extends State<RegisterForm> {
 //                           Container(
 //                             margin: const EdgeInsets.only(left: 16, right: 32),
 //                             child: TextFormField(
-//                               controller: _passwordController,
+//                               controller: passwordController,
 //                               validator: (value) {
 //                                 if (value!.trim().isEmpty) {
 //                                   return "Enter Password";
@@ -521,7 +503,7 @@ class _RegisterFormState extends State<RegisterForm> {
 //                           Container(
 //                             margin: const EdgeInsets.only(left: 16, right: 32),
 //                             child: TextFormField(
-//                                 controller: _dateController,
+//                                 controller: dateController,
 //                                 validator: (value) {
 //                                   if (value!.trim().isEmpty) {
 //                                     return "Enter Date";
@@ -543,7 +525,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
 //                                   if (pickedDate != null) {
 //                                     setState(() {
-//                                       _dateController.text =
+//                                       dateController.text =
 //                                           DateFormat('yyyy-MM-dd')
 //                                               .format(pickedDate);
 //                                     });
@@ -582,18 +564,18 @@ class _RegisterFormState extends State<RegisterForm> {
 //                       child: InkWell(onTap: () async {
 //                         if (_formKey.currentState!.validate()) {
 //                           var statusCode = await AuthService.userRegistration(
-//                               _firstNameController,
-//                               _lastNameController,
-//                               _usernameController,
-//                               _passwordController,
-//                               _dateController);
+//                               firstNameController,
+//                               lastNameController,
+//                               usernameController,
+//                               passwordController,
+//                               dateController);
 
 //                           if (statusCode >= 200 && statusCode < 300) {
-//                             _firstNameController.clear();
-//                             _lastNameController.clear();
-//                             _usernameController.clear();
-//                             _passwordController.clear();
-//                             _dateController.clear();
+//                             firstNameController.clear();
+//                             lastNameController.clear();
+//                             usernameController.clear();
+//                             passwordController.clear();
+//                             dateController.clear();
 
 //                             Navigator.of(context).push(
 //                               MaterialPageRoute(

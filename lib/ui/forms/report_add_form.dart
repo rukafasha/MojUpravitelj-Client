@@ -1,13 +1,9 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
-import 'package:praksa_frontend/Models/Report.dart';
+import 'package:praksa_frontend/helper/role_util.dart';
+import 'package:praksa_frontend/models/report.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 
-import '../../Helper/GlobalUrl.dart';
-import '../../Services/ReportService.dart';
+import '../../services/report_service.dart';
 
 class ReportAdd extends StatelessWidget {
   const ReportAdd({super.key});
@@ -101,7 +97,7 @@ class AddFormState extends State<AddForm> {
                       backgroundColor: const Color(0xfff8a55f),
                       onPressed: () async {
                         if (_formKey.currentState!.validate() &&
-                            RoleUtil.HasRole("Tenant")) {
+                            RoleUtil.hasRole("Tenant")) {
                           await AddReport(_titleController.text,
                               _descriptionController.text);
                           Navigator.of(context).push(MaterialPageRoute(
@@ -118,7 +114,7 @@ class AddFormState extends State<AddForm> {
 }
 
 Future<Report> AddReport(titleController, descriptionController) async {
-  var data = RoleUtil.GetData();
+  var data = RoleUtil.getData();
   Report report = Report(
     id: 1,
     title: titleController,

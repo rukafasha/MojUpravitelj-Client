@@ -1,17 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/Models/Person.dart';
-import 'package:praksa_frontend/Models/Report.dart';
-import 'package:praksa_frontend/Services/PersonService.dart';
-import 'package:praksa_frontend/Services/ReportService.dart';
-import 'package:praksa_frontend/ui/forms/reportAdd_form.dart';
-import 'package:http/http.dart' as http;
-import 'package:praksa_frontend/ui/forms/reportView_form.dart';
+import 'package:praksa_frontend/models/person.dart';
+import 'package:praksa_frontend/models/report.dart';
+import 'package:praksa_frontend/services/person_service.dart';
+import 'package:praksa_frontend/services/report_service.dart';
+import 'package:praksa_frontend/ui/forms/report_add_form.dart';
+import 'package:praksa_frontend/ui/forms/report_view_form.dart';
 
-import '../../Helper/GlobalUrl.dart';
-import '../NavigationDrawer/navigation_drawer.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
+import '../navigation_drawer/navigation_drawer.dart';
+import 'package:praksa_frontend/helper/role_util.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -215,8 +211,8 @@ class _PostTimeStamp extends StatelessWidget {
 }
 
 Future<List<Report>> fetchReports() async {
-  var data = RoleUtil.GetData();
-  if (RoleUtil.HasRole("Company")) {
+  var data = RoleUtil.getData();
+  if (RoleUtil.hasRole("Company")) {
     return ReportService(data).getReportByCompany(data["companyId"]);
   } else {
     return ReportService(data).getReportByBuilding(data["buildingId"]);

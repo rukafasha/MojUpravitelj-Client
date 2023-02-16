@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
+import 'package:praksa_frontend/helper/role_util.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:praksa_frontend/ui/forms/apartment_requests.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
-import 'package:praksa_frontend/ui/forms/myReports_form.dart';
+import 'package:praksa_frontend/ui/forms/my_reports_form.dart';
 import 'package:praksa_frontend/ui/forms/user_form.dart';
 
-import '../forms/buildingView_form.dart';
+import '../forms/building_view_form.dart';
 import '../forms/home_form.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -63,7 +63,7 @@ class NavigationDrawer extends StatelessWidget {
               },
             ),
             Visibility(
-              visible: RoleUtil.HasRole("Company"),
+              visible: RoleUtil.hasRole("Company"),
               child: ListTile(
                 leading: const Icon(Icons.people),
                 title: const Text('Buildings'),
@@ -76,7 +76,7 @@ class NavigationDrawer extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: RoleUtil.HasRole("Owner"),
+              visible: RoleUtil.hasRole("Owner"),
               child: ListTile(
                 leading: const Icon(Icons.request_page),
                 title: const Text('Requests'),
@@ -91,7 +91,7 @@ class NavigationDrawer extends StatelessWidget {
               title: const Text('Logout'),
               onTap: () {
                 _myBox.clear();
-                RoleUtil.DeleteDataFromBox();
+                RoleUtil.deleteDataFromBox();
 
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const LoginForm()));

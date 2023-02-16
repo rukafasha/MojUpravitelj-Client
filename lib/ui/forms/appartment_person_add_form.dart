@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
+import 'package:praksa_frontend/helper/role_util.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'package:praksa_frontend/ui/forms/user_form.dart';
 
-import '../../Models/AppartmentPerson.dart';
-import '../../Services/AppartmentService.dart';
+import '../../models/appartment_person.dart';
 
 class AddAppartmentPersonForm extends StatefulWidget {
   const AddAppartmentPersonForm({Key? key}) : super(key: key);
@@ -18,7 +16,7 @@ class _AddAppartmentPersonForm extends State<AddAppartmentPersonForm> {
   late final AsyncSnapshot<List<AppartmentPerson>> snapshot;
   late final int index;
 
-  static var data = RoleUtil.GetData();
+  static var data = RoleUtil.getData();
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +99,6 @@ class _AddAppartmentPersonForm extends State<AddAppartmentPersonForm> {
 }
 
 // fetchApartments() async {
-//   var data = RoleUtil.GetData();
+//   var data = RoleUtil.getData();
 //   return AppartmentService(data).fetchApartments();
 // }

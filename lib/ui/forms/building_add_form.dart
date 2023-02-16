@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
-import 'package:praksa_frontend/Models/Appartment.dart';
-import 'package:praksa_frontend/Models/Building.dart';
-import 'package:praksa_frontend/Services/AppartmentService.dart';
-import 'package:praksa_frontend/Services/BuildingService.dart';
-import 'package:praksa_frontend/ui/forms/buildingView_form.dart';
+import 'package:praksa_frontend/helper/role_util.dart';
+import 'package:praksa_frontend/models/appartment.dart';
+import 'package:praksa_frontend/services/appartment_service.dart';
+import 'package:praksa_frontend/services/building_service.dart';
+import 'package:praksa_frontend/ui/forms/building_view_form.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'dart:convert';
-
-import '../../Helper/GlobalUrl.dart';
-import 'package:http/http.dart' as http;
 
 class BuildingAdd extends StatelessWidget {
   const BuildingAdd({super.key});
@@ -103,14 +98,14 @@ class AddFormState extends State<AddForm> {
                       backgroundColor: const Color(0xfff8a55f),
                       onPressed: () async {
                         if (_formKey.currentState!.validate() &&
-                            RoleUtil.HasRole("Company")) {
-                          var building = await AddBuilding(
+                            RoleUtil.hasRole("Company")) {
+                          var building = await addBuilding(
                               _addressController.text,
                               _numbOfAppController.text);
                           for (var i = 0;
                               i < int.parse(_numbOfAppController.text);
                               i++) {
-                            await AddAppartment(building, (i + 1));
+                            await addAppartment(building, (i + 1));
                           }
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const BuildingView()));
@@ -125,12 +120,12 @@ class AddFormState extends State<AddForm> {
   }
 }
 
-Future<int> AddBuilding(addressController, numbOfAppController) async {
-  var data = RoleUtil.GetData();
+Future<int> addBuilding(addressController, numbOfAppController) async {
+  var data = RoleUtil.getData();
   return await BuildingService(data)
-      .AddBuilding(addressController, numbOfAppController);
+      .addBuilding(addressController, numbOfAppController);
 }
 
-Future<Appartment> AddAppartment(building, numbOfApps) async {
-  return await AppartmentService().AddAppartment(building, numbOfApps);
+Future<Appartment> addAppartment(building, numbOfApps) async {
+  return await AppartmentService().addAppartment(building, numbOfApps);
 }
