@@ -4,14 +4,25 @@ import 'package:praksa_frontend/Models/Person.dart';
 import 'package:praksa_frontend/Models/Report.dart';
 import 'package:praksa_frontend/Services/PersonService.dart';
 import 'package:praksa_frontend/Services/ReportService.dart';
+import 'package:praksa_frontend/Services/ReportStatusService.dart';
 import 'package:praksa_frontend/ui/forms/reportAdd_form.dart';
 import 'package:praksa_frontend/ui/forms/reportView_form.dart';
 
+import '../../Helper/RoleUtil.dart';
+import '../../Models/ReportStatus.dart';
 import '../NavigationDrawer/navigation_drawer.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
 
-class HomePage extends StatelessWidget {
+
+class HomePage extends StatefulWidget{
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+   _HomePageState();
+   String? filter = putFilter();
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +42,62 @@ class HomePage extends StatelessWidget {
         ),
       ),
       drawer: NavigationDrawer(),
-      body: FutureBuilder<List<Report>>(
-          future: fetchReports(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return PostCard(snapshot, index);
-                },
-              );
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-            return const CircularProgressIndicator();
-          }),
+      body: Column(
+        children: [
+               Container(
+                height: 65,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: FutureBuilder(
+                    future:getReportStatus(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return snapshot.hasData
+                          ? Container(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                hint: Text(filter!),
+                                items: snapshot.data.map<DropdownMenuItem<String>>((item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item.statusDescription,
+                                    child: Text(item.statusDescription),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    filter = value;
+                                });
+                                },
+                              ),
+                            )
+                          : Container(
+                              child: const Center(
+                                child: Text('Loading...'),
+                              ),
+                            );
+                    },
+                  ),
+                ),
+              ),
+            
+          FutureBuilder<List<Report>>(
+              future: fetchReports(filter),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return PostCard(snapshot, index);
+                          },
+                        ),
+                      );
+                } else if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                }
+                return const CircularProgressIndicator();
+              }),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
           heroTag: UniqueKey(),
           backgroundColor: const Color(0xfff8a55f),
@@ -56,6 +108,7 @@ class HomePage extends StatelessWidget {
           child: const Icon(Icons.add_outlined)),
     );
   }
+  
 }
 
 class PostCard extends StatelessWidget {
@@ -211,15 +264,29 @@ class _PostTimeStamp extends StatelessWidget {
   }
 }
 
-Future<List<Report>> fetchReports() async {
+Future<List<Report>> fetchReports(filter) async {
   var data = RoleUtil.GetData();
   if (RoleUtil.HasRole("Company")) {
-    return ReportService(data).getReportByCompany(data["companyId"]);
+    return ReportService(data).getReportByCompany(data["companyId"], filter);
   } else {
-    return ReportService(data).getReportByBuilding(data["buildingId"]);
+    return ReportService(data).getReportByBuilding(data["buildingId"], filter);
   }
 }
 
 Future<Person> fetchUserById(int id) async {
   return PersonService.fetchUserById(id);
+}
+
+Future<List<ReportStatus>> getReportStatus()async{
+  var data = RoleUtil.GetData();
+  return await ReportStatusService(data).getAllStatus();
+}
+
+String putFilter(){
+  String filter;
+  if(RoleUtil.HasRole("Representative")){filter = "open";}
+  else if(RoleUtil.HasRole("Company")){filter = "accepted";}
+  else{filter = "all";}
+
+  return filter;
 }

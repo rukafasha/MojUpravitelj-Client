@@ -76,7 +76,7 @@ class _UserFormState extends State<UserForm> {
       appBar: AppBar(
         leading: BackButton(
             onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(builder: (context) => HomePage()),
                 )),
         title: const Center(child: Text("Moj upravitelj")),
         flexibleSpace: Container(
