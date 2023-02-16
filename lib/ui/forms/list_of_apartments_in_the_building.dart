@@ -1,15 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/Models/AppartmentPerson.dart';
 import 'package:praksa_frontend/Services/AppartmentPersonService.dart';
-import 'package:praksa_frontend/Services/AppartmentService.dart';
 import 'package:praksa_frontend/Services/Auth/AuthService.dart';
 import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
-import 'package:praksa_frontend/ui/forms/register_form.dart';
-import 'package:http/http.dart' as http;
-import '../../Helper/GlobalUrl.dart';
 
 class Apartment {
   final int buildingId;
@@ -68,12 +63,7 @@ class _ListOfApartmentsInTheBuildingState
   }
 
   Future<List<Apartment>> getListOfApartmentsInTheBuilding(building_id) async {
-    final response = await http.get(
-      Uri.parse('${GlobalUrl.url}appartment/details/$building_id'),
-    );
-    final body = json.decode(response.body);
-
-    return body.map<Apartment>(Apartment.fromJson).toList();
+    return await AppartmentPersonService.getAppartmentsByBuildingId(building_id);
   }
 
   @override

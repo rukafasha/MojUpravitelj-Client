@@ -5,9 +5,7 @@ import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:praksa_frontend/ui/background/background.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/register_form.dart';
-import 'package:http/http.dart' as http;
 
-import '../../Helper/GlobalUrl.dart';
 import '../../Services/Auth/AuthService.dart';
 
 class LoginForm extends StatefulWidget {

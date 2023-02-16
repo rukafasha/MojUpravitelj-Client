@@ -3,6 +3,8 @@ import 'dart:convert';
 import '../Helper/GlobalUrl.dart';
 import '../Models/Person.dart';
 import 'package:http/http.dart' as http;
+
+import '../ui/forms/list_of_apartments_in_the_building.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 
 class PersonService {
@@ -15,6 +17,17 @@ class PersonService {
     } else {
       throw Exception('Unexpected error occured');
     }
+  }
+
+
+  static Future<List<Person>> getUsersByApartment(Apartment apartment) async{
+    var url = Uri.parse('${GlobalUrl.url}person/get/apartment/${apartment.apartmentId}');
+    final response = await http.get(url);
+
+    
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((person) => Person.fromMap(person)).toList();
+    
   }
 
   static Future<Person> editPerson(firstNameController, lastNameController,

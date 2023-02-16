@@ -1,12 +1,9 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:praksa_frontend/Services/Auth/AuthService.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
-import '../../Helper/GlobalUrl.dart';
 import '../background/background.dart';
-import 'package:http/http.dart' as http;
 
 class CompanyRegisterForm extends StatefulWidget {
   const CompanyRegisterForm({Key? key}) : super(key: key);
