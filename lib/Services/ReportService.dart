@@ -67,11 +67,11 @@ class ReportService {
       body: jsonEncode(<String, dynamic>{
         'title': report.title.toString(),
         'description': report.description.toString(),
-        'madeBy': report.madeBy,
+        'madeBy': report.madeBy.toString(),
         'timeCreated': report.timeCreated.toString(),
-        'timeFinished': report.timeFinished,
-        'status': report.status,
-        'closedBy': report.closedBy,
+        'timeFinished': report.timeFinished.toString(),
+        'status': report.status.toString(),
+        'closedBy': report.closedBy.toString(),
       }),
     );
 
@@ -129,7 +129,6 @@ class ReportService {
     final http.Response response = await http.delete(
       Uri.parse('${GlobalUrl.url}report/delete/${report.id}'),
     );
-
     return response;
   }
 }

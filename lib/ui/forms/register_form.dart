@@ -5,6 +5,7 @@ import 'package:praksa_frontend/ui/forms/company_register_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
 import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
 import '../../Helper/GlobalUrl.dart';
+import '../../Helper/GlobalUrl.dart';
 import '../background/background.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,6 +42,23 @@ class _RegisterFormState extends State<RegisterForm> {
   //   // return response.statusCode;
   //   return response;
   // }
+
+  Future userRegistration() async {
+    var map = <String, dynamic>{};
+    map['firstName'] = _firstNameController.text;
+    map['lastName'] = _lastNameController.text;
+    map['username'] = _usernameController.text;
+    map['password'] = _passwordController.text;
+    map['dateOfBirth'] = _dateController.text;
+    map['isCompany'] = false;
+
+    final response = await http.post(
+      Uri.parse('${GlobalUrl.url}registration'),
+      body: map,
+    );
+
+    return response.statusCode;
+  }
 
   @override
   Widget build(BuildContext context) {
