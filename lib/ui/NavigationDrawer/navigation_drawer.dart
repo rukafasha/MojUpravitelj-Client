@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:praksa_frontend/ui/forms/apartment_requests.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
 import 'package:praksa_frontend/ui/forms/myReports_form.dart';
 import 'package:praksa_frontend/ui/forms/user_form.dart';
@@ -66,10 +67,22 @@ class NavigationDrawer extends StatelessWidget {
               child: ListTile(
                 leading: const Icon(Icons.people),
                 title: const Text('Buildings'),
-                onTap: () {Navigator.pop(context);
+                onTap: () {
+                  Navigator.pop(context);
 
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const BuildingAll()));},
+              ),
+            ),
+            Visibility(
+              visible: RoleUtil.HasRole("Owner"),
+              child: ListTile(
+                leading: const Icon(Icons.request_page),
+                title: const Text('Requests'),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => ApartmentRequests()));
+                },
               ),
             ),
             ListTile(
@@ -83,7 +96,6 @@ class NavigationDrawer extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const LoginForm()));
               },
             ),
-           
           ],
         ),
       );

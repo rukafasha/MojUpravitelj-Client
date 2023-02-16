@@ -13,7 +13,7 @@ class Person {
     required this.firstName,
     required this.lastName,
     required this.dateOfBirth,
-    this.companyId,
+    required this.companyId,
     required this.userAccountId,
   });
 
