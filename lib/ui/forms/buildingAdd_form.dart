@@ -3,6 +3,7 @@ import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:praksa_frontend/Models/Appartment.dart';
 import 'package:praksa_frontend/Models/Building.dart';
 import 'package:praksa_frontend/Services/AppartmentService.dart';
+import 'package:praksa_frontend/Services/BuildingService.dart';
 import 'package:praksa_frontend/ui/forms/buildingView_form.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'dart:convert';
@@ -124,42 +125,12 @@ class AddFormState extends State<AddForm> {
   }
 }
 
-// ovo trebam jaaaa
 Future<int> AddBuilding(addressController, numbOfAppController) async {
   var data = RoleUtil.GetData();
-
-  final response = await http.post(
-    Uri.parse('${GlobalUrl.url}building/add'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, dynamic>{
-      'address': addressController.toString(),
-      'companyId': data["companyId"].toString(),
-      'numberOfAppartment': numbOfAppController.toString(),
-      'countyId': "1",
-      'representativeId': null,
-    }),
-  );
-  if (response.statusCode == 201) {
-    var building = Building.fromJson(response.body);
-    return building.buildingId;
-  } else {
-    throw Exception('Building loading failed!');
-  }
+  return await BuildingService(data)
+      .AddBuilding(addressController, numbOfAppController);
 }
 
 Future<Appartment> AddAppartment(building, numbOfApps) async {
-  final response = await http.post(
-    Uri.parse('${GlobalUrl.url}appartment/add'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, dynamic>{
-      'appartmentNumber': numbOfApps.toString(),
-      'buildingId': building,
-      'numberOfPeople': 0,
-    }),
-  );
-  return Appartment.fromMap(json.decode(response.body));
+  return await AppartmentService().AddAppartment(building, numbOfApps);
 }

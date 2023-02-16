@@ -2,11 +2,9 @@ import 'dart:convert';
 
 import '../Helper/GlobalUrl.dart';
 import '../Models/Appartment.dart';
+import 'package:http/http.dart' as http;
 
 class AppartmentService {
-  AppartmentService(data);
-
-  get http => null;
   Future<List<Appartment>> fetchApartments() async {
     var url = Uri.parse('${GlobalUrl.url}appartment/');
     final response = await http.get(url);
@@ -31,7 +29,6 @@ class AppartmentService {
         'appartmentNumber': numbOfApps.toString(),
         'buildingId': building,
         'numberOfPeople': 0,
-        'isActive': true,
       }),
     );
     return Appartment.fromMap(json.decode(response.body));

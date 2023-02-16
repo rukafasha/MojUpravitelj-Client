@@ -256,6 +256,43 @@ class _LoginFormState extends State<LoginForm> {
                                           ),
                                         ),
                                       ])));
+                            } else if (loginStatusCode == 405) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0.0,
+                                      content: Stack(children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(16),
+                                          height: 60,
+                                          decoration: const BoxDecoration(
+                                              color: Color(0xFFC72C41),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20))),
+                                          child: Row(
+                                            children: [
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: const [
+                                                    Text(
+                                                      "The owner must approve your request",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ])));
                             }
                           }
                         },

@@ -83,8 +83,15 @@ class ReportService {
   }
 
   Future<List<Report>> getReportByBuilding(listaZgrada) async {
-    var url = Uri.parse('${GlobalUrl.url}report/get/building/$listaZgrada');
-    final response = await http.get(url);
+    List<int> lista = List<int>.from(listaZgrada);
+
+    final response = await http.post(
+      Uri.parse('${GlobalUrl.url}report/get/building'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(lista),
+    );
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -95,8 +102,6 @@ class ReportService {
   }
 
   Future<List<Report>> getReportByCompany(companyId) async {
-    print("dckdcjdcnjdchdcdc");
-    print(data["companyId"]);
     var url = Uri.parse('${GlobalUrl.url}report/get/company/$companyId');
     final response = await http.get(url);
 
