@@ -1,9 +1,11 @@
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:praksa_frontend/Services/Auth/AuthService.dart';
 import 'package:praksa_frontend/ui/forms/company_register_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
 import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
+import '../../Helper/Constants.dart';
 import '../background/background.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -21,7 +23,6 @@ class _RegisterFormState extends State<RegisterForm> {
   final _passwordController = TextEditingController();
   final TextEditingController _dateController =
       TextEditingController(); // Ovo vidjeti na kraju
-
 
   @override
   Widget build(BuildContext context) {
@@ -221,13 +222,17 @@ class _RegisterFormState extends State<RegisterForm> {
                                     _usernameController.text);
 
                             if (statusCode >= 200 && statusCode < 300) {
+                              final hashedPwd = Crypt.sha256(
+                                  _passwordController.text,
+                                  salt: Constants.salt);
+
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => BuildingsByAddress(
                                     firstNameController: _firstNameController,
                                     lastNameController: _lastNameController,
                                     usernameController: _usernameController,
-                                    passwordController: _passwordController,
+                                    hashedPwd: hashedPwd,
                                     dateController: _dateController,
                                   ),
                                 ),

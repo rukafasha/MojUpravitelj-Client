@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/ui/forms/list_of_apartments_in_the_building.dart';
 import 'package:http/http.dart' as http;
@@ -14,14 +15,14 @@ class BuildingsByAddress extends StatefulWidget {
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
   final TextEditingController usernameController;
-  final TextEditingController passwordController;
+  final Crypt hashedPwd;
   final TextEditingController dateController;
 
   const BuildingsByAddress({
     required this.firstNameController,
     required this.lastNameController,
     required this.usernameController,
-    required this.passwordController,
+    required this.hashedPwd,
     required this.dateController,
   });
 
@@ -145,7 +146,7 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
                       firstNameController: widget.firstNameController,
                       lastNameController: widget.lastNameController,
                       usernameController: widget.usernameController,
-                      passwordController: widget.passwordController,
+                      hashedPwd: widget.hashedPwd,
                       dateController: widget.dateController,
                     ),
                   ),

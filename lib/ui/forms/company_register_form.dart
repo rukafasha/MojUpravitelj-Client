@@ -1,8 +1,10 @@
 
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:praksa_frontend/Services/Auth/AuthService.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
+import '../../Helper/Constants.dart';
 import '../background/background.dart';
 
 class CompanyRegisterForm extends StatefulWidget {
@@ -236,12 +238,16 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                       child: InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
+                            final hashedPwd = Crypt.sha256(
+                                _passwordController.text,
+                                salt: Constants.salt);
+                                
                             var statusCode =
                                 await AuthService.companyRegistration(
                                     _firstNameController,
                                     _lastNameController,
                                     _usernameController,
-                                    _passwordController,
+                                    hashedPwd,
                                     _dateController,
                                     _companyNameController);
 
