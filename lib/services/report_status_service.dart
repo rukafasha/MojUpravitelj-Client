@@ -12,7 +12,7 @@ class ReportStatusService {
     data = readData;
   }
 
-  Future<List<ReportStatus>> getAllCountry() async {
+  Future<List<ReportStatus>> getAllStatus() async {
     var url = Uri.parse('${GlobalUrl.url}reportStatus');
     final response = await http.get(url);
 
@@ -26,18 +26,31 @@ class ReportStatusService {
     }
   }
 
-  Future<ReportStatus> getCountryById(int id) async {
+  Future<String> getStatusById(int id) async {
     var url = Uri.parse('${GlobalUrl.url}reportStatus/$id');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      return ReportStatus.fromMap(json.decode(response.body));
+      var status = ReportStatus.fromMap(json.decode(response.body));
+      return status.statusDescription;
     } else {
       throw Exception("Unexpected error ocured");
     }
   }
 
-  Future<ReportStatus> addCountry(ReportStatus reportStatus) async {
+  Future<int> getStatusId(String? status) async {
+    var url = Uri.parse('${GlobalUrl.url}reportStatus/description/$status');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var status = ReportStatus.fromMap(json.decode(response.body));
+      return status.reportStatusId;
+    } else {
+      throw Exception("Unexpected error ocured");
+    }
+  }
+
+  Future<ReportStatus> addStatus(ReportStatus reportStatus) async {
     final response = await http.post(
       Uri.parse('${GlobalUrl.url}reportStatus/add'),
       headers: <String, String>{
@@ -55,7 +68,7 @@ class ReportStatusService {
     }
   }
 
-  Future<ReportStatus> editCountry(ReportStatus reportStatus) async {
+  Future<ReportStatus> editStatus(ReportStatus reportStatus) async {
     final response = await http.put(
       Uri.parse(
           '${GlobalUrl.url}reportStatus/edit/${reportStatus.reportStatusId}'),

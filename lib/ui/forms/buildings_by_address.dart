@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/helper/role_util.dart';
-import 'package:praksa_frontend/ui/forms/list_of_apartments_in_the_building.dart';
-import 'package:praksa_frontend/ui/forms/register_form.dart';
 
+import '../../helper/role_util.dart';
 import '../../models/model_buildings_by_address.dart';
 import '../../services/building_service.dart';
+
+import '../../ui/forms/list_of_apartments_in_the_building.dart';
+import '../../ui/forms/register_form.dart';
 
 class BuildingsByAddress extends StatefulWidget {
   final TextEditingController firstNameController;
@@ -13,7 +14,8 @@ class BuildingsByAddress extends StatefulWidget {
   final TextEditingController passwordController;
   final TextEditingController dateController;
 
-  BuildingsByAddress({
+  const BuildingsByAddress({
+    super.key,
     required this.firstNameController,
     required this.lastNameController,
     required this.usernameController,

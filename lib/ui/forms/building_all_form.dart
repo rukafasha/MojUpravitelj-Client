@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/models/person.dart';
-import 'package:praksa_frontend/models/report.dart';
-import 'package:praksa_frontend/services/person_service.dart';
-import 'package:praksa_frontend/services/report_service.dart';
-import 'package:praksa_frontend/ui/forms/report_add_form.dart';
-import 'package:praksa_frontend/ui/forms/report_view_form.dart';
 
-import 'package:praksa_frontend/helper/role_util.dart';
+import '../../helper/role_util.dart';
+import '../../models/building.dart';
+import '../../models/company.dart';
+import '../../services/building_service.dart';
+import '../../services/company_service.dart';
 
+import 'building_add_form.dart';
+import 'building_view_form.dart';
 import 'home_form.dart';
 
-class MyReport extends StatelessWidget {
-  const MyReport({super.key});
+class BuildingAll extends StatelessWidget {
+  const BuildingAll({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +34,8 @@ class MyReport extends StatelessWidget {
           ),
         ),
       ),
-      body: FutureBuilder<List<Report>>(
-          future: fetchReports(),
+      body: FutureBuilder<List<Building>>(
+          future: fetchBuildings(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -54,7 +54,7 @@ class MyReport extends StatelessWidget {
           backgroundColor: const Color(0xfff8a55f),
           onPressed: () {
             Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const ReportAdd()));
+                MaterialPageRoute(builder: (context) => const BuildingAdd()));
           },
           child: const Icon(Icons.add_outlined)),
     );
@@ -62,7 +62,7 @@ class MyReport extends StatelessWidget {
 }
 
 class PostCard extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> snapshot;
+  final AsyncSnapshot<List<Building>> snapshot;
   final int index;
   const PostCard(this.snapshot, this.index, {super.key});
 
@@ -74,9 +74,9 @@ class PostCard extends StatelessWidget {
         elevation: 2,
         child: InkWell(
           onTap: () {
-            var report = snapshot.data![index];
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => ReportView(report)));
+            var building = snapshot.data![index];
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => BuildingView(building)));
           },
           child: Container(
             margin: const EdgeInsets.all(4.0),
@@ -96,7 +96,7 @@ class PostCard extends StatelessWidget {
 }
 
 class _Post extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> snapshot;
+  final AsyncSnapshot<List<Building>> snapshot;
   final int index;
   const _Post(this.snapshot, this.index);
 
@@ -110,7 +110,7 @@ class _Post extends StatelessWidget {
 }
 
 class _PostTitleAndSummary extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> snapshot;
+  final AsyncSnapshot<List<Building>> snapshot;
   final int index;
   const _PostTitleAndSummary(this.snapshot, this.index, {Key? key})
       : super(key: key);
@@ -119,8 +119,8 @@ class _PostTitleAndSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle? titleTheme = Theme.of(context).textTheme.headline6;
     final TextStyle? summaryTheme = Theme.of(context).textTheme.bodyText2;
-    String title = snapshot.data![index].title;
-    String summary = snapshot.data![index].description;
+    String title = snapshot.data![index].address;
+    String summary = snapshot.data![index].numberOfAppartment.toString();
 
     return Expanded(
       flex: 3,
@@ -132,7 +132,7 @@ class _PostTitleAndSummary extends StatelessWidget {
           children: <Widget>[
             Text(title, style: titleTheme),
             const SizedBox(height: 2.0),
-            Text(summary, style: summaryTheme),
+            Text("Number of apartments $summary", style: summaryTheme),
           ],
         ),
       ),
@@ -141,23 +141,22 @@ class _PostTitleAndSummary extends StatelessWidget {
 }
 
 class _PostDetails extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> lista;
+  final AsyncSnapshot<List<Building>> lista;
   final int index;
   const _PostDetails(this.lista, this.index, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextStyle? nameTheme = Theme.of(context).textTheme.subtitle1;
-    final int made = lista.data![index].madeBy;
-    return FutureBuilder<Person>(
-        future: fetchUserById(made),
+    final int made = lista.data![index].companyId;
+    return FutureBuilder<Company>(
+        future: fetchCompany(made),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Row(
               children: <Widget>[
-                _UserNameAndEmail(lista, snapshot.data!.firstName,
-                    snapshot.data!.lastName, nameTheme, index),
-                _PostTimeStamp(lista, index),
+                _UserNameAndEmail(
+                    lista, snapshot.data!.companyName, nameTheme, index),
               ],
             );
           } else if (snapshot.hasError) {
@@ -169,13 +168,11 @@ class _PostDetails extends StatelessWidget {
 }
 
 class _UserNameAndEmail extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> snapshot;
+  final AsyncSnapshot<List<Building>> snapshot;
   final int index;
   final String name;
-  final String lastName;
   final TextStyle? nameTheme;
-  const _UserNameAndEmail(
-      this.snapshot, this.name, this.lastName, this.nameTheme, this.index,
+  const _UserNameAndEmail(this.snapshot, this.name, this.nameTheme, this.index,
       {Key? key})
       : super(key: key);
 
@@ -189,7 +186,7 @@ class _UserNameAndEmail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("$name $lastName", style: nameTheme),
+            Text(name, style: nameTheme),
             const SizedBox(height: 2.0),
           ],
         ),
@@ -198,27 +195,12 @@ class _UserNameAndEmail extends StatelessWidget {
   }
 }
 
-class _PostTimeStamp extends StatelessWidget {
-  final AsyncSnapshot<List<Report>> snapshot;
-  final int index;
-  const _PostTimeStamp(this.snapshot, this.index, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final TextStyle? timeTheme = Theme.of(context).textTheme.caption;
-    return Expanded(
-      flex: 2,
-      child:
-          Text(snapshot.data![index].timeCreated.toString(), style: timeTheme),
-    );
-  }
-}
-
-Future<List<Report>> fetchReports() async {
+Future<List<Building>> fetchBuildings() async {
   var data = RoleUtil.getData();
-  return await ReportService(data).getReportByUser(data["personId"]);
+  return await BuildingService(data).fetchBuildings();
 }
 
-Future<Person> fetchUserById(int id) async {
-  return await PersonService.fetchUserById(id);
+Future<Company> fetchCompany(int id) async {
+  var data = RoleUtil.getData();
+  return CompanyService(data).getCompanyById(id);
 }

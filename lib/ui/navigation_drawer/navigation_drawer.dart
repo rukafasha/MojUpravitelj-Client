@@ -6,7 +6,7 @@ import 'package:praksa_frontend/ui/forms/login_form.dart';
 import 'package:praksa_frontend/ui/forms/my_reports_form.dart';
 import 'package:praksa_frontend/ui/forms/user_form.dart';
 
-import '../forms/building_view_form.dart';
+import '../forms/building_all_form.dart';
 import '../forms/home_form.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -71,7 +71,7 @@ class NavigationDrawer extends StatelessWidget {
                   Navigator.pop(context);
 
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const BuildingView()));
+                      builder: (context) => const BuildingAll()));
                 },
               ),
             ),

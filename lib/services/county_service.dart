@@ -18,7 +18,7 @@ class CountyService {
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
-      return jsonResponse.map((country) => County.fromMap(country)).toList();
+      return jsonResponse.map((county) => County.fromMap(county)).toList();
     } else {
       throw Exception('Unexpected error occured');
     }
@@ -66,6 +66,30 @@ class CountyService {
 
     if (response.statusCode == 200) {
       return County.fromMap(json.decode(response.body));
+    } else {
+      throw Exception('Unexpected error occured');
+    }
+  }
+  
+  Future<List<County>> getCountyByCountry(value) async{
+  var url = Uri.parse('${GlobalUrl.url}county/country/$value');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((county) => County.fromMap(county)).toList();
+    } else {
+      throw Exception('Unexpected error occured');
+    }
+  }
+
+  Future<int> getCountyByName(value) async{
+  var url = Uri.parse('${GlobalUrl.url}county/$value');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var county = County.fromMap(json.decode(response.body));
+      return county.countyId;
     } else {
       throw Exception('Unexpected error occured');
     }

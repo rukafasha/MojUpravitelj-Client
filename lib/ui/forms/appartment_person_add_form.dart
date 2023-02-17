@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:praksa_frontend/helper/role_util.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
-
+import '../../helper/role_util.dart';
 import '../../models/appartment_person.dart';
+import '../../ui/forms/home_form.dart';
 
 class AddAppartmentPersonForm extends StatefulWidget {
   const AddAppartmentPersonForm({Key? key}) : super(key: key);

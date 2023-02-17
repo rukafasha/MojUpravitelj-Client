@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/helper/role_util.dart';
-import 'package:praksa_frontend/models/report.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
 
-import '../../services/report_service.dart';
+import '../../helper/role_util.dart';
+import '../../models/comment.dart';
+import '../../models/report.dart';
+import '../../services/comment_service.dart';
+import '../../ui/forms/reportView_form.dart';
 
-class ReportAdd extends StatelessWidget {
-  const ReportAdd({super.key});
+class CommentAdd extends StatelessWidget {
+  final Report report;
+  const CommentAdd(this.report, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,7 @@ class ReportAdd extends StatelessWidget {
       appBar: AppBar(
         leading: BackButton(
             onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const HomePage()))),
+                MaterialPageRoute(builder: (context) => ReportView(report)))),
         title: const Center(
             child: Text(
           "Moj upravitelj",
@@ -28,24 +30,26 @@ class ReportAdd extends StatelessWidget {
           ),
         ),
       ),
-      body: const AddForm(),
+      body: AddForm(report),
     );
   }
 }
 
 class AddForm extends StatefulWidget {
-  const AddForm({super.key});
+  final Report report;
+  const AddForm(this.report, {super.key});
 
   @override
   AddFormState createState() {
-    return AddFormState();
+    return AddFormState(report);
   }
 }
 
 class AddFormState extends State<AddForm> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final Report report;
+  AddFormState(this.report);
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -57,21 +61,6 @@ class AddFormState extends State<AddForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-              height: MediaQuery.of(context).size.height / 8,
-              child: TextFormField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.short_text),
-                    hintText: 'Enter title for report',
-                    labelText: 'Title',
-                  ),
-                  validator: (String? value) {
-                    return (value!.isEmpty)
-                        ? 'Enter the title of your report.'
-                        : null;
-                  }),
-            ),
-            SizedBox(
               height: MediaQuery.of(context).size.height / 6,
               child: TextFormField(
                   controller: _descriptionController,
@@ -80,12 +69,12 @@ class AddFormState extends State<AddForm> {
                   minLines: null,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.assignment_rounded),
-                    hintText: 'Enter a description',
-                    labelText: 'Description',
+                    hintText: 'Enter the content',
+                    labelText: 'Content',
                   ),
                   validator: (String? value) {
                     return (value!.isEmpty)
-                        ? 'Enter the description of your report.'
+                        ? 'Enter the content of your comment.'
                         : null;
                   }),
             ),
@@ -96,13 +85,10 @@ class AddFormState extends State<AddForm> {
                   child: FloatingActionButton(
                       backgroundColor: const Color(0xfff8a55f),
                       onPressed: () async {
-                        if (_formKey.currentState!.validate() &&
-                            RoleUtil.hasRole("Tenant")) {
-                          await addReport(_titleController.text,
-                              _descriptionController.text);
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const HomePage()));
-                        }
+                        await addComment(
+                            report.id, _descriptionController.text);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ReportView(report)));
                       },
                       child: const Icon(Icons.save)))
             ])
@@ -113,17 +99,13 @@ class AddFormState extends State<AddForm> {
   }
 }
 
-Future<Report> addReport(titleController, descriptionController) async {
+Future<Comment> addComment(report, string) async {
   var data = RoleUtil.getData();
-  Report report = Report(
-    id: 1,
-    title: titleController,
-    description: descriptionController,
-    timeCreated: DateTime.now(),
-    timeFinished: null,
-    madeBy: data["personId"],
-    closedBy: null,
-    status: 1,
+  Comment comment = Comment(
+    commentId: 0,
+    content: string,
+    personId: data["personId"],
+    reportId: report,
   );
-  return await ReportService(data).addReport(report);
+  return await CommentService(data).addComment(comment);
 }

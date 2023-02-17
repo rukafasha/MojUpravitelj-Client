@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:praksa_frontend/services/auth/auth_service.dart';
-import 'package:praksa_frontend/ui/forms/login_form.dart';
+
+import '../../services/auth/auth_service.dart';
+import '../../ui/forms/login_form.dart';
 import '../background/background.dart';
 
 class CompanyRegisterForm extends StatefulWidget {
@@ -25,7 +26,7 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        Background(),
+        const Background(),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

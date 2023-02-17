@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/helper/role_util.dart';
-import 'package:praksa_frontend/models/appartment.dart';
-import 'package:praksa_frontend/services/appartment_service.dart';
-import 'package:praksa_frontend/services/building_service.dart';
-import 'package:praksa_frontend/ui/forms/building_view_form.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
+
+import '../../helper/role_util.dart';
+import '../../models/country.dart';
+import '../../models/appartment.dart';
+import '../../models/county.dart';
+import '../../services/appartment_service.dart';
+import '../../services/building_service.dart';
+import '../../services/country_service.dart';
+import '../../services/county_service.dart';
+import '../../ui/forms/building_all_form.dart';
 
 class BuildingAdd extends StatelessWidget {
   const BuildingAdd({super.key});
@@ -15,7 +19,7 @@ class BuildingAdd extends StatelessWidget {
       appBar: AppBar(
         leading: BackButton(
             onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const HomePage()))),
+                MaterialPageRoute(builder: (context) => const BuildingAll()))),
         title: const Center(
             child: Text(
           "Moj upravitelj",
@@ -47,6 +51,8 @@ class AddFormState extends State<AddForm> {
   final _formKey = GlobalKey<FormState>();
   final _addressController = TextEditingController();
   final _numbOfAppController = TextEditingController();
+  String? dropDownValueDrzava;
+  String? dropDownValueOpstina;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -86,29 +92,106 @@ class AddFormState extends State<AddForm> {
                   ),
                   validator: (String? value) {
                     return (value!.isEmpty)
-                        ? 'Enter the number of appartmentsin your building.'
+                        ? 'Enter the number of appartments in your building.'
                         : null;
                   }),
             ),
+            SizedBox(
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: 20, left: MediaQuery.of(context).size.width / 4),
+                child: FutureBuilder(
+                  future: getAllCountry(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    return snapshot.hasData
+                        ? SizedBox(
+                            child: DropdownButton<String>(
+                              hint: Text(
+                                  dropDownValueDrzava ?? "Make a selection"),
+                              items: snapshot.data
+                                  .map<DropdownMenuItem<String>>((item) {
+                                return DropdownMenuItem<String>(
+                                  value: item.countryName,
+                                  child: Text(item.countryName),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  dropDownValueDrzava = value;
+                                  dropDownValueOpstina = null;
+                                });
+                              },
+                            ),
+                          )
+                        : const SizedBox(
+                            child: Center(
+                              child: Text('Loading...'),
+                            ),
+                          );
+                  },
+                ),
+              ),
+            ),
+            if (dropDownValueDrzava != null)
+              SizedBox(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      top: 30, left: MediaQuery.of(context).size.width / 4),
+                  child: FutureBuilder(
+                    future: getAllCountyByCountry(dropDownValueDrzava),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return snapshot.hasData
+                          ? SizedBox(
+                              child: DropdownButton<String>(
+                                hint: Text(
+                                    dropDownValueOpstina ?? "Make a selection"),
+                                items: snapshot.data
+                                    .map<DropdownMenuItem<String>>((item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item.countyName,
+                                    child: Text(item.countyName),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    dropDownValueOpstina = value;
+                                  });
+                                },
+                              ),
+                            )
+                          : const SizedBox(
+                              child: Center(
+                                child: Text('Loading...'),
+                              ),
+                            );
+                    },
+                  ),
+                ),
+              ),
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
               Padding(
                   padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height / 2.2, right: 20),
+                      top: MediaQuery.of(context).size.height / 4, right: 20),
                   child: FloatingActionButton(
                       backgroundColor: const Color(0xfff8a55f),
                       onPressed: () async {
                         if (_formKey.currentState!.validate() &&
+                            dropDownValueDrzava != null &&
+                            dropDownValueOpstina != null &&
                             RoleUtil.hasRole("Company")) {
                           var building = await addBuilding(
                               _addressController.text,
-                              _numbOfAppController.text);
-                          for (var i = 0;
-                              i < int.parse(_numbOfAppController.text);
-                              i++) {
-                            await addAppartment(building, (i + 1));
+                              _numbOfAppController.text,
+                              dropDownValueOpstina);
+                          if (int.parse(_numbOfAppController.text) != 0) {
+                            for (var i = 0;
+                                i < int.parse(_numbOfAppController.text);
+                                i++) {
+                              await addAppartment(building, (i + 1));
+                            }
                           }
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const BuildingView()));
+                              builder: (context) => const BuildingAll()));
                         }
                       },
                       child: const Icon(Icons.save)))
@@ -120,12 +203,24 @@ class AddFormState extends State<AddForm> {
   }
 }
 
-Future<int> addBuilding(addressController, numbOfAppController) async {
+Future<int> addBuilding(
+    addressController, numbOfAppController, dropDownValueOpstina) async {
   var data = RoleUtil.getData();
+  var opstina = await CountyService(data).getCountyByName(dropDownValueOpstina);
   return await BuildingService(data)
-      .addBuilding(addressController, numbOfAppController);
+      .addBuilding(addressController, numbOfAppController, opstina);
 }
 
 Future<Appartment> addAppartment(building, numbOfApps) async {
   return await AppartmentService().addAppartment(building, numbOfApps);
+}
+
+Future<List<Country>> getAllCountry() async {
+  var data = RoleUtil.getData;
+  return await CountryService(data).getAllCountry();
+}
+
+Future<List<County>> getAllCountyByCountry(value) {
+  var data = RoleUtil.getData;
+  return CountyService(data).getCountyByCountry(value);
 }

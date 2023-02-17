@@ -73,7 +73,7 @@ class ReportView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     child: Row(
                       children: <Widget>[
                         Expanded(
@@ -149,7 +149,7 @@ class ReportView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     child: Column(
                       children: <Widget>[
                         ListTile(

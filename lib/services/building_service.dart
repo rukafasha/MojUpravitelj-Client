@@ -30,7 +30,8 @@ class BuildingService {
     }
   }
 
-  Future<int> addBuilding(addressController, numbOfAppController) async {
+  Future<int> addBuilding(
+      addressController, numbOfAppController, dropDownValueOpstina) async {
     final response = await http.post(
       Uri.parse('${GlobalUrl.url}building/add'),
       headers: <String, String>{
@@ -40,7 +41,7 @@ class BuildingService {
         'address': addressController.toString(),
         'companyId': data["companyId"].toString(),
         'numberOfAppartment': numbOfAppController.toString(),
-        'countyId': "1",
+        'countyId': dropDownValueOpstina,
         'representativeId': null,
       }),
     );
@@ -50,6 +51,54 @@ class BuildingService {
     } else {
       throw Exception('Building loading failed!');
     }
+  }
+
+  Future<Building> editBuilding(Building rep) async {
+    final response = await http.put(
+      Uri.parse('${GlobalUrl.url}building/edit/${rep.buildingId}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'address': rep.address.toString(),
+        'companyId': rep.companyId.toString(),
+        'numberOfAppartment': rep.numberOfAppartment.toString(),
+        'countyId': rep.countyId.toString(),
+        'representativeId': rep.representativeId,
+      }),
+    );
+    if (response.statusCode == 200) {
+      return Building.fromJson(response.body);
+    } else {
+      throw Exception('Building loading failed!');
+    }
+  }
+
+  Future<Building> addRepresentative(Building rep) async {
+    final response = await http.put(
+      Uri.parse('${GlobalUrl.url}building/edit/${rep.buildingId}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'address': rep.address.toString(),
+        'companyId': rep.companyId.toString(),
+        'numberOfAppartment': rep.numberOfAppartment.toString(),
+        'countyId': rep.countyId.toString(),
+        'representativeId': rep.representativeId.toString(),
+      }),
+    );
+    if (response.statusCode == 200) {
+      return Building.fromJson(response.body);
+    } else {
+      throw Exception('Building loading failed!');
+    }
+  }
+
+  Future buildingDelete(Building building) async {
+    final http.Response response = await http.delete(
+      Uri.parse('${GlobalUrl.url}building/delete/${building.buildingId}'),
+    );
   }
 
   Future<List<ModelBuildingsByAddress>> getBuildingsByAddress(address) async {

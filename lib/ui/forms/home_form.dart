@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/models/person.dart';
-import 'package:praksa_frontend/models/report.dart';
-import 'package:praksa_frontend/services/person_service.dart';
-import 'package:praksa_frontend/services/report_service.dart';
-import 'package:praksa_frontend/ui/forms/report_add_form.dart';
-import 'package:praksa_frontend/ui/forms/report_view_form.dart';
 
+import '../../helper/role_util.dart';
+import '../../models/person.dart';
+import '../../models/report.dart';
+import '../../models/report_status.dart';
+import '../../services/person_service.dart';
+import '../../services/report_service.dart';
+import '../../services/report_status_service.dart';
+import '../../ui/forms/report_add_form.dart';
+import '../../ui/forms/reportView_form.dart';
 import '../navigation_drawer/navigation_drawer.dart';
-import 'package:praksa_frontend/helper/role_util.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  _HomePageState();
+  String? filter = putFilter();
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +40,62 @@ class HomePage extends StatelessWidget {
         ),
       ),
       drawer: NavigationDrawer(),
-      body: FutureBuilder<List<Report>>(
-          future: fetchReports(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return PostCard(snapshot, index);
+      body: Column(
+        children: [
+          SizedBox(
+            height: 65,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: FutureBuilder(
+                future: getReportStatus(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  return snapshot.hasData
+                      ? SizedBox(
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            hint: Text(filter!),
+                            items: snapshot.data
+                                .map<DropdownMenuItem<String>>((item) {
+                              return DropdownMenuItem<String>(
+                                value: item.statusDescription,
+                                child: Text(item.statusDescription),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                filter = value;
+                              });
+                            },
+                          ),
+                        )
+                      : const SizedBox(
+                          child: Center(
+                            child: Text('Loading...'),
+                          ),
+                        );
                 },
-              );
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-            return const CircularProgressIndicator();
-          }),
+              ),
+            ),
+          ),
+          FutureBuilder<List<Report>>(
+              future: fetchReports(filter),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return PostCard(snapshot, index);
+                      },
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                }
+                return const CircularProgressIndicator();
+              }),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
           heroTag: UniqueKey(),
           backgroundColor: const Color(0xfff8a55f),
@@ -210,15 +261,33 @@ class _PostTimeStamp extends StatelessWidget {
   }
 }
 
-Future<List<Report>> fetchReports() async {
+Future<List<Report>> fetchReports(filter) async {
   var data = RoleUtil.getData();
   if (RoleUtil.hasRole("Company")) {
-    return ReportService(data).getReportByCompany(data["companyId"]);
+    return ReportService(data).getReportByCompany(data["companyId"], filter);
   } else {
-    return ReportService(data).getReportByBuilding(data["buildingId"]);
+    return ReportService(data).getReportByBuilding(data["buildingId"], filter);
   }
 }
 
 Future<Person> fetchUserById(int id) async {
   return PersonService.fetchUserById(id);
+}
+
+Future<List<ReportStatus>> getReportStatus() async {
+  var data = RoleUtil.getData();
+  return await ReportStatusService(data).getAllStatus();
+}
+
+String putFilter() {
+  String filter;
+  if (RoleUtil.hasRole("Representative")) {
+    filter = "open";
+  } else if (RoleUtil.hasRole("Company")) {
+    filter = "accepted";
+  } else {
+    filter = "all";
+  }
+
+  return filter;
 }

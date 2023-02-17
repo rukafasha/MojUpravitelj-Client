@@ -5,8 +5,6 @@ import 'package:praksa_frontend/services/appartment_person_service.dart';
 import 'package:praksa_frontend/services/auth/auth_service.dart';
 import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
-import 'package:http/http.dart' as http;
-import '../../helper/global_url.dart';
 
 class Apartment {
   final int buildingId;
@@ -65,12 +63,8 @@ class _ListOfApartmentsInTheBuildingState
   }
 
   Future<List<Apartment>> getListOfApartmentsInTheBuilding(building_id) async {
-    final response = await http.get(
-      Uri.parse('${GlobalUrl.url}appartment/details/$building_id'),
-    );
-    final body = json.decode(response.body);
-
-    return body.map<Apartment>(Apartment.fromJson).toList();
+    return await AppartmentPersonService.getAppartmentsByBuildingId(
+        building_id);
   }
 
   @override
