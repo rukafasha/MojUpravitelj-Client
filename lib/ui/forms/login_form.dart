@@ -6,7 +6,11 @@ import 'package:praksa_frontend/ui/background/background.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/register_form.dart';
 
+import '../../Helper/GlobalUrl.dart';
 import '../../Services/Auth/AuthService.dart';
+import '../../getFcm.dart';
+
+import 'package:http/http.dart' as http;
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -311,11 +315,26 @@ class _LoginFormState extends State<LoginForm> {
                 Container(
                   margin: const EdgeInsets.only(left: 16, top: 24),
                   child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterForm(),
-                        ),
+                    onTap: () async {
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const RegisterForm(),
+                      //   ),
+                      // );
+
+                      String? fcmKey = await getFcmToken();
+                      print("FCM Key: $fcmKey");
+
+                      final response = await http.post(
+                        Uri.parse('${GlobalUrl.url}send-push'),
+                        headers: <String, String>{
+                          'Content-Type': 'application/json; charset=UTF-8',
+                        },
+                        body: jsonEncode(<String, dynamic>{
+                          "msg": "porukaaa",
+                          "registration_token": fcmKey,
+                          "title": "naslovvv"
+                        }),
                       );
                     },
                     child: const Text(
