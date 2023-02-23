@@ -6,7 +6,11 @@ import 'package:praksa_frontend/ui/background/background.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/register_form.dart';
 
+import '../../Helper/GlobalUrl.dart';
 import '../../Services/Auth/AuthService.dart';
+import '../../getFcm.dart';
+
+import 'package:http/http.dart' as http;
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -311,7 +315,7 @@ class _LoginFormState extends State<LoginForm> {
                 Container(
                   margin: const EdgeInsets.only(left: 16, top: 24),
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const RegisterForm(),

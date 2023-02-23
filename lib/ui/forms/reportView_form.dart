@@ -260,7 +260,6 @@ class _ReportViewState extends State<ReportView> {
                             heroTag: null,
                             backgroundColor: const Color(0xfff8a55f),
                             onPressed: () async {
-                              var report2 = await updateReport(report, status);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) => CommentAdd(report)));},
@@ -365,7 +364,7 @@ Widget buildComments(List<Comment> comments, dynamic context, Report report) =>
                         child: Card(
                           child: ListTile(
                             title: Text("Comment: ${comment.content}"),
-                            subtitle: Text("Address: ${snapshot.data}"),
+                            subtitle: Text("User: ${snapshot.data}"),
                           ),
                         ),
                       );

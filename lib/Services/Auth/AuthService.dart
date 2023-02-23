@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:praksa_frontend/getFcm.dart';
 
 import '../../Helper/GlobalUrl.dart';
 
 class AuthService {
   static Future login(TextEditingController _usernameController,
       TextEditingController _passwordController) async {
+        String? token = await getFcmToken();
     final personDetails = await http.post(Uri.parse('${GlobalUrl.url}login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -15,6 +17,7 @@ class AuthService {
         body: jsonEncode(<String, dynamic>{
           'username': _usernameController.text.toString(),
           'password': _passwordController.text.toString(),
+          "deviceID": token.toString()
         }));
 
     return personDetails;
