@@ -8,7 +8,7 @@ import '../../services/person_service.dart';
 import '../../services/report_service.dart';
 import '../../services/report_status_service.dart';
 import '../../ui/forms/report_add_form.dart';
-import '../../ui/forms/reportView_form.dart';
+import 'report_view_form.dart';
 import '../navigation_drawer/navigation_drawer.dart';
 
 class HomePage extends StatefulWidget {

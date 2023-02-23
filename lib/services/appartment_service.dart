@@ -33,4 +33,23 @@ class AppartmentService {
     );
     return Appartment.fromMap(json.decode(response.body));
   }
+
+  Future<List<Appartment>> getAppartmentsWithoutPerson(appartmantsList) async {
+    List<int> lista = List<int>.from(appartmantsList);
+    final response =
+        await http.post(Uri.parse('${GlobalUrl.url}appartment/withoutPerson'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, dynamic>{"lista": lista}));
+
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse
+          .map((appartment) => Appartment.fromMap(appartment))
+          .toList();
+    } else {
+      throw Exception('Unexpected error occured');
+    }
+  }
 }

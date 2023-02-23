@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-import '../helper/global_url.dart';
-import '../models/appartment_person.dart';
 import 'package:http/http.dart' as http;
+
+import '../helper/global_url.dart';
+import '../helper/role_util.dart';
+import '../models/appartment_person.dart';
 import '../ui/forms/list_of_apartments_in_the_building.dart';
 
 class AppartmentPersonService {
@@ -53,5 +55,24 @@ class AppartmentPersonService {
     final body = json.decode(response.body);
 
     return body.map<Apartment>(Apartment.fromJson).toList();
+  }
+
+  Future<int> addAppartmentPeron(appartmentId) async {
+    var data = RoleUtil.getData();
+    final response = await http.post(
+      Uri.parse('${GlobalUrl.url}appartmentPerson/addByTenant'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'person_id': data["personId"],
+        'apartment_id': appartmentId,
+      }),
+    );
+    if (response.statusCode < 300) {
+      return response.statusCode;
+    } else {
+      throw Exception('Unexpected error occured');
+    }
   }
 }

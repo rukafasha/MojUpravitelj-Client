@@ -42,3 +42,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+.vs/MojUpravitelj-Client/v15/.ssms_suo

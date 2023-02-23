@@ -1,22 +1,42 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/helper/role_util.dart';
-import 'package:praksa_frontend/models/report.dart';
-import 'package:praksa_frontend/ui/forms/report_edit_form.dart';
-import '../../helper/global_url.dart';
-import '../../models/person.dart';
 import 'package:http/http.dart' as http;
+import 'package:praksa_frontend/ui/forms/comment_edit_form.dart';
+import 'package:praksa_frontend/ui/forms/report_edit_form.dart';
+
+import '../../helper/global_url.dart';
+import '../../helper/role_util.dart';
+import '../../models/person.dart';
+import '../../models/comment.dart';
+import '../../models/report.dart';
+import '../../services/comment_service.dart';
+import '../../services/person_service.dart';
+import '../../services/report_service.dart';
+import '../../services/report_status_service.dart';
+
+import 'comment_add_form.dart';
 import 'home_form.dart';
 
-class ReportView extends StatelessWidget {
+class ReportView extends StatefulWidget {
   final Report report;
   const ReportView(this.report, {super.key});
 
   @override
+  State<ReportView> createState() => _ReportViewState(report);
+}
+
+class _ReportViewState extends State<ReportView> {
+  final Report report;
+  _ReportViewState(this.report);
+  String? status;
+  @override
+  void initState() {
+    getStatus(report.status).then((value) => status = value);
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     var data = RoleUtil.getData();
-
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
@@ -35,123 +55,168 @@ class ReportView extends StatelessWidget {
           ),
         ),
       ),
-      body: FutureBuilder<Person>(
-          future: fetchUsers(report.madeBy),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView(
-                children: <Widget>[
-                  Container(
-                    height: 200,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: <Color>[Color(0xfff8a55f), Color(0xfff1665f)],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        stops: [0.5, 0.9],
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: FutureBuilder<Person>(
+                future: fetchUsers(report.madeBy),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
                       children: <Widget>[
-                        Text(
-                          report.title,
-                          style: const TextStyle(
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                        Container(
+                          height: 200,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: <Color>[
+                                Color(0xfff8a55f),
+                                Color(0xfff1665f)
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              stops: [0.5, 0.9],
+                            ),
                           ),
-                        ),
-                        Text(
-                          "${snapshot.data!.firstName} ${snapshot.data!.lastName}",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 25,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            color: const Color(0xfff1665f),
-                            child: ListTile(
-                              title: const Text(
-                                "Created at: ",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                report.title,
+                                style: const TextStyle(
+                                  fontSize: 35,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
                               ),
-                              subtitle: Text(
-                                "${report.timeCreated.day}.${report.timeCreated.month}.${report.timeCreated.year}",
-                                textAlign: TextAlign.center,
+                              Text(
+                                "${snapshot.data!.firstName} ${snapshot.data!.lastName}",
                                 style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white70,
+                                  color: Colors.white,
+                                  fontSize: 25,
                                 ),
                               ),
-                            ),
+                            ],
                           ),
                         ),
-                        if (report.timeFinished == null)
-                          Expanded(
-                            child: Container(
-                              color: const Color(0xfff8a55f),
-                              child: const ListTile(
-                                title: Text(
-                                  "Closed at: ",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  "Report is not closed",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        if (report.timeFinished != null)
-                          Expanded(
-                            child: Container(
-                              color: const Color(0xfff8a55f),
-                              child: ListTile(
-                                title: const Text(
-                                  "Closed at: ",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  "${report.timeCreated.day}.${report.timeCreated.month}.${report.timeCreated.year}",
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white70,
+                        SizedBox(
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Container(
+                                  color: const Color(0xfff1665f),
+                                  child: ListTile(
+                                    title: const Text(
+                                      "Created at: ",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      "${report.timeCreated.day}.${report.timeCreated.month}.${report.timeCreated.year}",
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white70,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
+                              if (report.timeFinished == null)
+                                Expanded(
+                                  child: Container(
+                                    color: const Color(0xfff8a55f),
+                                    child: const ListTile(
+                                      title: Text(
+                                        "Closed at: ",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        "Report is not closed",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              if (report.timeFinished != null)
+                                Expanded(
+                                  child: Container(
+                                    color: const Color(0xfff8a55f),
+                                    child: ListTile(
+                                      title: const Text(
+                                        "Closed at: ",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        "${report.timeCreated.day}.${report.timeCreated.month}.${report.timeCreated.year}",
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        if ((RoleUtil.hasRole("Representative") ||
+                            RoleUtil.hasRole("Company") && status != "closed"))
+                          SizedBox(
+                            height: 65,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: FutureBuilder(
+                                future: getReportStatus(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  return snapshot.hasData
+                                      ? SizedBox(
+                                          child: DropdownButton<String>(
+                                            isExpanded: true,
+                                            hint: Text(status!),
+                                            items: snapshot.data
+                                                .map<DropdownMenuItem<String>>(
+                                                    (item) {
+                                              return DropdownMenuItem<String>(
+                                                value: item.statusDescription,
+                                                child: Text(
+                                                    item.statusDescription),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                status = value!;
+                                              });
+                                            },
+                                          ),
+                                        )
+                                      : const SizedBox(
+                                          child: Center(
+                                            child: Text('Loading...'),
+                                          ),
+                                        );
+                                },
+                              ),
                             ),
                           ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    child: Column(
-                      children: <Widget>[
                         ListTile(
                           subtitle: Text(
                             report.description,
@@ -161,35 +226,91 @@ class ReportView extends StatelessWidget {
                             ),
                           ),
                         ),
+                        Expanded(
+                          child: FutureBuilder<List<Comment>>(
+                              future: getListOfComments(report.id),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                } else if (snapshot.hasData &&
+                                    snapshot.data!.isNotEmpty) {
+                                  final comments = snapshot.data!;
+                                  return buildComments(
+                                      comments, context, report);
+                                } else {
+                                  return const Text("Apartments not found.");
+                                }
+                              }),
+                        ),
                       ],
-                    ),
-                  ),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-            return const CircularProgressIndicator();
-          }),
-      floatingActionButton: Visibility(
-        visible: report.madeBy == data["personId"] && report.status == 1,
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ReportEdit(report)));
-              },
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xfff8a55f)),
-              child: const Text('Edit report '),
-            ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text(snapshot.error.toString());
+                  }
+                  return const CircularProgressIndicator();
+                }),
           ),
-        ),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Visibility(
+              visible: RoleUtil.hasRole("Representative") ||
+                  RoleUtil.hasRole("Company") ||
+                  report.madeBy == data["personId"],
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: FloatingActionButton(
+                      heroTag: null,
+                      backgroundColor: const Color(0xfff8a55f),
+                      onPressed: () async {
+                        var report2 = await updateReport(report, status);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CommentAdd(report)));
+                      },
+                      child: const Icon(Icons.comment)),
+                ),
+              )),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Visibility(
+                  visible: (RoleUtil.hasRole("Representative") ||
+                          RoleUtil.hasRole("Company")) &&
+                      report.status != 2,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: FloatingActionButton(
+                        heroTag: null,
+                        backgroundColor: const Color(0xfff8a55f),
+                        onPressed: () async {
+                          var report2 = await updateReport(report, status);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ReportView(report2)));
+                        },
+                        child: const Icon(Icons.save)),
+                  )),
+              Visibility(
+                  visible:
+                      report.madeBy == data["personId"] && report.status == 1,
+                  child: FloatingActionButton(
+                      heroTag: null,
+                      backgroundColor: const Color(0xfff8a55f),
+                      onPressed: () async {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ReportEdit(report)));
+                      },
+                      child: const Icon(Icons.edit))),
+            ],
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
@@ -204,3 +325,56 @@ Future<Person> fetchUsers(int id) async {
     throw Exception('Unexpected error occured');
   }
 }
+
+Future<String> getStatus(id) async {
+  var data = RoleUtil.getData();
+  return await ReportStatusService(data).getStatusById(id);
+}
+
+Future<Report> updateReport(Report report, String? status) async {
+  var data = RoleUtil.getData();
+  return await ReportService(data).changeReportStatus(report, status);
+}
+
+Future<List<Comment>> getListOfComments(int reportId) async {
+  var data = RoleUtil.getData();
+  return await CommentService(data).getCommentsByReportId(reportId);
+}
+
+Future<String> fetchUsersName(int id) async {
+  return PersonService.fetchUsersName(id);
+}
+
+Widget buildComments(List<Comment> comments, dynamic context, Report report) =>
+    ListView.builder(
+        itemCount: comments.length,
+        itemBuilder: (context, index) {
+          var data = RoleUtil.getData();
+          final comment = comments[index];
+          final person = fetchUsersName(comment.personId);
+          return FutureBuilder<String>(
+              future: fetchUsersName(comment.personId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                  return InkWell(
+                    onTap: () {
+                      if (comment.personId == data["personId"]) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                CommentEdit(report, comment)));
+                      }
+                    },
+                    child: Card(
+                      child: ListTile(
+                        title: Text("Comment: ${comment.content}"),
+                        subtitle: Text("Address: ${snapshot.data}"),
+                      ),
+                    ),
+                  );
+                } else {
+                  return const Text("Comments not found.");
+                }
+              });
+        });

@@ -4,7 +4,7 @@ import '../../helper/role_util.dart';
 import '../../models/comment.dart';
 import '../../models/report.dart';
 import '../../services/comment_service.dart';
-import '../../ui/forms/reportView_form.dart';
+import 'report_view_form.dart';
 
 class CommentAdd extends StatelessWidget {
   final Report report;

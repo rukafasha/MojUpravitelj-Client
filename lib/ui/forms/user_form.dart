@@ -31,7 +31,7 @@ class _UserFormState extends State<UserForm> {
 
   bool _customTileExpanded = false;
 
-  static var data = RoleUtil.getData();
+  var data = RoleUtil.getData();
   static const uName = "Shakleen Ishfar";
   static const companyId = '1';
 
@@ -41,6 +41,7 @@ class _UserFormState extends State<UserForm> {
       "lastName": data["lastName"],
       "DOB": data["DOB"],
     });
+    RoleUtil(_myBox.get(1));
   }
 
   @override
