@@ -151,7 +151,6 @@ class _PostDetails extends StatelessWidget {
     final TextStyle? nameTheme = Theme.of(context).textTheme.subtitle1;
     final int made = lista.data![index].madeBy;
     return FutureBuilder<Person>(
-        // future: PersonService.fetchUsers(made),
         future: fetchUserById(made),
         builder: (context, snapshot) {
           if (snapshot.hasData) {

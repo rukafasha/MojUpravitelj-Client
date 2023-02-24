@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'package:praksa_frontend/ui/forms/user_form.dart';
 
 import '../../Models/AppartmentPerson.dart';
-import '../../Services/AppartmentService.dart';
 
 class AddAppartmentPersonForm extends StatefulWidget {
   const AddAppartmentPersonForm({Key? key}) : super(key: key);
@@ -38,69 +36,7 @@ class _AddAppartmentPersonForm extends State<AddAppartmentPersonForm> {
           ),
         ),
       ),
-      body: null,
-      // body: SingleChildScrollView(
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //     children: <Widget>[
-      //       Expanded(
-      //         child: Center(
-      //           child: FutureBuilder<dynamic>(
-      //               future: fetchAppartmentsByPerson(),
-      //               builder: (context, snapshot) {
-      //                 if (snapshot.connectionState == ConnectionState.waiting) {
-      //                   return const CircularProgressIndicator();
-      //                 } else if (snapshot.hasData &&
-      //                     snapshot.data!.isNotEmpty) {
-      //                   final apartments = snapshot.data!;
-      //                   return buildApartment(apartments, context);
-      //                 } else {
-      //                   return const Text("Apartments not found.");
-      //                 }
-      //               }),
-      //         ),
-      //       ),
-      //       Row(
-      //         mainAxisAlignment: MainAxisAlignment.end,
-      //         children: [
-      //           Container(
-      //             margin: const EdgeInsets.all(10),
-      //             child: FloatingActionButton(
-      //               heroTag: null,
-      //               backgroundColor: const Color(0xfff8a55f),
-      //               onPressed: () async {
-      //                 // data = PersonService.getData();
-      //                 // await PersonService.editPerson();
-      //                 Navigator.of(context).push(MaterialPageRoute(
-      //                     builder: (context) => const UserForm()));
-      //               },
-      //               child: const Icon(Icons.save),
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     ],
-      //   ),
-      // ),
+      
     );
   }
-
-//   Widget buildApartment(List<dynamic> apartments, dynamic context) =>
-//       ListView.builder(
-//         shrinkWrap: true,
-//         itemCount: apartments.length,
-//         itemBuilder: (context, index) {
-//           final apartment = apartments[index];
-//           return Card(
-//             child: ListTile(
-//               title: Text("Apartman: ${apartment.appartmentId}"),
-//             ),
-//           );
-//         },
-//       );
 }
-
-// fetchApartments() async {
-//   var data = RoleUtil.GetData();
-//   return AppartmentService(data).fetchApartments();
-// }

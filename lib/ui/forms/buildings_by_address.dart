@@ -1,11 +1,8 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/ui/forms/list_of_apartments_in_the_building.dart';
-import 'package:http/http.dart' as http;
 import 'package:praksa_frontend/ui/forms/register_form.dart';
 
-import '../../Helper/GlobalUrl.dart';
 import '../../Helper/RoleUtil.dart';
 import '../../Models/ModelBuildingsByAddress.dart';
 import '../../Services/BuildingService.dart';
