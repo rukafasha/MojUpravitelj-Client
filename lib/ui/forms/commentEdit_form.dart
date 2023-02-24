@@ -4,10 +4,8 @@ import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:praksa_frontend/Models/Comment.dart';
 import 'package:praksa_frontend/Models/Report.dart';
 import 'package:praksa_frontend/Services/CommentService.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/reportView_form.dart';
 
-import '../../Services/ReportService.dart';
 
 class CommentEdit extends StatelessWidget {
   final Comment comment;
@@ -65,58 +63,60 @@ class CommentEditFormState extends State<CommentEditForm> {
       width: MediaQuery.of(context).size.width,
       child: Form(
         key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 6,
-              child: TextFormField(
-                  controller: _descriptionController,
-                  expands: true,
-                  maxLines: null,
-                  minLines: null,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.assignment_rounded),
-                    hintText: 'Enter the content',
-                    labelText: 'Content',
-                  ),
-                  validator: (String? value) {
-                    return (value!.isEmpty)
-                        ? 'Enter the content of your comment.'
-                        : null;
-                  }),
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-             children: [
-              Padding(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height / 2.2, right: 50),
-                  child: FloatingActionButton(
-                      backgroundColor: const Color(0xfff1665f),
-                      heroTag: null,
-                      onPressed: () async {
-                        await commentDelete(comment);
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ReportView(report)));
-                      },
-                      child: const Icon(
-                        Icons.delete,
-                        color: Colors.black,
-                      ))),
-              Padding(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height / 2.2, right: 20),
-                  child: FloatingActionButton(
-                      backgroundColor: const Color(0xfff8a55f),
-                      onPressed: () async {
-                          await editComment(comment,
-                              _descriptionController.text);
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 6,
+                child: TextFormField(
+                    controller: _descriptionController,
+                    expands: true,
+                    maxLines: null,
+                    minLines: null,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.assignment_rounded),
+                      hintText: 'Enter the content',
+                      labelText: 'Content',
+                    ),
+                    validator: (String? value) {
+                      return (value!.isEmpty)
+                          ? 'Enter the content of your comment.'
+                          : null;
+                    }),
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+               children: [
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 2.2, right: 50),
+                    child: FloatingActionButton(
+                        backgroundColor: const Color(0xfff1665f),
+                        heroTag: null,
+                        onPressed: () async {
+                          await commentDelete(comment);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ReportView(report)));
                         },
-                      child: const Icon(Icons.save)))
-            ])
-          ],
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.black,
+                        ))),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 2.2, right: 20),
+                    child: FloatingActionButton(
+                        backgroundColor: const Color(0xfff8a55f),
+                        onPressed: () async {
+                            await editComment(comment,
+                                _descriptionController.text);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ReportView(report)));
+                          },
+                        child: const Icon(Icons.save)))
+              ])
+            ],
+          ),
         ),
       ),
     );

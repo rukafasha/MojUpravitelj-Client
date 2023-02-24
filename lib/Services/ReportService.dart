@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
 
 import '../Helper/GlobalUrl.dart';
 import '../Models/Report.dart';
@@ -69,11 +68,11 @@ class ReportService {
       body: jsonEncode(<String, dynamic>{
         'title': report.title.toString(),
         'description': report.description.toString(),
-        'madeBy': report.madeBy.toString(),
+        'madeBy': report.madeBy,
         'timeCreated': report.timeCreated.toString(),
-        'timeFinished': report.timeFinished.toString(),
-        'status': report.status.toString(),
-        'closedBy': report.closedBy.toString(),
+        'timeFinished': report.timeFinished,
+        'status': report.status,
+        'closedBy': report.closedBy,
       }),
     );
 
