@@ -22,7 +22,7 @@ class _RegisterFormState extends State<RegisterForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final TextEditingController _dateController =
-      TextEditingController(); // Ovo vidjeti na kraju
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/Helper/RoleUtil.dart';
 import 'package:praksa_frontend/Models/Comment.dart';
@@ -7,9 +6,7 @@ import 'package:praksa_frontend/Services/ReportService.dart';
 import 'package:praksa_frontend/Services/ReportStatusService.dart';
 import 'package:praksa_frontend/ui/forms/commentEdit_form.dart';
 import 'package:praksa_frontend/ui/forms/reportEdit_form.dart';
-import '../../Helper/GlobalUrl.dart';
 import '../../Models/Person.dart';
-import 'package:http/http.dart' as http;
 import '../../Services/CommentService.dart';
 import '../../Services/PersonService.dart';
 import 'commentAdd_form.dart';
@@ -226,7 +223,7 @@ class _ReportViewState extends State<ReportView> {
                         final comments = snapshot.data!;
                         return buildComments(comments, context, report);
                       } else {
-                         return const Text("Apartments not found.");
+                         return const Text("Comments not found.");
                       }
                     }),
              
@@ -260,7 +257,6 @@ class _ReportViewState extends State<ReportView> {
                             heroTag: null,
                             backgroundColor: const Color(0xfff8a55f),
                             onPressed: () async {
-                              var report2 = await updateReport(report, status);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) => CommentAdd(report)));},
@@ -311,14 +307,7 @@ class _ReportViewState extends State<ReportView> {
 
 
 Future<Person> fetchUsers(int id) async {
-  var url = Uri.parse('${GlobalUrl.url}person/$id');
-  final response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    return Person.fromMap(json.decode(response.body));
-  } else {
-    throw Exception('Unexpected error occured');
-  }
+  return await PersonService.fetchUserById(id);
 }
 
 Future<String> getStatus(id)async {
@@ -365,7 +354,7 @@ Widget buildComments(List<Comment> comments, dynamic context, Report report) =>
                         child: Card(
                           child: ListTile(
                             title: Text("Comment: ${comment.content}"),
-                            subtitle: Text("Address: ${snapshot.data}"),
+                            subtitle: Text("User: ${snapshot.data}"),
                           ),
                         ),
                       );
