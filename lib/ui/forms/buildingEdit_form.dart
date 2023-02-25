@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/helper/role_util.dart';
-import 'package:praksa_frontend/models/report.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'package:praksa_frontend/ui/forms/report_view_form.dart';
+import 'package:praksa_frontend/services/building_service.dart';
+import 'package:praksa_frontend/ui/forms/building_view_form.dart';
 
-import '../../services/report_service.dart';
+import '../../models/building.dart';
+import 'building_all_form.dart';
 
-class ReportEdit extends StatelessWidget {
-  final Report report;
-  const ReportEdit(this.report, {super.key});
+class BuildingEdit extends StatelessWidget {
+  final Building building;
+  const BuildingEdit(this.building, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-            onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => ReportView(report)))),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => BuildingView(building)))),
         title: const Center(
             child: Text(
           "Moj upravitelj",
@@ -30,32 +30,30 @@ class ReportEdit extends StatelessWidget {
           ),
         ),
       ),
-      body: EditForm(report),
+      body: EditForm(building),
     );
   }
 }
 
 class EditForm extends StatefulWidget {
-  final Report report;
-  const EditForm(this.report, {super.key});
+  final Building building;
+  const EditForm(this.building, {super.key});
 
   @override
   EditFormState createState() {
-    return EditFormState(report);
+    return EditFormState(building);
   }
 }
 
 class EditFormState extends State<EditForm> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  Report report;
-  EditFormState(this.report);
+  Building building;
+  EditFormState(this.building);
 
   @override
   Widget build(BuildContext context) {
-    _descriptionController.text = report.description;
-    _titleController.text = report.title;
+    _descriptionController.text = building.address;
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -66,21 +64,6 @@ class EditFormState extends State<EditForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SizedBox(
-                height: MediaQuery.of(context).size.height / 8,
-                child: TextFormField(
-                    controller: _titleController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.short_text),
-                      hintText: 'Enter title for report',
-                      labelText: 'Title',
-                    ),
-                    validator: (String? value) {
-                      return (value!.isEmpty)
-                          ? 'Enter the title of your report.'
-                          : null;
-                    }),
-              ),
-              SizedBox(
                 height: MediaQuery.of(context).size.height / 6,
                 child: TextFormField(
                     controller: _descriptionController,
@@ -89,8 +72,8 @@ class EditFormState extends State<EditForm> {
                     minLines: null,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.assignment_rounded),
-                      hintText: 'Enter a description',
-                      labelText: 'Description',
+                      hintText: 'Enter an address',
+                      labelText: 'Address',
                     ),
                     validator: (String? value) {
                       return (value!.isEmpty)
@@ -107,9 +90,9 @@ class EditFormState extends State<EditForm> {
                         backgroundColor: const Color(0xfff1665f),
                         heroTag: null,
                         onPressed: () async {
-                          await reportDelete(report);
+                          await DeleteBuilding(building);
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => HomePage()));
+                              builder: (context) => const BuildingAll()));
                         },
                         child: const Icon(
                           Icons.delete,
@@ -123,12 +106,11 @@ class EditFormState extends State<EditForm> {
                         heroTag: null,
                         backgroundColor: const Color(0xfff8a55f),
                         onPressed: () async {
-                          if (_formKey.currentState!.validate() &&
-                              RoleUtil.hasRole("Tenant")) {
-                            report = await editReport(_titleController.text,
-                                _descriptionController.text, report);
+                          if (_formKey.currentState!.validate()) {
+                            building = await EditBuilding(
+                                _descriptionController.text, building);
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ReportView(report)));
+                                builder: (context) => BuildingView(building)));
                           }
                         },
                         child: const Icon(Icons.save)))
@@ -141,23 +123,21 @@ class EditFormState extends State<EditForm> {
   }
 }
 
-Future<Report> editReport(titleController, descriptionController, r) async {
+Future<Building> EditBuilding(descriptionController, r) async {
   var data = RoleUtil.getData();
-  Report report = r;
-  Report rep = Report(
-    id: report.id,
-    title: titleController,
-    description: descriptionController,
-    timeCreated: report.timeCreated,
-    timeFinished: report.timeFinished,
-    madeBy: report.madeBy,
-    closedBy: report.closedBy,
-    status: report.status,
-  );
-  return await ReportService(data).editReport(rep);
+  Building building = r;
+  Building rep = Building(
+      buildingId: building.buildingId,
+      address: descriptionController.toString(),
+      companyId: building.companyId,
+      numberOfAppartment: building.numberOfAppartment,
+      countyId: building.countyId,
+      representativeId: building.representativeId);
+
+  return await BuildingService(data).editBuilding(rep);
 }
 
-Future reportDelete(Report report) async {
+Future DeleteBuilding(Building building) async {
   var data = RoleUtil.getData();
-  await ReportService(data).deleteReport(report);
+  await BuildingService(data).buildingDelete(building);
 }

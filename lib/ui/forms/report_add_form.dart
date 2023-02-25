@@ -53,60 +53,63 @@ class AddFormState extends State<AddForm> {
       width: MediaQuery.of(context).size.width,
       child: Form(
         key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 8,
-              child: TextFormField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.short_text),
-                    hintText: 'Enter title for report',
-                    labelText: 'Title',
-                  ),
-                  validator: (String? value) {
-                    return (value!.isEmpty)
-                        ? 'Enter the title of your report.'
-                        : null;
-                  }),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 6,
-              child: TextFormField(
-                  controller: _descriptionController,
-                  expands: true,
-                  maxLines: null,
-                  minLines: null,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.assignment_rounded),
-                    hintText: 'Enter a description',
-                    labelText: 'Description',
-                  ),
-                  validator: (String? value) {
-                    return (value!.isEmpty)
-                        ? 'Enter the description of your report.'
-                        : null;
-                  }),
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              Padding(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height / 2.2, right: 20),
-                  child: FloatingActionButton(
-                      backgroundColor: const Color(0xfff8a55f),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate() &&
-                            RoleUtil.hasRole("Tenant")) {
-                          await addReport(_titleController.text,
-                              _descriptionController.text);
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const HomePage()));
-                        }
-                      },
-                      child: const Icon(Icons.save)))
-            ])
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 8,
+                child: TextFormField(
+                    controller: _titleController,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.short_text),
+                      hintText: 'Enter title for report',
+                      labelText: 'Title',
+                    ),
+                    validator: (String? value) {
+                      return (value!.isEmpty)
+                          ? 'Enter the title of your report.'
+                          : null;
+                    }),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 6,
+                child: TextFormField(
+                    controller: _descriptionController,
+                    expands: true,
+                    maxLines: null,
+                    minLines: null,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.assignment_rounded),
+                      hintText: 'Enter a description',
+                      labelText: 'Description',
+                    ),
+                    validator: (String? value) {
+                      return (value!.isEmpty)
+                          ? 'Enter the description of your report.'
+                          : null;
+                    }),
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 2.2,
+                        right: 20),
+                    child: FloatingActionButton(
+                        backgroundColor: const Color(0xfff8a55f),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate() &&
+                              RoleUtil.hasRole("Tenant")) {
+                            await addReport(_titleController.text,
+                                _descriptionController.text);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => HomePage()));
+                          }
+                        },
+                        child: const Icon(Icons.save)))
+              ])
+            ],
+          ),
         ),
       ),
     );
