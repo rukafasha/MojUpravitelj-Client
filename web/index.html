@@ -44,8 +44,10 @@
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
+        entrypointUrl: "/main.dart.js",
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
+          serviceWorkerUrl: "./firebase-messaging-sw.js",
         }
       }).then(function(engineInitializer) {
         return engineInitializer.initializeEngine();
