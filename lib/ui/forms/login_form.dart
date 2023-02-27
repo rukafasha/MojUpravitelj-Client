@@ -1,13 +1,16 @@
 import 'dart:convert';
+
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
+
+import 'package:praksa_frontend/helper/role_util.dart';
 import 'package:praksa_frontend/ui/background/background.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/register_form.dart';
 
-import '../../Services/Auth/AuthService.dart';
-
+import '../../helper/Constants.dart';
+import '../../services/auth/auth_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -47,7 +50,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        Background(),
+        const Background(),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -165,8 +168,12 @@ class _LoginFormState extends State<LoginForm> {
                       child: InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
+                            final hashedPwd = Crypt.sha256(
+                                _passwordController.text,
+                                salt: Constants.salt);
+
                             var personDetails = await AuthService.login(
-                                _usernameController, _passwordController);
+                                _usernameController, hashedPwd);
                             var loginStatusCode = personDetails.statusCode;
 
                             if (loginStatusCode >= 200 &&
@@ -181,7 +188,7 @@ class _LoginFormState extends State<LoginForm> {
 
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => HomePage(),
+                                  builder: (context) => const HomePage(),
                                 ),
                               );
                             } else if (loginStatusCode == 401) {

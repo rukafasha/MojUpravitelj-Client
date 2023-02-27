@@ -1,8 +1,9 @@
-
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:praksa_frontend/Services/Auth/AuthService.dart';
+import 'package:praksa_frontend/services/auth/auth_service.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
+import '../../helper/Constants.dart';
 import '../background/background.dart';
 
 class CompanyRegisterForm extends StatefulWidget {
@@ -68,7 +69,8 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Container(
-                              margin: const EdgeInsets.only(left: 16, right: 32),
+                              margin:
+                                  const EdgeInsets.only(left: 16, right: 32),
                               child: TextFormField(
                                 controller: _firstNameController,
                                 validator: (value) {
@@ -89,7 +91,8 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.only(left: 16, right: 32),
+                              margin:
+                                  const EdgeInsets.only(left: 16, right: 32),
                               child: TextFormField(
                                 controller: _lastNameController,
                                 validator: (value) {
@@ -110,7 +113,8 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.only(left: 16, right: 32),
+                              margin:
+                                  const EdgeInsets.only(left: 16, right: 32),
                               child: TextFormField(
                                 controller: _usernameController,
                                 validator: (value) {
@@ -131,7 +135,8 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.only(left: 16, right: 32),
+                              margin:
+                                  const EdgeInsets.only(left: 16, right: 32),
                               child: TextFormField(
                                 controller: _passwordController,
                                 validator: (value) {
@@ -153,7 +158,8 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.only(left: 16, right: 32),
+                              margin:
+                                  const EdgeInsets.only(left: 16, right: 32),
                               child: TextFormField(
                                   controller: _dateController,
                                   validator: (value) {
@@ -185,7 +191,8 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                                   }),
                             ),
                             Container(
-                              margin: const EdgeInsets.only(left: 16, right: 32),
+                              margin:
+                                  const EdgeInsets.only(left: 16, right: 32),
                               child: TextFormField(
                                 controller: _companyNameController,
                                 validator: (value) {
@@ -237,12 +244,16 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                         child: InkWell(
                           onTap: () async {
                             if (_formKey.currentState!.validate()) {
+                              final hashedPwd = Crypt.sha256(
+                                  _passwordController.text,
+                                  salt: Constants.salt);
+
                               var statusCode =
                                   await AuthService.companyRegistration(
                                       _firstNameController,
                                       _lastNameController,
                                       _usernameController,
-                                      _passwordController,
+                                      hashedPwd,
                                       _dateController,
                                       _companyNameController);
 
@@ -277,13 +288,15 @@ class _CompanyRegisterFormState extends State<CompanyRegisterForm> {
                                                 Expanded(
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: const [
                                                       Text(
                                                         "Unsuccessful registration. Username is already registered.",
                                                         style: TextStyle(
                                                             fontSize: 16,
-                                                            color: Colors.white),
+                                                            color:
+                                                                Colors.white),
                                                       ),
                                                     ],
                                                   ),

@@ -1,15 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:http/http.dart' as http;
-import '../../Helper/GlobalUrl.dart';
-import '../../Models/RequestModel.dart';
-import '../../Services/RequestService.dart';
+
+import '../../helper/role_util.dart';
+import '../../helper/global_url.dart';
+import '../../models/request_model.dart';
+import '../../services/request_service.dart';
+import '../../ui/forms/home_form.dart';
 
 class ApartmentRequests extends StatefulWidget {
-  ApartmentRequests({super.key});
+  const ApartmentRequests({super.key});
 
   @override
   State<ApartmentRequests> createState() => _ApartmentRequestsState();
@@ -27,7 +28,7 @@ class _ApartmentRequestsState extends State<ApartmentRequests> {
   }
 
   Future<List<RequestModel>> getApartmentRequests() async {
-    var data = RoleUtil.GetData();
+    var data = RoleUtil.getData();
 
     return await RequestService(data).getApartmentRequests();
   }
@@ -38,8 +39,8 @@ class _ApartmentRequestsState extends State<ApartmentRequests> {
         appBar: AppBar(
           centerTitle: true,
           leading: BackButton(
-            onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => HomePage())),
+            onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const HomePage())),
           ),
           title: const Text(
             "Requests",
@@ -88,9 +89,9 @@ class _ApartmentRequestsState extends State<ApartmentRequests> {
           return Container(
             height: 135,
             width: double.infinity,
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.only(bottom: 15),
-            color: Color.fromARGB(255, 195, 195, 195),
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(bottom: 15),
+            color: const Color.fromARGB(255, 195, 195, 195),
             child: Center(
               child: Column(
                 children: [
@@ -148,23 +149,23 @@ class _ApartmentRequestsState extends State<ApartmentRequests> {
 }
 
 Future declineOrAcceptTheRequest(
-  int owner_id,
-  int tenant_id,
-  int appartment_id,
-  int request_id,
+  int ownerId,
+  int tenantId,
+  int appartmentId,
+  int requestId,
   bool? approved,
   dynamic context,
 ) async {
   final response = await http.put(
-    Uri.parse('${GlobalUrl.url}request/edit/$request_id'),
+    Uri.parse('${GlobalUrl.url}request/edit/$requestId'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, dynamic>{
-      'ownerId': owner_id.toString(),
-      'tenantId': tenant_id.toString(),
-      'appartmentId': appartment_id.toString(),
-      'personId': appartment_id.toString(),
+      'ownerId': ownerId.toString(),
+      'tenantId': tenantId.toString(),
+      'appartmentId': appartmentId.toString(),
+      'personId': appartmentId.toString(),
       'approved': approved,
     }),
   );
