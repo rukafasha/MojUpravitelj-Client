@@ -1,9 +1,9 @@
 import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:praksa_frontend/Services/Auth/AuthService.dart';
+import 'package:praksa_frontend/services/auth/auth_service.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
-import '../../Helper/Constants.dart';
+import '../../helper/Constants.dart';
 import '../background/background.dart';
 
 class CompanyRegisterForm extends StatefulWidget {

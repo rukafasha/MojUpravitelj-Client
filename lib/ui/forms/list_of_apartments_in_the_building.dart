@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/Services/AppartmentPersonService.dart';
-import 'package:praksa_frontend/Services/Auth/AuthService.dart';
+import 'package:praksa_frontend/services/appartment_person_service.dart';
+import 'package:praksa_frontend/services/auth/auth_service.dart';
 import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
 

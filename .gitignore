@@ -9,7 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
-lib/Helper/GlobalUrl.dart
+lib/helper/global_url.dart
 # IntelliJ related
 *.iml
 *.ipr
@@ -42,3 +42,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+.vs/MojUpravitelj-Client/v15/.ssms_suo
