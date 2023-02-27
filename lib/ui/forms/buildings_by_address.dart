@@ -1,12 +1,12 @@
-
 import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/ui/forms/list_of_apartments_in_the_building.dart';
-import 'package:praksa_frontend/ui/forms/register_form.dart';
 
-import '../../Helper/RoleUtil.dart';
-import '../../Models/ModelBuildingsByAddress.dart';
-import '../../Services/BuildingService.dart';
+import '../../helper/role_util.dart';
+import '../../models/model_buildings_by_address.dart';
+import '../../services/building_service.dart';
+
+import '../../ui/forms/list_of_apartments_in_the_building.dart';
+import '../../ui/forms/register_form.dart';
 
 class BuildingsByAddress extends StatefulWidget {
   final TextEditingController firstNameController;
@@ -16,6 +16,7 @@ class BuildingsByAddress extends StatefulWidget {
   final TextEditingController dateController;
 
   const BuildingsByAddress({
+    super.key,
     required this.firstNameController,
     required this.lastNameController,
     required this.usernameController,
@@ -37,7 +38,7 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
   }
 
   Future<List<ModelBuildingsByAddress>> getBuildingsByAddress(address) async {
-    var data = RoleUtil.GetData();
+    var data = RoleUtil.getData();
     return await BuildingService(data).getBuildingsByAddress(address);
   }
 

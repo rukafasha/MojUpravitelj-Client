@@ -1,15 +1,16 @@
 import 'dart:convert';
+
 import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:praksa_frontend/Helper/RoleUtil.dart';
+
+import 'package:praksa_frontend/helper/role_util.dart';
 import 'package:praksa_frontend/ui/background/background.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/register_form.dart';
 
-import '../../Helper/Constants.dart';
-import '../../Services/Auth/AuthService.dart';
-
+import '../../helper/Constants.dart';
+import '../../services/auth/auth_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -49,7 +50,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        Background(),
+        const Background(),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -187,7 +188,7 @@ class _LoginFormState extends State<LoginForm> {
 
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => HomePage(),
+                                  builder: (context) => const HomePage(),
                                 ),
                               );
                             } else if (loginStatusCode == 401) {
