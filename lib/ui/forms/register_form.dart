@@ -1,9 +1,11 @@
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:praksa_frontend/services/auth/auth_service.dart';
 import 'package:praksa_frontend/ui/forms/company_register_form.dart';
 import 'package:praksa_frontend/ui/forms/login_form.dart';
 import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
+import '../../Helper/Constants.dart';
 import '../background/background.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -15,12 +17,11 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-  final TextEditingController dateController =
-      TextEditingController(); // Ovo vidjeti na kraju
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               margin:
                                   const EdgeInsets.only(left: 16, right: 32),
                               child: TextFormField(
-                                controller: firstNameController,
+                                controller: _firstNameController,
                                 validator: (value) {
                                   if (value!.trim().isEmpty) {
                                     return "Enter First Name";
@@ -93,7 +94,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               margin:
                                   const EdgeInsets.only(left: 16, right: 32),
                               child: TextFormField(
-                                controller: lastNameController,
+                                controller: _lastNameController,
                                 validator: (value) {
                                   if (value!.trim().isEmpty) {
                                     return "Enter Last Name";
@@ -115,7 +116,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               margin:
                                   const EdgeInsets.only(left: 16, right: 32),
                               child: TextFormField(
-                                controller: usernameController,
+                                controller: _usernameController,
                                 validator: (value) {
                                   if (value!.trim().isEmpty) {
                                     return "Enter Username";
@@ -137,7 +138,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               margin:
                                   const EdgeInsets.only(left: 16, right: 32),
                               child: TextFormField(
-                                controller: passwordController,
+                                controller: _passwordController,
                                 validator: (value) {
                                   if (value!.trim().isEmpty) {
                                     return "Enter Password";
@@ -160,7 +161,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               margin:
                                   const EdgeInsets.only(left: 16, right: 32),
                               child: TextFormField(
-                                  controller: dateController,
+                                  controller: _dateController,
                                   validator: (value) {
                                     if (value!.trim().isEmpty) {
                                       return "Enter Date";
@@ -182,7 +183,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
                                     if (pickedDate != null) {
                                       setState(() {
-                                        dateController.text =
+                                        _dateController.text =
                                             DateFormat('yyyy-MM-dd')
                                                 .format(pickedDate);
                                       });
@@ -223,20 +224,22 @@ class _RegisterFormState extends State<RegisterForm> {
                             if (_formKey.currentState!.validate()) {
                               var statusCode =
                                   await AuthService.usernameVerification(
-                                      usernameController.text);
+                                      _usernameController.text);
 
                               if (statusCode >= 200 && statusCode < 300) {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => BuildingsByAddress(
-                                      firstNameController: firstNameController,
-                                      lastNameController: lastNameController,
-                                      usernameController: usernameController,
-                                      passwordController: passwordController,
-                                      dateController: dateController,
-                                    ),
+                                final hashedPwd = Crypt.sha256(
+                                    _passwordController.text,
+                                    salt: Constants.salt);
+
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => BuildingsByAddress(
+                                    firstNameController: _firstNameController,
+                                    lastNameController: _lastNameController,
+                                    usernameController: _usernameController,
+                                    hashedPwd: hashedPwd,
+                                    dateController: _dateController,
                                   ),
-                                );
+                                ));
                               } else if (statusCode == 409) {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(

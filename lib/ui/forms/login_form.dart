@@ -1,13 +1,16 @@
 import 'dart:convert';
+
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:praksa_frontend/helper/role_util.dart';
 import 'package:praksa_frontend/ui/background/background.dart';
 import 'package:praksa_frontend/ui/forms/home_form.dart';
 import 'package:praksa_frontend/ui/forms/register_form.dart';
 
+import '../../helper/Constants.dart';
 import '../../services/auth/auth_service.dart';
-
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -40,8 +43,8 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   final _formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +96,7 @@ class _LoginFormState extends State<LoginForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: usernameController,
+                              controller: _usernameController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter Username";
@@ -114,7 +117,7 @@ class _LoginFormState extends State<LoginForm> {
                           Container(
                             margin: const EdgeInsets.only(left: 16, right: 32),
                             child: TextFormField(
-                              controller: passwordController,
+                              controller: _passwordController,
                               validator: (value) {
                                 if (value!.trim().isEmpty) {
                                   return "Enter Password";
@@ -165,8 +168,12 @@ class _LoginFormState extends State<LoginForm> {
                       child: InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
+                            final hashedPwd = Crypt.sha256(
+                                _passwordController.text,
+                                salt: Constants.salt);
+
                             var personDetails = await AuthService.login(
-                                usernameController, passwordController);
+                                _usernameController, hashedPwd);
                             var loginStatusCode = personDetails.statusCode;
 
                             if (loginStatusCode >= 200 &&
@@ -176,8 +183,8 @@ class _LoginFormState extends State<LoginForm> {
 
                               saveDataToLocalStorage(personDetailsConverted);
                               RoleUtil(readData());
-                              usernameController.clear();
-                              passwordController.clear();
+                              _usernameController.clear();
+                              _passwordController.clear();
 
                               Navigator.of(context).push(
                                 MaterialPageRoute(

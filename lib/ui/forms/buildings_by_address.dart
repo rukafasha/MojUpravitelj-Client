@@ -1,3 +1,4 @@
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 
 import '../../helper/role_util.dart';
@@ -11,7 +12,7 @@ class BuildingsByAddress extends StatefulWidget {
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
   final TextEditingController usernameController;
-  final TextEditingController passwordController;
+  final Crypt hashedPwd;
   final TextEditingController dateController;
 
   const BuildingsByAddress({
@@ -19,7 +20,7 @@ class BuildingsByAddress extends StatefulWidget {
     required this.firstNameController,
     required this.lastNameController,
     required this.usernameController,
-    required this.passwordController,
+    required this.hashedPwd,
     required this.dateController,
   });
 
@@ -143,7 +144,7 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
                       firstNameController: widget.firstNameController,
                       lastNameController: widget.lastNameController,
                       usernameController: widget.usernameController,
-                      passwordController: widget.passwordController,
+                      hashedPwd: widget.hashedPwd,
                       dateController: widget.dateController,
                     ),
                   ),
