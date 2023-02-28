@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -320,11 +321,22 @@ class _LoginFormState extends State<LoginForm> {
                   margin: const EdgeInsets.only(left: 16, top: 24),
                   child: InkWell(
                     onTap: () async {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterForm(),
-                        ),
-                      );
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const RegisterForm(),
+                      //   ),
+                      // );
+                      AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.question,
+                              animType: AnimType.bottomSlide,
+                              showCloseIcon: true,
+                              // title: "Novi vlasnik apartmana",
+                              desc:
+                                  "Izabrani apartman nema vlasnika. Želite li postati vlasnik apartmana?",
+                              btnCancelOnPress: () {},
+                              btnOkOnPress: () {})
+                          .show();
                     },
                     child: const Text(
                       "Register",

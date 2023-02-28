@@ -29,6 +29,13 @@
             {
               "client_id": "616816988843-944c868lf3r9bv56k111fad5uns9jh38.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "616816988843-g4u4ipg2rddaroohquaff0n7v9sd3mge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.praksaFrontend"
+              }
             }
           ]
         }
@@ -58,6 +65,13 @@
             {
               "client_id": "616816988843-944c868lf3r9bv56k111fad5uns9jh38.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "616816988843-g4u4ipg2rddaroohquaff0n7v9sd3mge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.praksaFrontend"
+              }
             }
           ]
         }

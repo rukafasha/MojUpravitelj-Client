@@ -7,13 +7,13 @@ import 'package:flutter/foundation.dart'
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
-/// dart
+/// ```dart
 /// import 'firebase_options.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
-/// 
+/// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -27,15 +27,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return linux;
       default:
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
@@ -67,7 +61,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '616816988843',
     projectId: 'flutter-notification1',
     storageBucket: 'flutter-notification1.appspot.com',
-    iosClientId: '616816988843-g4u4ipg2rddaroohquaff0n7v9sd3mge.apps.googleusercontent.com',
+    iosClientId:
+        '616816988843-g4u4ipg2rddaroohquaff0n7v9sd3mge.apps.googleusercontent.com',
     iosBundleId: 'com.example.praksaFrontend',
   );
 
@@ -77,7 +72,28 @@ class DefaultFirebaseOptions {
     messagingSenderId: '616816988843',
     projectId: 'flutter-notification1',
     storageBucket: 'flutter-notification1.appspot.com',
-    iosClientId: '616816988843-g4u4ipg2rddaroohquaff0n7v9sd3mge.apps.googleusercontent.com',
+    iosClientId:
+        '616816988843-g4u4ipg2rddaroohquaff0n7v9sd3mge.apps.googleusercontent.com',
     iosBundleId: 'com.example.praksaFrontend',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCpvL9-ZaqGrKyHaMFWpZIj_8LzsolXZww',
+    appId: '1:616816988843:web:f76ddbae1efbc3f8459dee',
+    messagingSenderId: '616816988843',
+    projectId: 'flutter-notification1',
+    authDomain: 'flutter-notification1.firebaseapp.com',
+    storageBucket: 'flutter-notification1.appspot.com',
+    measurementId: 'G-PJCG5EXMG5',
+  );
+
+  static const FirebaseOptions linux = FirebaseOptions(
+    apiKey: 'AIzaSyCpvL9-ZaqGrKyHaMFWpZIj_8LzsolXZww',
+    appId: '1:616816988843:web:8e06b22072dde907459dee',
+    messagingSenderId: '616816988843',
+    projectId: 'flutter-notification1',
+    authDomain: 'flutter-notification1.firebaseapp.com',
+    storageBucket: 'flutter-notification1.appspot.com',
+    measurementId: 'G-PMSBKEWLYB',
   );
 }
