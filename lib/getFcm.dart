@@ -11,6 +11,9 @@ Future<String?> getFcmToken() async {
     String? fcmKey = await FirebaseMessaging.instance.getToken();
     return fcmKey;
   }
+  if(Platform.isWindows){
+    return null;
+  }
   String? fcmKey = await FirebaseMessaging.instance.getToken();
   return fcmKey;
 }
