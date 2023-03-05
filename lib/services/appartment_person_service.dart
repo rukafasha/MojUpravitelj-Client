@@ -57,6 +57,27 @@ class AppartmentPersonService {
     return body.map<Apartment>(Apartment.fromJson).toList();
   }
 
+  static Future appartmentHasOwner(int apartmentId) async {
+    final response = await http.post(
+      Uri.parse('${GlobalUrl.url}appartmentPerson/checkOwner'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'apartment_id': apartmentId.toString(),
+      }),
+    );
+
+    print("*****************");
+    final body = json.decode(response.body);
+
+    print(body);
+
+    print("---------------");
+
+    return body;
+  }
+
   Future<int> addAppartmentPeron(appartmentId) async {
     var data = RoleUtil.getData();
     final response = await http.post(

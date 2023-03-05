@@ -25,7 +25,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     LocalNotification.initialize();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print(message);
       LocalNotification.showNotification(message);
     });
     return MaterialApp(

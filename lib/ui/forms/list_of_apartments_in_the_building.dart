@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:praksa_frontend/services/appartment_person_service.dart';
@@ -129,16 +130,30 @@ class _ListOfApartmentsInTheBuildingState
           return Card(
             child: ListTile(
               onTap: () async {
-                final response = await AuthService.userRegistration(
-                  widget.firstNameController,
-                  widget.lastNameController,
-                  widget.usernameController,
-                  widget.hashedPwd,
-                  widget.dateController,
-                );
+                final msg = await AppartmentPersonService.appartmentHasOwner(
+                    apartment.apartmentId);
 
-                var person__id = json.decode(response.body);
-                await newOwner(apartment.apartmentId, person__id, context);
+                AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.question,
+                    animType: AnimType.bottomSlide,
+                    showCloseIcon: true,
+                    // title: "Novi vlasnik apartmana",
+                    desc: msg,
+                    btnCancelOnPress: () {},
+                    btnOkOnPress: () async {
+                      final response = await AuthService.userRegistration(
+                        widget.firstNameController,
+                        widget.lastNameController,
+                        widget.usernameController,
+                        widget.hashedPwd,
+                        widget.dateController,
+                      );
+
+                      var person__id = json.decode(response.body);
+                      await newOwner(
+                          apartment.apartmentId, person__id, context);
+                    }).show();
               },
               title: Text("Apartment number: ${apartment.apartmentNumber}"),
               subtitle: Text("Address: ${apartment.address}"),

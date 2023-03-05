@@ -369,7 +369,7 @@ Widget buildComments(List<Comment> comments, dynamic context, Report report) =>
                     child: Card(
                       child: ListTile(
                         title: Text("Comment: ${comment.content}"),
-                        subtitle: Text("Address: ${snapshot.data}"),
+                        subtitle: Text("${snapshot.data}"),
                       ),
                     ),
                   );

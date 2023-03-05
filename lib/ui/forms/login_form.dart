@@ -321,22 +321,11 @@ class _LoginFormState extends State<LoginForm> {
                   margin: const EdgeInsets.only(left: 16, top: 24),
                   child: InkWell(
                     onTap: () async {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const RegisterForm(),
-                      //   ),
-                      // );
-                      AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.question,
-                              animType: AnimType.bottomSlide,
-                              showCloseIcon: true,
-                              // title: "Novi vlasnik apartmana",
-                              desc:
-                                  "Izabrani apartman nema vlasnika. Želite li postati vlasnik apartmana?",
-                              btnCancelOnPress: () {},
-                              btnOkOnPress: () {})
-                          .show();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterForm(),
+                        ),
+                      );
                     },
                     child: const Text(
                       "Register",
