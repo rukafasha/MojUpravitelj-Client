@@ -65,6 +65,7 @@ class AuthService {
               'dateOfBirth': _dateController.text.toString(),
               'companyName': _companyNameController.text.toString(),
             }));
+
     return response.statusCode;
   }
 
