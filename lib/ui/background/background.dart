@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Background extends StatefulWidget {
+  const Background({super.key});
+
   @override
   State<Background> createState() => _MyPainterState();
 }
@@ -28,11 +30,10 @@ class Curved extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var rect = Offset.zero & size;
-
     Paint paint = Paint();
     paint.shader = const LinearGradient(
       begin: Alignment.topLeft,
-      end: Alignment.topRight,
+      end: Alignment.bottomRight,
       stops: [.01, .25],
       colors: [
         Color(0xfff8a55f),
@@ -42,7 +43,7 @@ class Curved extends CustomPainter {
 
     Paint paint2 = Paint();
     paint2.shader = const LinearGradient(
-      begin: Alignment.bottomLeft,
+      begin: Alignment.centerLeft,
       end: Alignment.centerRight,
       stops: [.05, 1],
       colors: [
@@ -62,14 +63,12 @@ class Curved extends CustomPainter {
       size.width * 0.6,
       size.height * 0.07,
     );
-
     path.quadraticBezierTo(
       size.width * 0.2,
       size.height * 0.08,
       size.width * 0.1,
       size.height * 0.18,
     );
-
     path.quadraticBezierTo(
       size.width * 0.06,
       size.height * 0.21,
@@ -77,7 +76,6 @@ class Curved extends CustomPainter {
       size.height * 0.26,
     );
     path.close();
-
     path2.moveTo(size.width, size.height);
     path2.lineTo(size.width, size.height * 0.7);
     path2.quadraticBezierTo(
