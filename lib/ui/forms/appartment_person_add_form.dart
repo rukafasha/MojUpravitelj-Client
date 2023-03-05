@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/helper/role_util.dart';
-import 'package:praksa_frontend/ui/forms/user_form.dart';
+import 'package:praksa_frontend/ui/forms/list_of_apartments_in_the_building.dart';
+
+import '../../helper/role_util.dart';
 import '../../models/appartment_person.dart';
 import '../../services/appartment_person_service.dart';
 import '../../services/appartment_service.dart';
+import '../../ui/forms/apartment_person_add_search.dart';
+import '../../ui/forms/user_form.dart';
 
 class AddAppartmentPersonForm extends StatefulWidget {
-  const AddAppartmentPersonForm({Key? key}) : super(key: key);
+  final int building_id;
+
+  const AddAppartmentPersonForm({Key? key, required this.building_id})
+      : super(key: key);
 
   @override
   State<AddAppartmentPersonForm> createState() => _AddAppartmentPersonForm();
@@ -23,7 +29,7 @@ class _AddAppartmentPersonForm extends State<AddAppartmentPersonForm> {
       appBar: AppBar(
         leading: BackButton(
             onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const UserForm()),
+                  MaterialPageRoute(builder: (context) => const SearchForm()),
                 )),
         title: const Center(child: Text("Add Apartment")),
         flexibleSpace: Container(
@@ -41,7 +47,7 @@ class _AddAppartmentPersonForm extends State<AddAppartmentPersonForm> {
           children: <Widget>[
             Center(
               child: FutureBuilder<dynamic>(
-                  future: fetchAppartments(),
+                  future: fetchAppartments(widget.building_id),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
@@ -49,7 +55,7 @@ class _AddAppartmentPersonForm extends State<AddAppartmentPersonForm> {
                       final appartments = snapshot.data!;
                       return buildAppartment(appartments, context);
                     } else {
-                      return const Text("Appartments not found.");
+                      return const Text("Apartments not found.");
                     }
                   }),
             ),
@@ -59,39 +65,36 @@ class _AddAppartmentPersonForm extends State<AddAppartmentPersonForm> {
     );
   }
 
-  Widget buildAppartment(List<dynamic> appartments, dynamic context) =>
+  Widget buildAppartment(List<Apartment> appartments, dynamic context) =>
       ListView.builder(
         shrinkWrap: true,
         itemCount: appartments.length,
         itemBuilder: (context, index) {
           final appartment = appartments[index];
           return Card(
+              shadowColor: Colors.grey.withOpacity(0.5),
               child: Column(
-            children: [
-              ListTile(
-                title: Text("Appartman: ${appartment.appartmentId}"),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.all(10),
-                    child: FloatingActionButton(
-                      heroTag: null,
-                      backgroundColor: const Color(0xfff8a55f),
-                      onPressed: () async {
-                        debugPrint(appartment.appartmentId.toString());
-                        await addAppartmentPerson(appartment.appartmentId);
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const UserForm()));
-                      },
-                      child: const Icon(Icons.save),
-                    ),
+                  ListTile(
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            width: 2, color: Colors.grey.withOpacity(0.5)),
+                        borderRadius: BorderRadius.circular(20)),
+                    leading: Icon(Icons.home, color: Color(0xfff8a55f)),
+                    title:
+                        Text("Apartment number: ${appartment.apartmentNumber}"),
+                    subtitle: Text("Address: ${appartment.address}"),
+                    trailing: IconButton(
+                        icon: Icon(Icons.add),
+                        color: Color(0xfff1665f),
+                        onPressed: () => {
+                              addAppartmentPerson(appartment.apartmentId),
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const UserForm()))
+                            }),
                   ),
                 ],
-              ),
-            ],
-          ));
+              ));
         },
       );
 }
@@ -101,7 +104,7 @@ addAppartmentPerson(appartment) async {
   return AppartmentPersonService(data).addAppartmentPeron(appartment);
 }
 
-fetchAppartments() async {
+fetchAppartments(building_id) async {
   var data = RoleUtil.getData();
   List appartmantId = [];
 
@@ -110,5 +113,6 @@ fetchAppartments() async {
   for (var i = 0; i < lista.length; i++) {
     appartmantId.add(lista[i].appartmentId);
   }
-  return AppartmentService().getAppartmentsWithoutPerson(appartmantId);
+  return AppartmentService()
+      .getAppartmentsWithoutPerson(appartmantId, building_id);
 }

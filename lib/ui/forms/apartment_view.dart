@@ -53,6 +53,7 @@ class AppartmentView extends StatelessWidget {
               ),
               child: Card(
                   child: ListTile(
+                leading: Icon(Icons.home, color: Color(0xfff8a55f)),
                 title: Text("Appartment number: ${apartment.apartmentNumber}"),
                 subtitle: Text("Address: ${apartment.address}"),
               )),
@@ -87,19 +88,18 @@ Widget buildUsers(List<Person> users, dynamic context, Building building) =>
             children: [
               Expanded(
                 child: ListTile(
+                  leading: Icon(Icons.person, color: Color(0xfff8a55f)),
                   title: Text(" ${user.firstName} ${user.lastName}"),
                   subtitle: Text(
                       "Date of birth: ${user.dateOfBirth.day}.${user.dateOfBirth.month}.${user.dateOfBirth.year}"),
+                  trailing: Icon(Icons.add, color: Color(0xfff8a55f)),
+                  onTap: () async {
+                    var building2 = await addRepresentative(user, building);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => BuildingView(building2)));
+                  },
                 ),
               ),
-              InkWell(
-                onTap: () async {
-                  var building2 = await addRepresentative(user, building);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BuildingView(building2)));
-                },
-                child: const Icon(Icons.add),
-              )
             ],
           ),
         );

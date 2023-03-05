@@ -1,10 +1,10 @@
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
+
+import '../../helper/role_util.dart';
 import '../helper/global_url.dart';
 import '../models/person.dart';
-import 'package:http/http.dart' as http;
-import 'package:praksa_frontend/helper/role_util.dart';
-
 import '../ui/forms/list_of_apartments_in_the_building.dart';
 
 class PersonService {

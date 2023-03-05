@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
-import '../Helper/global_url.dart';
-import '../Models/Role.dart';
+import '../helper/global_url.dart';
+import '../models/role.dart';
 
 class RoleService {
   static Future<int> getByString(String desc) async {

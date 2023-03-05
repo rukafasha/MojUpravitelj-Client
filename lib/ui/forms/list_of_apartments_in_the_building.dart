@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/services/appartment_person_service.dart';
-import 'package:praksa_frontend/services/auth/auth_service.dart';
-import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
-import 'package:praksa_frontend/ui/forms/login_form.dart';
+import '../../services/appartment_person_service.dart';
+import '../../services/auth/auth_service.dart';
+import '../../ui/forms/buildings_by_address.dart';
+import '../../ui/forms/login_form.dart';
 
 class Apartment {
   final int buildingId;
@@ -128,6 +128,10 @@ class _ListOfApartmentsInTheBuildingState
 
           return Card(
             child: ListTile(
+              shape: RoundedRectangleBorder(
+                  side:
+                      BorderSide(width: 2, color: Colors.grey.withOpacity(0.5)),
+                  borderRadius: BorderRadius.circular(20)),
               onTap: () async {
                 final response = await AuthService.userRegistration(
                   widget.firstNameController,
@@ -140,8 +144,10 @@ class _ListOfApartmentsInTheBuildingState
                 var person__id = json.decode(response.body);
                 await newOwner(apartment.apartmentId, person__id, context);
               },
+              leading: Icon(Icons.home, color: Color(0xfff8a55f)),
               title: Text("Apartment number: ${apartment.apartmentNumber}"),
               subtitle: Text("Address: ${apartment.address}"),
+              trailing: Icon(Icons.add, color: Color(0xfff8a55f)),
             ),
           );
         },

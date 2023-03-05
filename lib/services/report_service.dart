@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:praksa_frontend/services/report_status_service.dart';
 
+import '../../services/report_status_service.dart';
 import '../helper/global_url.dart';
 import '../models/report.dart';
 

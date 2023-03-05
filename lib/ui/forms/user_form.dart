@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
-import 'package:praksa_frontend/helper/role_util.dart';
-import 'package:praksa_frontend/ui/forms/appartment_person_add_form.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
-
+import '../../helper/role_util.dart';
 import '../../models/appartment_person.dart';
 import '../../services/appartment_person_service.dart';
 import '../../services/person_service.dart';
+import '../../ui/forms/apartment_person_add_search.dart';
+import '../../ui/forms/home_form.dart';
 
 class UserForm extends StatefulWidget {
   const UserForm({Key? key}) : super(key: key);
@@ -32,8 +31,8 @@ class _UserFormState extends State<UserForm> {
   bool _customTileExpanded = false;
 
   var data = RoleUtil.getData();
-  static const uName = "Shakleen Ishfar";
-  static const companyId = '1';
+  var username = _myBox.get(1)["username"];
+  var companyId = _myBox.get(1)["companyId"].toString();
 
   void saveDataToLocalStorage(data) async {
     _myBox.put(1, {
@@ -68,8 +67,8 @@ class _UserFormState extends State<UserForm> {
     firstNameController.text = data["firstName"];
     lastNameController.text = data["lastName"];
     dataController.text = data["DOB"];
-    usernameController.text = "Shakleen Ishfar";
-    companyController.text = "1";
+    usernameController.text = data["username"];
+    companyController.text = data["companyId"].toString();
 
     return Scaffold(
       appBar: AppBar(
@@ -96,7 +95,8 @@ class _UserFormState extends State<UserForm> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Container(
-                    margin: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.only(
+                        bottom: 15, left: 15, right: 15, top: 25),
                     child: TextFormField(
                       decoration: InputDecoration(
                         labelText: data["firstName"],
@@ -117,7 +117,7 @@ class _UserFormState extends State<UserForm> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(15),
                     child: TextFormField(
                       decoration: InputDecoration(
                         labelText: data["lastName"],
@@ -138,11 +138,12 @@ class _UserFormState extends State<UserForm> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.only(
+                        bottom: 15, left: 15, right: 15, top: 15),
                     child: TextFormField(
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintStyle: TextStyle(fontSize: 20),
-                        labelText: uName,
+                        labelText: username,
                         icon: Icon(Icons.account_circle_rounded),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
@@ -159,9 +160,9 @@ class _UserFormState extends State<UserForm> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(15),
                     child: TextFormField(
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintStyle: TextStyle(fontSize: 20),
                         labelText: companyId,
                         icon: Icon(Icons.business),
@@ -180,7 +181,8 @@ class _UserFormState extends State<UserForm> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.only(
+                        bottom: 30, left: 15, right: 15, top: 15),
                     child: TextFormField(
                         controller: dataController,
                         validator: (value) {
@@ -216,8 +218,10 @@ class _UserFormState extends State<UserForm> {
                         }),
                   ),
                   ExpansionTile(
-                    title: const Text('Show apartments'),
+                    title: const Text('Show apartments',
+                        style: TextStyle(color: Color(0xfff8a55f))),
                     trailing: Icon(
+                      color: const Color(0xfff8a55f),
                       _customTileExpanded
                           ? Icons.arrow_drop_down_circle
                           : Icons.arrow_drop_down,
@@ -249,8 +253,7 @@ class _UserFormState extends State<UserForm> {
                               backgroundColor: const Color(0xfff8a55f),
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        const AddAppartmentPersonForm()));
+                                    builder: (context) => const SearchForm()));
                               },
                               child: const Icon(Icons.add_outlined),
                             ),
