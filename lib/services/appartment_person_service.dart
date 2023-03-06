@@ -47,6 +47,26 @@ class AppartmentPersonService {
     return response;
   }
 
+  static Future appartmentHasOwner(int apartmentId) async {
+    final response = await http.post(
+      Uri.parse('${GlobalUrl.url}appartmentPerson/checkOwner'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'apartment_id': apartmentId.toString(),
+      }),
+    );
+
+    print("*****************");
+    final body = json.decode(response.body);
+
+    print(body);
+    print("---------------");
+
+    return body;
+  }
+
   static Future<List<Apartment>> getAppartmentsByBuildingId(
       int buildingId) async {
     final response = await http.get(
