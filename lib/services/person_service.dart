@@ -44,7 +44,7 @@ class PersonService {
       userNameController, passwordController, dataController) async {
     var data = RoleUtil.getData();
     var id = data["personId"];
-
+    var userAccountId = await PersonService.fetchUserById(data["personId"]);
     final response = await http.put(
       Uri.parse('${GlobalUrl.url}person/edit/$id'),
       headers: <String, String>{
@@ -57,7 +57,7 @@ class PersonService {
         'dateOfBirth': dataController.toString(),
         'isActive': true,
         'companyId': data["companyId"],
-        'userAccountId': 1,
+        'userAccountId': userAccountId.userAccountId,
       }),
     );
 
@@ -70,11 +70,16 @@ class PersonService {
 
   static dynamic getData(firstNameController, lastNameController,
       usernameController, passwordController, dataController) {
+        var personData = RoleUtil.getData();
     var data = {
-      'firstName': firstNameController,
-      'lastName': lastNameController,
-      'DOB': dataController,
-      'username': usernameController,
+      "personId": personData["personId"],
+      "firstName": firstNameController,
+      "lastName": lastNameController,
+      "DOB": dataController.toString(),
+      "companyId": personData["companyId"],
+      "buildingId": personData["buildingId"],
+      "roles": personData["roles"],
+      "username": usernameController,
       'password': passwordController
     };
     return data;

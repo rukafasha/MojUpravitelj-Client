@@ -191,7 +191,10 @@ class _ReportViewState extends State<ReportView> {
                                       ? SizedBox(
                                           child: DropdownButton<String>(
                                             isExpanded: true,
-                                            hint: Text(status!),
+                                            hint: Padding(
+                                              padding: const EdgeInsets.all(15),
+                                              child: Text(status!),
+                                            ),
                                             items: snapshot.data
                                                 .map<DropdownMenuItem<String>>(
                                                     (item) {
@@ -239,7 +242,7 @@ class _ReportViewState extends State<ReportView> {
                                   return buildComments(
                                       comments, context, report);
                                 } else {
-                                  return const Text("Apartments not found.");
+                                  return const Text("Comments not found.");
                                 }
                               }),
                         ),
