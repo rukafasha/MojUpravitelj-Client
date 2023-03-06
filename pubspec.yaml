@@ -40,9 +40,11 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   crypt: ^4.2.1
-  firebase_messaging: ^14.2.0
-  firebase_core: ^2.4.0
+  firebase_messaging: ^14.2.5
+  firebase_core: ^2.7.0
   flutter_local_notifications: ^13.0.0
+  firebase_core_desktop: ^1.0.2
+  awesome_dialog: ^3.0.2
 
 dev_dependencies:
   flutter_test:
