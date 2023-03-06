@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import '../helper/global_url.dart';
-import '../models/building.dart';
 import 'package:http/http.dart' as http;
 
+import '../helper/global_url.dart';
+import '../models/building.dart';
 import '../models/model_buildings_by_address.dart';
 
 class BuildingService {
@@ -107,7 +107,6 @@ class BuildingService {
     );
 
     final body = json.decode(response.body);
-
     return body
         .map<ModelBuildingsByAddress>(ModelBuildingsByAddress.fromJson)
         .toList();

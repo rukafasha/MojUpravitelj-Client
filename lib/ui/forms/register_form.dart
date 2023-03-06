@@ -1,11 +1,12 @@
 import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:praksa_frontend/services/auth/auth_service.dart';
-import 'package:praksa_frontend/ui/forms/company_register_form.dart';
-import 'package:praksa_frontend/ui/forms/login_form.dart';
-import 'package:praksa_frontend/ui/forms/buildings_by_address.dart';
-import '../../Helper/Constants.dart';
+
+import '../../helper/constants.dart';
+import '../../services/auth/auth_service.dart';
+import '../../ui/forms/buildings_by_address.dart';
+import '../../ui/forms/company_register_form.dart';
+import '../../ui/forms/login_form.dart';
 import '../background/background.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -28,21 +29,21 @@ class _RegisterFormState extends State<RegisterForm> {
     return Scaffold(
       body: Stack(children: [
         const Background(),
-        SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 55),
-                child: const Text(
-                  "Register",
-                  style: TextStyle(
-                    fontSize: 35,
-                    fontWeight: FontWeight.bold,
-                  ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(bottom: 55),
+              child: const Text(
+                "Register",
+                style: TextStyle(
+                  fontSize: 35,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(
+            ),
+            SingleChildScrollView(
+              child: SizedBox(
                 height: 350,
                 child: Stack(
                   children: [
@@ -290,58 +291,58 @@ class _RegisterFormState extends State<RegisterForm> {
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(left: 16, top: 24),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const LoginForm(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xffe98f60),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 16, top: 24),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginForm(),
                         ),
+                      );
+                    },
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xffe98f60),
                       ),
                     ),
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(left: 16, top: 24),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const CompanyRegisterForm(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        "Register company",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xffe98f60),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 16, top: 24),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const CompanyRegisterForm(),
                         ),
+                      );
+                    },
+                    child: const Text(
+                      "Register company",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xffe98f60),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ]),
     );

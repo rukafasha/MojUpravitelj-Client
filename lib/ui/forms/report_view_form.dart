@@ -1,19 +1,19 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:praksa_frontend/ui/forms/comment_edit_form.dart';
-import 'package:praksa_frontend/ui/forms/report_edit_form.dart';
 
 import '../../helper/global_url.dart';
 import '../../helper/role_util.dart';
-import '../../models/person.dart';
 import '../../models/comment.dart';
+import '../../models/person.dart';
 import '../../models/report.dart';
 import '../../services/comment_service.dart';
 import '../../services/person_service.dart';
 import '../../services/report_service.dart';
 import '../../services/report_status_service.dart';
-
+import '../../ui/forms/comment_edit_form.dart';
+import '../../ui/forms/report_edit_form.dart';
 import 'comment_add_form.dart';
 import 'home_form.dart';
 
@@ -191,7 +191,10 @@ class _ReportViewState extends State<ReportView> {
                                       ? SizedBox(
                                           child: DropdownButton<String>(
                                             isExpanded: true,
-                                            hint: Text(status!),
+                                            hint: Padding(
+                                              padding: const EdgeInsets.all(15),
+                                              child: Text(status!),
+                                            ),
                                             items: snapshot.data
                                                 .map<DropdownMenuItem<String>>(
                                                     (item) {
@@ -368,6 +371,7 @@ Widget buildComments(List<Comment> comments, dynamic context, Report report) =>
                     },
                     child: Card(
                       child: ListTile(
+                        leading: Icon(Icons.comment, color: Color(0xfff8a55f)),
                         title: Text("Comment: ${comment.content}"),
                         subtitle: Text("Address: ${snapshot.data}"),
                       ),

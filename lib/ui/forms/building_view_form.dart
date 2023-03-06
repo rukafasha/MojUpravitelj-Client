@@ -6,10 +6,9 @@ import '../../models/building.dart';
 import '../../models/company.dart';
 import '../../services/appartment_person_service.dart';
 import '../../services/appartment_service.dart';
-import '../../ui/forms/apartment_view.dart';
 import '../../services/building_service.dart';
 import '../../services/company_service.dart';
-
+import '../../ui/forms/apartment_view.dart';
 import 'building_all_form.dart';
 import 'building_edit_form.dart';
 import 'list_of_apartments_in_the_building.dart';
@@ -182,8 +181,14 @@ Widget buildApartments(
           },
           child: Card(
             child: ListTile(
+              shape: RoundedRectangleBorder(
+                  side:
+                      BorderSide(width: 2, color: Colors.grey.withOpacity(0.5)),
+                  borderRadius: BorderRadius.circular(20)),
+              leading: Icon(Icons.home, color: Color(0xfff8a55f)),
               title: Text("Apartment number: ${apartment.apartmentNumber}"),
               subtitle: Text("Address: ${apartment.address}"),
+              trailing: Icon(Icons.arrow_forward, color: Color(0xfff8a55f)),
             ),
           ),
         );

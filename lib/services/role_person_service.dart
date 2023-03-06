@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../Helper/global_url.dart';
+import '../helper/global_url.dart';
 
 class RolePersonService {
   static Future<void> addRepresentativeRole(int personId, int roleId) async {
