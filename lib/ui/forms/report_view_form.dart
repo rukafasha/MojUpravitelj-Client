@@ -239,7 +239,7 @@ class _ReportViewState extends State<ReportView> {
                                   return buildComments(
                                       comments, context, report);
                                 } else {
-                                  return const Text("Apartments not found.");
+                                  return const Text("Comments not found.");
                                 }
                               }),
                         ),

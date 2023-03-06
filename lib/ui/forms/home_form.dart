@@ -9,7 +9,7 @@ import '../../services/report_service.dart';
 import '../../services/report_status_service.dart';
 import '../../ui/forms/report_add_form.dart';
 import 'report_view_form.dart';
-import '../navigation_drawer/navigation_drawer.dart';
+import '../navigation_drawer/navigation_drawer.dart' as NavigationDrawer;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      drawer: NavigationDrawer(),
+      drawer: NavigationDrawer.NavigationDrawer(),
       body: Column(
         children: [
           SizedBox(
