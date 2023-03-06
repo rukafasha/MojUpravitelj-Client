@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../../helper/role_util.dart';
 import '../../helper/global_url.dart';
+import '../../helper/role_util.dart';
 import '../../models/request_model.dart';
 import '../../services/request_service.dart';
 import '../../ui/forms/home_form.dart';
@@ -91,7 +91,7 @@ class _ApartmentRequestsState extends State<ApartmentRequests> {
             width: double.infinity,
             padding: const EdgeInsets.all(10),
             margin: const EdgeInsets.only(bottom: 15),
-            color: const Color.fromARGB(255, 195, 195, 195),
+            color: Color.fromARGB(255, 231, 229, 229),
             child: Center(
               child: Column(
                 children: [
@@ -113,6 +113,9 @@ class _ApartmentRequestsState extends State<ApartmentRequests> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll<Color>(
+                                Color(0xfff1665f))),
                         onPressed: () async {
                           await declineOrAcceptTheRequest(
                             request.ownerId,
@@ -126,6 +129,9 @@ class _ApartmentRequestsState extends State<ApartmentRequests> {
                         child: const Text('Decline'),
                       ),
                       ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll<Color>(
+                                Color(0xfff8a55f))),
                         onPressed: () async {
                           await declineOrAcceptTheRequest(
                             request.ownerId,

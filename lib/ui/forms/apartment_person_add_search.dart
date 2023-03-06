@@ -1,34 +1,21 @@
-import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 
 import '../../helper/role_util.dart';
 import '../../models/model_buildings_by_address.dart';
 import '../../services/building_service.dart';
+import '../../ui/forms/appartment_person_add_form.dart';
+import '../../ui/forms/user_form.dart';
 
-import '../../ui/forms/list_of_apartments_in_the_building.dart';
-import '../../ui/forms/register_form.dart';
-
-class BuildingsByAddress extends StatefulWidget {
-  final TextEditingController firstNameController;
-  final TextEditingController lastNameController;
-  final TextEditingController usernameController;
-  final Crypt hashedPwd;
-  final TextEditingController dateController;
-
-  const BuildingsByAddress({
+class SearchForm extends StatefulWidget {
+  const SearchForm({
     super.key,
-    required this.firstNameController,
-    required this.lastNameController,
-    required this.usernameController,
-    required this.hashedPwd,
-    required this.dateController,
   });
 
   @override
-  State<BuildingsByAddress> createState() => _BuildingsByAddressState();
+  State<SearchForm> createState() => _SearchForm();
 }
 
-class _BuildingsByAddressState extends State<BuildingsByAddress> {
+class _SearchForm extends State<SearchForm> {
   late Future<List<ModelBuildingsByAddress>> buildingsFuture = Future.value([]);
   final _searchController = TextEditingController();
 
@@ -48,11 +35,9 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
         appBar: AppBar(
           centerTitle: true,
           leading: BackButton(
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const RegisterForm()))),
-          title: const Text(
-            "Buildings",
-          ),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const UserForm()))),
+          title: const Text("Buildings"),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -79,12 +64,12 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
                     ),
                     hintText: "Enter Address",
                     prefixIcon: const Icon(Icons.search),
-                    prefixIconColor: Colors.purple.shade900,
+                    prefixIconColor: Color(0xfff1665f),
                   ),
                 ),
               ),
               const SizedBox(
-                height: 5,
+                height: 15,
               ),
               Center(
                 child: ElevatedButton(
@@ -137,21 +122,14 @@ class _BuildingsByAddressState extends State<BuildingsByAddress> {
 
           return Card(
             child: ListTile(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ListOfApartmentsInTheBuilding(
-                      building_id: building.buildingId,
-                      firstNameController: widget.firstNameController,
-                      lastNameController: widget.lastNameController,
-                      usernameController: widget.usernameController,
-                      hashedPwd: widget.hashedPwd,
-                      dateController: widget.dateController,
-                    ),
-                  ),
-                );
-              },
               contentPadding: EdgeInsets.all(10),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => AddAppartmentPersonForm(
+                    building_id: building.buildingId,
+                  ),
+                ));
+              },
               leading: Icon(Icons.business, color: Color(0xfff8a55f)),
               title: Text("Building: ${building.buildingId}"),
               subtitle: Text(

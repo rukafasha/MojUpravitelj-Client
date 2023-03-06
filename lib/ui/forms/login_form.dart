@@ -4,13 +4,12 @@ import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:praksa_frontend/helper/role_util.dart';
-import 'package:praksa_frontend/ui/background/background.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'package:praksa_frontend/ui/forms/register_form.dart';
-
-import '../../helper/Constants.dart';
+import '../../helper/constants.dart';
+import '../../helper/role_util.dart';
 import '../../services/auth/auth_service.dart';
+import '../../ui/background/background.dart';
+import '../../ui/forms/home_form.dart';
+import '../../ui/forms/register_form.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -26,6 +25,7 @@ class _LoginFormState extends State<LoginForm> {
     var personData = data["person"];
     var buildingData = data["building_ids"];
     var listOfRoles = data["list_of_roles"];
+    var username = data["username"];
 
     _myBox.put(1, {
       "personId": personData["personId"],
@@ -35,6 +35,7 @@ class _LoginFormState extends State<LoginForm> {
       "companyId": personData["companyId"],
       "buildingId": buildingData,
       "roles": listOfRoles,
+      "username": username,
     });
   }
 

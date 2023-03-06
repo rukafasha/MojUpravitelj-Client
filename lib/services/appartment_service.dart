@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
+
 import '../helper/global_url.dart';
 import '../models/appartment.dart';
-import 'package:http/http.dart' as http;
+import '../ui/forms/list_of_apartments_in_the_building.dart';
 
 class AppartmentService {
   Future<List<Appartment>> fetchApartments() async {
@@ -34,20 +36,20 @@ class AppartmentService {
     return Appartment.fromMap(json.decode(response.body));
   }
 
-  Future<List<Appartment>> getAppartmentsWithoutPerson(appartmantsList) async {
+  Future<List<Apartment>> getAppartmentsWithoutPerson(
+      appartmantsList, building_id) async {
     List<int> lista = List<int>.from(appartmantsList);
-    final response =
-        await http.post(Uri.parse('${GlobalUrl.url}appartment/withoutPerson'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(<String, dynamic>{"lista": lista}));
+    final response = await http.post(
+        Uri.parse('${GlobalUrl.url}appartment/withoutPerson'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+            <String, dynamic>{"lista": lista, "building_id": building_id}));
 
     if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
-      return jsonResponse
-          .map((appartment) => Appartment.fromMap(appartment))
-          .toList();
+      final body = json.decode(response.body);
+      return body.map<Apartment>(Apartment.fromJson).toList();
     } else {
       throw Exception('Unexpected error occured');
     }

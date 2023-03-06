@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/models/person.dart';
-import 'package:praksa_frontend/models/report.dart';
-import 'package:praksa_frontend/services/person_service.dart';
-import 'package:praksa_frontend/services/report_service.dart';
-import 'package:praksa_frontend/ui/forms/report_add_form.dart';
-import 'package:praksa_frontend/ui/forms/report_view_form.dart';
 
-import 'package:praksa_frontend/helper/role_util.dart';
-
+import '../../helper/role_util.dart';
+import '../../models/person.dart';
+import '../../models/report.dart';
+import '../../services/person_service.dart';
+import '../../services/report_service.dart';
+import '../../ui/forms/report_add_form.dart';
+import '../../ui/forms/report_view_form.dart';
 import 'home_form.dart';
 
 class MyReport extends StatelessWidget {

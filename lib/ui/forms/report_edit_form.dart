@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:praksa_frontend/helper/role_util.dart';
-import 'package:praksa_frontend/models/report.dart';
-import 'package:praksa_frontend/ui/forms/home_form.dart';
-import 'package:praksa_frontend/ui/forms/report_view_form.dart';
 
+import '../../helper/role_util.dart';
+import '../../models/report.dart';
 import '../../services/report_service.dart';
+import '../../ui/forms/home_form.dart';
+import '../../ui/forms/report_view_form.dart';
 
 class ReportEdit extends StatelessWidget {
   final Report report;
